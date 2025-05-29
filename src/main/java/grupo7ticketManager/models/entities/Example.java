@@ -1,4 +1,4 @@
-package grupo7ticketManager.models;
+package grupo7ticketManager.models.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
