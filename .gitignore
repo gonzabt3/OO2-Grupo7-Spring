@@ -1,0 +1,79 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+# Byte-compiled / clase
+*.class
+
+# Logs y bases de datos temporales
+*.log
+*.tmp
+hs_err_pid*
+
+# Archivos generados por el IDE (IntelliJ, Eclipse, NetBeans, etc.)
+.idea/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+*.swp
+*.swo
+.vscode/
+*.project
+*.classpath
+*.settings/
+
+# Archivos de compilación de Maven o Gradle
+target/
+build/
+out/
+
+# Librerías descargadas
+*.jar
+*.war
+*.ear
+
+# Configuraciones específicas del sistema operativo
+Thumbs.db
+.DS_Store
+
+# Archivos de configuración local
+application.properties
+application.yml
+
+# Archivos del sistema operativo
+*.swp
+*~
+
+# Directorios de dependencias
+node_modules/
