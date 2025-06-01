@@ -1,4 +1,4 @@
-# Proyecto Grupo7 Ticket Manager Programacion Orientada a Objetos 2 de la UNLA.
+# Sistema de Tickets del Grupo 7 - Programacion Orientada a Objetos 2 de la UNLA.
 
 Pasos a seguir para levantar el proyecto:
  * Version de Java 17 o superior.
@@ -11,6 +11,10 @@ Pasos a seguir para levantar el proyecto:
    * DB_URL -> jdbc:mysql://localhost:3306/bd-oo2-grupo7?useSSL=false&serverTimezone=UTC
    * DB_USERNAME -> colocar tu usuario de la base de datos.
    * DB_PASSWORD -> colocar tu password de la base de datos.
+   * EMAIL_USERNAME -> colocar email emisor para el envio de emails.
+   * EMAIL_APIKEY -> colocar API key para enviar mails por SMTP
+   * EMAIL_TEST -> (opcional) email donde se reciben los email
  * Ejecutar el proyecto. Si todo esta correcto aparece que la aplicacion inicio en x segundos en el puerto 8080.
  * Abrir el navegador e ir a la siguiente url: **http://localhost:8080/swagger-ui/index.html**
+ * IMPORTANTE! Si al correr el proyecto por terminal hay errores, escribir las siguientes lineas: DB_USERNAME=*tu username*, DB_PASSWORD=*tu password*, DB_URL=jdbc:mysql://localhost:3306/bd-oo2-grupo7
 
