@@ -31,6 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+<<<<<<< HEAD
 
 # Byte-compiled / clase
 *.class
@@ -77,3 +78,5 @@ application.yml
 
 # Directorios de dependencias
 node_modules/
+=======
+>>>>>>> 6290c9e (- El proyecto se creo de vuelta con Spring Initialzr, para asegurar que incluya las dependencias: Spring Web, Thymeleaf, MySQL Driver (también se agrego JPA, no se si ya estaba), Java Mail Sender. La version de Spring Boot utilizada es 3.5.0.)
