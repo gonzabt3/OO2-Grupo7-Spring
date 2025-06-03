@@ -1,10 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Mi Primera Vista</title>
+    <title>Panel de Control</title>
+    <!-- Bootstrap CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Hola, ¡esta es mi primera vista!</h1>
-    <p th:text="'Bienvenido, ' + ${nombre} + '!'"></p>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Panel de Control</h1>
+        <div class="d-flex justify-content-center">
+            <a href="/cliente/nuevo-ticket" class="btn btn-primary btn-lg mx-2">Crear Ticket</a>
+            <a href="/cliente/tickets" class="btn btn-secondary btn-lg mx-2">Mis Tickets</a>
+            <a href="/logout" class="btn btn-danger btn-lg mx-2">Cerrar Sesión</a>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
