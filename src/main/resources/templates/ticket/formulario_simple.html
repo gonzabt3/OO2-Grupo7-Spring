@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Ticket Simple</title>
+</head>
+<body>
+    <h1>Crear Nuevo Ticket</h1>
+    <form action="/tickets/nuevo-simple" method="post">
+        <div>
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" required>
+        </div>
+        <div>
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="5" required></textarea>
+        </div>
+        <button type="submit">Aceptar</button>
+    </form>
+</body>
+</html>

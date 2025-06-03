@@ -33,7 +33,11 @@ public class Usuario extends Persona {
 			this.contraseña = contraseña;
 		}
 	  
-	  public static void validarNombreApellido(String nombre, String apellido) throws Exception {
+	  public Usuario() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public static void validarNombreApellido(String nombre, String apellido) throws Exception {
 			if (nombre == null || nombre.trim().isEmpty()) {
 		        throw new Exception("El nombre no puede estar vacío.");
 		    }
@@ -87,7 +91,7 @@ public class Usuario extends Persona {
 			return contraseña;
 		}
 
-		private void setContraseña(String contraseña) {
+		public void setContraseña(String contraseña) {
 			this.contraseña = contraseña;
 		}
 	  
