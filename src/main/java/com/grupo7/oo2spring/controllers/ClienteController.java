@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.grupo7.oo2spring.services.TicketService;
 import com.grupo7.oo2spring.services.UsuarioService;
 import com.grupo7.oo2spring.models.Ticket;
-import com.grupo7.oo2spring.models.Usuario;
 
 @Controller
 public class ClienteController {

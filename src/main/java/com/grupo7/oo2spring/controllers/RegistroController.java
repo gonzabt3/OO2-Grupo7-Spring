@@ -6,6 +6,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import com.grupo7.oo2spring.models.Cliente;
+import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 
@@ -25,10 +27,13 @@ public class RegistroController {
     }
 
     @PostMapping
-    public String registrarUsuario(@ModelAttribute Usuario usuario) {
+    public String registrarUsuario(@ModelAttribute Cliente usuario) {
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
+        usuario.setRol(Rol.ROLE_CLIENTE); // Asignar rol ROLE_CLIENTE
+
+        
         usuarioRepository.save(usuario);
-        return "redirect:/login"; // o a donde quieras redirigir
+        return "user-creado";
     }
 }
 

@@ -22,14 +22,14 @@ public class TestIEmpleado {
 
 
     @Test
-    void testGuardarYBuscarEmpleado() {
+    void testGuardarYBuscarEmpleado() throws Exception {
         // Crear empleado
-        Empleado empleado = new Empleado("Juan", "Perez", "20.308.232", "juan.perez@example.com", Area.DESARROLLO, true, 0);
+        Empleado empleado = new Empleado("Juan", "Perez", "20.308.232", "juan.perez@example.com","juan","password", Area.DESARROLLO, true);
         // Guardar en DB
         empleado = empleadoRepository.save(empleado);
 
         // Buscar por ID
-        Optional<Empleado> encontrado = empleadoRepository.findById(empleado.getIdEmpleado());
+        Optional<Empleado> encontrado = empleadoRepository.findById(empleado.getIdUsuario());
         assertThat(encontrado).isPresent();
 
         // Verificar datos
