@@ -16,7 +16,7 @@ public interface IControlRepository extends JpaRepository<Control, Integer> {
     List<Control> findByTicketIdTicket(int ticketId);
     
     // Buscar controles por empleado
-    List<Control> findByEmpleadoIdEmpleado(int empleadoId);
+    List<Control> findByEmpleado_idUsuario(int idUsuario);
 	
  // Buscar controles finalizados o no finalizados
     List<Control> findByFinalizado(boolean finalizado);
@@ -28,7 +28,7 @@ public interface IControlRepository extends JpaRepository<Control, Integer> {
     List<Control> findByFechaSalidaBetween(LocalDate inicio, LocalDate fin);
     
     // Buscar controles por empleado y finalizado
-    List<Control> findByEmpleadoIdEmpleadoAndFinalizado(int empleadoId, boolean finalizado);
+    List<Control> findByEmpleado_idUsuarioAndFinalizado(int empleadoId, boolean finalizado);
     
     // Buscar controles de un ticket que no estén finalizados (ej: en curso)
     List<Control> findByTicketIdTicketAndFinalizado(int ticketId, boolean finalizado);

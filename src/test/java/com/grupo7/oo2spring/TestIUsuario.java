@@ -9,8 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.grupo7.oo2spring.models.Cliente;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
+import com.mysql.cj.xdevapi.Client;
 
 @SpringBootTest
 public class TestIUsuario {
@@ -22,7 +24,7 @@ public class TestIUsuario {
     void testGuardarYBuscarUsuario() {
         // Crear usuario
 		try { 
-        Usuario usuario = new Usuario("Roberto", "Jimenez", "34672169", "roberto.jimenez@example.com", "rober", "test");
+        Usuario usuario = new Cliente("Roberto", "Jimenez", "34672169", "roberto.jimenez@example.com", "rober", "test", "123");
      // Guardar en DB
         usuario = usuarioRepository.save(usuario);
 
