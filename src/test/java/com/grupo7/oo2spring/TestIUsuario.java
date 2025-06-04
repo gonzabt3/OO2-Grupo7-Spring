@@ -8,21 +8,29 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @SpringBootTest
 public class TestIUsuario {
 
 	@Autowired
     private IUsuarioRepository usuarioRepository;
+	@Autowired
+    private PasswordEncoder passwordEncoder;
 	
 	@Test
     void testGuardarYBuscarUsuario() {
         // Crear usuario
 		try { 
+			//usuarioRepository.deleteById(1);
         Usuario usuario = new Usuario("Roberto", "Jimenez", "34672169", "roberto.jimenez@example.com", "rober", "test");
+        String encodedPassword = passwordEncoder.encode(usuario.getContraseña());
+        usuario.setContraseña(encodedPassword);
      // Guardar en DB
         usuario = usuarioRepository.save(usuario);
 

@@ -1,16 +1,26 @@
 package com.grupo7.oo2spring.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Table;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Entity
-public class Usuario extends Persona {
+public class Usuario extends Persona implements UserDetails {
 	
 	 @Id
 	 @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +32,7 @@ public class Usuario extends Persona {
 	  @Column(nullable = false)
 	  private String contraseña;
 
+	  @Enumerated(EnumType.STRING)
 	  private Rol rol;
 	  
 	  public Usuario(String nombre, String apellido, String dni, String email,
@@ -33,7 +44,7 @@ public class Usuario extends Persona {
 			validarDNI(dni);
 			this.nombreUsuario = nombreUsuario;
 			this.contraseña = contraseña;
-			this.rol = rol.ROLE_USER;
+			this.rol = Rol.USER;
 		}
 
 	public static void validarNombreApellido(String nombre, String apellido) throws Exception {
@@ -101,6 +112,18 @@ public class Usuario extends Persona {
 		public void setRol(Rol rol) {
 			this.rol = rol;
 		}
+		
+		@Override
+		public Collection<? extends GrantedAuthority> getAuthorities() {
+		    return List.of(new SimpleGrantedAuthority(this.rol.toString()));
+		}
+
+
+	    @Override
+	    public String getPassword() { return this.contraseña; }
+
+	    @Override
+	    public String getUsername() { return this.nombreUsuario; }
 		
 
 	  

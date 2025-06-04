@@ -3,6 +3,7 @@ package com.grupo7.oo2spring.dto;
 import java.util.Objects;
 
 import com.grupo7.oo2spring.models.Area;
+import com.grupo7.oo2spring.models.Rol;
 
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,8 @@ public class EmpleadoDTO extends PersonaDTO {
 	private int idEmpleado;
 	 
 	private Area area;
+	
+	private Rol rol;
 	
 
 	private boolean disponibilidad;
@@ -23,6 +26,7 @@ public class EmpleadoDTO extends PersonaDTO {
 		this.area = area;
 		this.disponibilidad = disponibilidad;
 		this.nivelAcceso = nivelAcceso;
+		this.rol = Rol.EMPLEADO;
 	}
 
 	

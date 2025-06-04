@@ -1,9 +1,9 @@
-package com.grupo7.oo2spring.models;
+package com.grupo7.oo2spring.dto;
 
 public enum Rol {
-    ADMIN("Admin"),
-    EMPLEADO("Empleado"),
-    USER("Usuario");
+    ROLE_ADMIN("Admin"),
+    ROLE_EMPLEADO("Empleado"),
+    ROLE_USER("Usuario");
 	
 	private final String nombre;
 	

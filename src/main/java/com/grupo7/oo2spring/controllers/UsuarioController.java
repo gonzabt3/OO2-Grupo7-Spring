@@ -16,15 +16,17 @@ import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import com.grupo7.oo2spring.services.UsuarioService;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-    @Autowired
-    private IUsuarioRepository userRepository;
+    private final IUsuarioRepository userRepository;
     
-    @Autowired
-    private UsuarioService usuarioService;
+ 
+    private final UsuarioService usuarioService;
 
     @GetMapping("/registrar")
     public String mostrarFormularioRegistro() {

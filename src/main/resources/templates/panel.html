@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Panel de Control</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Panel de Control</h1>
+        <div class="d-flex justify-content-center">
+			<p>ROL ACTUAL: <span th:text="${rol}">[rol]</span></p>
+            <!-- Crear Ticket visible para todos -->
+            <a href="/ticket/formulario_simple" class="btn btn-primary btn-lg mx-2">
+                Crear Ticket
+            </a>
+
+            <!-- Mis Tickets visible solo para usuarios -->
+            <a href="/cliente/tickets" class="btn btn-secondary btn-lg mx-2"
+               th:if="${rol == 'USER'}">
+                Mis Tickets
+            </a>
+
+            <!-- Ver Tickets Asignados visible solo para empleados -->
+            <a href="/empleado/tickets-asignados" class="btn btn-info btn-lg mx-2"
+               th:if="${rol == 'EMPLEADO'}">
+                Ver Tickets Asignados
+            </a>
+
+            <!-- Cerrar Sesión visible para todos -->
+            <a href="/logout" class="btn btn-danger btn-lg mx-2">
+                Cerrar Sesión
+            </a>
+        </div>
+    </div>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

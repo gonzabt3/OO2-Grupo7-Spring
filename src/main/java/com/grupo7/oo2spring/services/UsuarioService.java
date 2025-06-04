@@ -4,11 +4,19 @@ import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,22 +30,33 @@ import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 public class UsuarioService {
 
     private final IUsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
  
+    @PostConstruct
+    public void init() {
+        System.out.println("UsuarioService está cargado ✔");
+    }
+    
+    
     public Usuario guardarUsuario(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) {
         Usuario nuevoUsuario = new Usuario();
+        nuevoUsuario.setNombreUsuario(nombreUsuario);
         nuevoUsuario.setNombre(nombre);
         nuevoUsuario.setApellido(apellido);
         nuevoUsuario.setDni(dni);
         nuevoUsuario.setEmail(email);
-        nuevoUsuario.setNombreUsuario(nombreUsuario);
-        nuevoUsuario.setContraseña(contraseña);
-
+        nuevoUsuario.setContraseña(passwordEncoder.encode(contraseña));
         return usuarioRepository.save(nuevoUsuario);
     }
     
     public Usuario getUsuarioByUsername(String username) {
         return usuarioRepository.findByNombreUsuario(username).orElse(null);
     }
+    
+    public Optional<Usuario> buscarPorUsernameYPassword(String username, String password) {
+    	return usuarioRepository.findByNombreUsuarioAndContraseña(username, password);
+    }
+   
 
 }

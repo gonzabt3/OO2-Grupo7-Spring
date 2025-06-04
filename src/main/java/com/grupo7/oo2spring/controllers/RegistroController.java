@@ -10,7 +10,6 @@ import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 
 @Controller
-@RequestMapping("/registro")
 public class RegistroController {
 
     @Autowired
@@ -19,16 +18,23 @@ public class RegistroController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping
+    @GetMapping("/registro")
     public String mostrarFormularioRegistro() {
-        return "registro"; // carga registro.html
+        return "/usuario/registro_form";
     }
 
-    @PostMapping
+    @PostMapping("/registro")
     public String registrarUsuario(@ModelAttribute Usuario usuario) {
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
         usuarioRepository.save(usuario);
-        return "redirect:/login"; // o a donde quieras redirigir
+        System.out.println("Usuario registrado: " + usuario.getUsername());
+        return "redirect:/usuario/registro_exito";
+    }
+    
+    @GetMapping("/usuario/registro_exito")
+    public String mostrarRegistroExito() {
+    	 System.out.println(">> MOSTRANDO /usuario/registro_exito");
+        return "/usuario/registro_exito"; 
     }
 }
 

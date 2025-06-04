@@ -9,20 +9,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.grupo7.oo2spring.services.TicketService;
 import com.grupo7.oo2spring.services.UsuarioService;
+
+import lombok.RequiredArgsConstructor;
+
 import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.models.Usuario;
 
 @Controller
+@RequiredArgsConstructor
 public class ClienteController {
-    @Autowired
-    private UsuarioService usuarioService;
 
-    @Autowired
-    private TicketService ticketService;
+    private final UsuarioService usuarioService;
 
-    public ClienteController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
+    private final TicketService ticketService;
 
     @GetMapping("/cliente/tickets")
     public String verTicketsCliente(Model model) {

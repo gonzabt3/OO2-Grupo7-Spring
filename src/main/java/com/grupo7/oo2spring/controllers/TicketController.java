@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequestMapping("/tickets")
+@RequestMapping("/ticket")
 public class TicketController {
 
     @Autowired
@@ -42,10 +42,10 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-    @GetMapping("/nuevo")
+    @GetMapping("/formulario_simple")
     public String mostrarFormulario(Model model) {
         model.addAttribute("ticket", new TicketDTO());
-        return "formulario-ticket";
+        return "ticket/formulario_simple";
     }
 
     @PostMapping("/crear")
@@ -64,18 +64,13 @@ public class TicketController {
         ticketRepository.save(nuevoTicket);
 
         model.addAttribute("mensaje", "Ticket creado con éxito");
-        return "ticket-creado"; // Este es el HTML que deberías crear
+        return "ticket-creado"; 
     	} catch (RuntimeException ex) {
     	    model.addAttribute("error", ex.getMessage());
-    	    return "formulario-ticket"; // Volvés al formulario con mensaje de error
+    	    return "formulario-ticket";
     	}
     }
-   
-	
-	@GetMapping("/nuevo-simple")
-    public String mostrarFormularioSimple() {
-        return "ticket/formulario_simple"; // Nombre del formulario HTML
-    }
+ 
 
     @PostMapping("/nuevo-simple")
     public String guardarTicketSimple(

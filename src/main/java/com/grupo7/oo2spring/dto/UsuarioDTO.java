@@ -24,7 +24,7 @@ public class UsuarioDTO extends PersonaDTO {
 			validarDNI(dni);
 			this.nombreUsuario = nombreUsuario;
 			this.contraseña = contraseña;
-			this.rol = rol.ROLE_USER;
+			this.rol = Rol.USER;
 		}
 	  
 	  public static void validarNombreApellido(String nombre, String apellido) throws Exception {

@@ -1,0 +1,8 @@
+<form th:action="@{/usuario/login/process}" method="post">
+	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+  <input type="text" name="username" placeholder="Usuario" required/>
+  <input type="password" name="password" placeholder="Contraseña" required/>
+  <button type="submit">Ingresar</button>
+  
+  <p th:if="${param.error}">Usuario o contraseña incorrectos</p>
+</form>

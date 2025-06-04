@@ -26,6 +26,9 @@ public class Empleado extends Persona {
 	@Enumerated(EnumType.STRING)
 	private Area area;
 	
+	@Enumerated(EnumType.STRING)
+	private Rol rol;
+	
 
 	private boolean disponibilidad;
 	private int nivelAcceso;
@@ -36,6 +39,7 @@ public class Empleado extends Persona {
 		this.area = area;
 		this.disponibilidad = disponibilidad;
 		this.nivelAcceso = nivelAcceso;
+		this.rol = Rol.EMPLEADO;
 	}
 
 	
