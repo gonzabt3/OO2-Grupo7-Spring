@@ -1,31 +1,22 @@
-package com.grupo7.oo2spring.models;
+package com.grupo7.oo2spring.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Table;
+import com.grupo7.oo2spring.models.Rol;
+
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-@Entity
-public class Usuario extends Persona {
+public class UsuarioDTO extends PersonaDTO {
 	
-	 @Id
-	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 private int idUsuario;
 	 
-	 @Column(name = "username", nullable = false, unique = true)
 	 private String nombreUsuario;
 	 
-	  @Column(nullable = false)
 	  private String contraseña;
 	  
 	  private Rol rol;
 	  
-	  public Usuario(String nombre, String apellido, String dni, String email,
-				String nombreUsuario, String contraseña) throws Exception {
+	  public UsuarioDTO(String nombre, String apellido, String dni, String email,
+				String nombreUsuario, String contraseña, Rol rol) throws Exception {
 			super(nombre, apellido, dni, email);
 			validarNombreApellido(nombre, apellido);
 			validarNombreUsuario(nombreUsuario);
@@ -74,7 +65,7 @@ public class Usuario extends Persona {
 			return idUsuario;
 		}
 
-		private void setIdUsuario(int idUsuario) {
+		public void setIdUsuario(int idUsuario) {
 			this.idUsuario = idUsuario;
 		}
 
@@ -90,7 +81,7 @@ public class Usuario extends Persona {
 			return contraseña;
 		}
 
-		public void setContraseña(String contraseña) {
+		private void setContraseña(String contraseña) {
 			this.contraseña = contraseña;
 		}
 
@@ -101,6 +92,8 @@ public class Usuario extends Persona {
 		public void setRol(Rol rol) {
 			this.rol = rol;
 		}
+		
+		
 	  
 
 }

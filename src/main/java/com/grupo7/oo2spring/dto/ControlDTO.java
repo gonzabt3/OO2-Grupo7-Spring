@@ -1,44 +1,41 @@
-package grupo7ticketManager.models.entities;
+package com.grupo7.oo2spring.dto;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-public class Control {
+import lombok.NoArgsConstructor;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idControl;
+@NoArgsConstructor
+public class ControlDTO {
 
-    @ManyToOne
-    @JoinColumn(name = "ticket_id")
-    private Ticket ticket;
-
-
-    @ManyToOne
-    @JoinColumn(name = "empleado_id")
-    private Persona empleado;
-
+    private int idControl;
+    private TicketDTO ticket;
+    private EmpleadoDTO empleado;
     private LocalDate fechaEntrada;
-
     private LocalDate fechaSalida;
-
     private boolean finalizado;
 
     // Getters y setters
-    public Integer getIdControl() {
+    public int getIdControl() {
         return idControl;
     }
 
-    public void setIdControl(Integer idControl) {
+    public void setIdControl(int idControl) {
         this.idControl = idControl;
     }
 
-    public Ticket getTicket() {
+    public EmpleadoDTO getEmpleadoDTO() {
+		return empleado;
+	}
+
+	public void setEmpleadoDTO(EmpleadoDTO empleado) {
+		this.empleado = empleado;
+	}
+
+	public TicketDTO getTicket() {
         return ticket;
     }
 
-    public void setTicket(Ticket ticket) {
+    public void setTicket(TicketDTO ticket) {
         this.ticket = ticket;
     }
 

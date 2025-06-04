@@ -1,13 +1,12 @@
-package com.grupo7.oo2spring.models;
+package com.grupo7.oo2spring.dto;
 
 import java.util.Objects;
 
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
-@MappedSuperclass
-@NoArgsConstructor(force = true)
-public class Persona {
+@NoArgsConstructor
+public class PersonaDTO {
 
     private String nombre;
 
@@ -16,16 +15,13 @@ public class Persona {
     private String dni;
 
     private String email;
-   
 	
-	public Persona(String nombre, String apellido, String dni, String email) {
+	public PersonaDTO(String nombre, String apellido, String dni, String email) {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
 		this.email = email;
 	}
-	
-
 	
 
 
@@ -74,7 +70,7 @@ public class Persona {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Persona other = (Persona) obj;
+		PersonaDTO other = (PersonaDTO) obj;
 		return Objects.equals(apellido, other.apellido) && Objects.equals(dni, other.dni)
 				&& Objects.equals(email, other.email) && Objects.equals(nombre, other.nombre);
 	}

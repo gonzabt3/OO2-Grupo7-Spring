@@ -1,15 +1,15 @@
-package grupo7ticketManager.models.entities;
+package com.grupo7.oo2spring.dto;
 
-import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
-public class Ticket {
+import lombok.NoArgsConstructor;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idTicket;
+@NoArgsConstructor
+public class TicketDTO {
+
+    private int idTicket;
 
     private String titulo;
 
@@ -19,26 +19,33 @@ public class Ticket {
 
     private LocalDate fechaCierre;
 
-    @ManyToOne
-    @JoinColumn(name = "persona_creador_id")
-    private Persona personaCreador;
+    private UsuarioDTO usuarioCreador;
 
-    @ManyToOne
-    @JoinColumn(name = "estado_id")
     private Estado estado;
 
-    @Enumerated(EnumType.STRING)
     private Prioridad prioridad;
 
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
-    private List<Control> procesos;
+    private List<ControlDTO> procesos;
+    
+   
+	public TicketDTO(String titulo, String descripcion,
+			UsuarioDTO usuarioCreador, Estado estado, Prioridad prioridad) {
+		super();
+		this.idTicket = idTicket;
+		this.titulo = titulo;
+		this.descripcion = descripcion;
+		this.fechaCreacion = LocalDate.now();
+		this.fechaCierre = null;
+		this.usuarioCreador = usuarioCreador;
+		this.estado = estado;
+		this.prioridad = prioridad;
+	}
 
-    // Getters y setters
-    public Integer getIdTicket() {
+    public int getIdTicket() {
         return idTicket;
     }
 
-    public void setIdTicket(Integer idTicket) {
+    public void setIdTicket(int idTicket) {
         this.idTicket = idTicket;
     }
 
@@ -73,16 +80,17 @@ public class Ticket {
     public void setFechaCierre(LocalDate fechaCierre) {
         this.fechaCierre = fechaCierre;
     }
+    
 
-    public Persona getPersonaCreador() {
-        return personaCreador;
-    }
+    public UsuarioDTO getUsuarioCreador() {
+		return usuarioCreador;
+	}
 
-    public void setPersonaCreador(Persona personaCreador) {
-        this.personaCreador = personaCreador;
-    }
+	public void setUsuarioCreador(UsuarioDTO usuarioCreador) {
+		this.usuarioCreador = usuarioCreador;
+	}
 
-    public Estado getEstado() {
+	public Estado getEstado() {
         return estado;
     }
 
@@ -98,11 +106,12 @@ public class Ticket {
         this.prioridad = prioridad;
     }
 
-    public List<Control> getProcesos() {
+    public List<ControlDTO> getProcesos() {
         return procesos;
     }
 
-    public void setProcesos(List<Control> procesos) {
+    public void setProcesos(List<ControlDTO> procesos) {
         this.procesos = procesos;
     }
+    
 }

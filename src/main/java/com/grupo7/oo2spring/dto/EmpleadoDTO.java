@@ -1,36 +1,23 @@
-package com.grupo7.oo2spring.models;
+package com.grupo7.oo2spring.dto;
 
 import java.util.Objects;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.EqualsAndHashCode;
+import com.grupo7.oo2spring.models.Area;
+
 import lombok.NoArgsConstructor;
 
-@Entity
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class Empleado extends Persona {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EmpleadoDTO extends PersonaDTO {
+
 	private int idEmpleado;
 	 
-
-	@Enumerated(EnumType.STRING)
 	private Area area;
 	
 
 	private boolean disponibilidad;
 	private int nivelAcceso;
 	
-	public Empleado(String nombre, String apellido, String dni, String email, Area area, boolean disponibilidad,
+	public EmpleadoDTO(String nombre, String apellido, String dni, String email, Area area, boolean disponibilidad,
 			int nivelAcceso) {
 		super(nombre, apellido, dni, email);
 		this.area = area;
@@ -43,7 +30,7 @@ public class Empleado extends Persona {
 		return idEmpleado;
 	}
 
-	private void setIdEmpleado(int idEmpleado) {
+	public void setIdEmpleado(int idEmpleado) {
 		this.idEmpleado = idEmpleado;
 	}
 	
@@ -89,7 +76,7 @@ public class Empleado extends Persona {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Empleado other = (Empleado) obj;
+		EmpleadoDTO other = (EmpleadoDTO) obj;
 		return area == other.area && disponibilidad == other.disponibilidad && idEmpleado == other.idEmpleado
 				&& nivelAcceso == other.nivelAcceso;
 	}
