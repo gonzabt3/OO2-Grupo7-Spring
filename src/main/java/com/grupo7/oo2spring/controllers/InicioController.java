@@ -5,11 +5,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class ControladorTest {
+public class InicioController {
 
     @GetMapping("/inicio")
-    public String mostrarVista(Model model) {
-        model.addAttribute("nombre", "Usuario");
+    public String mostrarInicio(Model model) {
         return "index"; 
     }
 }

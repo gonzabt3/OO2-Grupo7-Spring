@@ -3,6 +3,10 @@ spring:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  security:
+    user:
+      name: user
+      password: password
   jpa:
     hibernate:
       ddl-auto: update
@@ -22,6 +26,7 @@ spring:
           auth: true
           starttls:
             enable: true
+
 logging:
   level:
     org.hibernate.SQL: DEBUG
