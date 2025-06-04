@@ -11,9 +11,11 @@ import com.grupo7.oo2spring.models.Usuario;
 @Repository("usuarioRepository")
 public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
 	
-	
+	Optional<Usuario> findByNombreUsuario(String nombreUsuario);
+    Optional<Usuario> findByDni(String dni);
+    Optional<Usuario> findByEmail(String email);
 	 // Buscar usuario por nombre y apellido
-    Optional<Usuario> findByNombreAndApellido(String nombre, String apellido);
+    //Optional<Usuario> findByNombreAndApellido(String nombre, String apellido);
 	
  // Validar existencia de nombreUsuario (devuelve true si existe)
     boolean existsByNombreUsuario(String nombreUsuario);
@@ -26,10 +28,10 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
     boolean existsByDni(String dni);
     
  // Buscar usuario por nombreUsuario
-    Optional<Usuario> findByNombreUsuario(String nombreUsuario);
+    //Optional<Usuario> findByNombreUsuario(String nombreUsuario);
     
     // Buscar usuario por dni
-    Optional<Usuario> findByDni(String dni);
+    //Optional<Usuario> findByDni(String dni);
 	
 
 }

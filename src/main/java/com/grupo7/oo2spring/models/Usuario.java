@@ -35,8 +35,8 @@ public class Usuario extends Persona {
 			this.contraseña = contraseña;
 			this.rol = rol.ROLE_USER;
 		}
-	  
-	  public static void validarNombreApellido(String nombre, String apellido) throws Exception {
+
+	public static void validarNombreApellido(String nombre, String apellido) throws Exception {
 			if (nombre == null || nombre.trim().isEmpty()) {
 		        throw new Exception("El nombre no puede estar vacío.");
 		    }

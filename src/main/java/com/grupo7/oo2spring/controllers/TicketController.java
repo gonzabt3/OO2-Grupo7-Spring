@@ -1,8 +1,10 @@
 package com.grupo7.oo2spring.controllers;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo7.oo2spring.dto.TicketDTO;
@@ -35,6 +38,9 @@ public class TicketController {
 
     @Autowired
     private ITicketRepository ticketRepository;
+    
+    @Autowired
+    private TicketService ticketService;
 
     @GetMapping("/nuevo")
     public String mostrarFormulario(Model model) {
@@ -64,5 +70,43 @@ public class TicketController {
     	    return "formulario-ticket"; // Volvés al formulario con mensaje de error
     	}
     }
+   
+	
+	@GetMapping("/nuevo-simple")
+    public String mostrarFormularioSimple() {
+        return "ticket/formulario_simple"; // Nombre del formulario HTML
+    }
+
+    @PostMapping("/nuevo-simple")
+    public String guardarTicketSimple(
+            @RequestParam("titulo") String titulo,
+            @RequestParam("descripcion") String descripcion,
+            Model model) {
+    	model.addAttribute("se creo con exito post");
+        Usuario usuarioCreador = usuarioRepository.findById(1).orElse(null); // Asumiendo que existe un usuario con ID 1
+        
+        
+        if (usuarioCreador == null) {
+            model.addAttribute("mensaje", "Error: No se encontró el usuario creador.");
+            return "ticket/exito";
+        }
+
+        Ticket nuevoTicket = ticketService.crearTicket(usuarioCreador, titulo, descripcion);
+        model.addAttribute("mensaje", "Ticket creado exitosamente con ID: " + nuevoTicket.getIdTicket());
+        return "redirect:/exito"; // Redirigir a la página de éxito
+    }
+
+    @GetMapping("/exito")
+    public String mostrarExito(Model model) {
+        model.addAttribute("mensajeExito", "¡El ticket ha sido creado con éxito!");
+        return "ticket/exito";
+    }
+
+	@GetMapping("/ver")
+	public ResponseEntity<List<Ticket>> listartickets(){
+		List<Ticket> tickets = ticketRepository.findAll();
+		return new ResponseEntity<>(tickets, HttpStatus.OK);
+    
+	}
 }
 

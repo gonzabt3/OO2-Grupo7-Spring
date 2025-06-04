@@ -11,8 +11,10 @@ import com.grupo7.oo2spring.models.Estado;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.models.Ticket;
 
-@Repository("ticketRepository")
+@Repository
 public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
+	
+	public Optional<Ticket> findById(int idTicket);
 	
 	 // Buscar tickets por título
     List<Ticket> findByTituloContainingIgnoreCase(String titulo);
@@ -35,8 +37,8 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
     // Buscar tickets cerrados antes de una fecha
     List<Ticket> findByFechaCierreBefore(LocalDate fecha);
     
-    
 	
+
 	
 
 }

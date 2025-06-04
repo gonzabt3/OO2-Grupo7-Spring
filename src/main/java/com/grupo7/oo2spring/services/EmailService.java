@@ -1,4 +1,4 @@
-package com.grupo7.oo2spring.services;
+/*package com.grupo7.oo2spring.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,4 +27,4 @@ public class EmailService {
 	        System.out.println("Mensaje enviado a " + to);
 	 
 }
-}
+}*/

@@ -1,4 +1,4 @@
-package com.grupo7.oo2spring;
+/*package com.grupo7.oo2spring;
 
 import static org.mockito.Mockito.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,5 +27,5 @@ public class TestMail {
 		emailService.enviarEmail(emailUsername, "Hola Mundo!", "Mail de ejemplo.");
 	}
 	
-	}
+	}*/
 
