@@ -16,7 +16,6 @@ public class Persona {
     private String dni;
 
     private String email;
-   
 	
 	public Persona(String nombre, String apellido, String dni, String email) {
 		this.nombre = nombre;

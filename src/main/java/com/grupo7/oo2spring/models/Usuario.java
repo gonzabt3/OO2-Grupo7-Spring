@@ -21,7 +21,7 @@ public class Usuario extends Persona {
 	 
 	  @Column(nullable = false)
 	  private String contraseña;
-	  
+
 	  private Rol rol;
 	  
 	  public Usuario(String nombre, String apellido, String dni, String email,
@@ -101,6 +101,8 @@ public class Usuario extends Persona {
 		public void setRol(Rol rol) {
 			this.rol = rol;
 		}
+		
+
 	  
 
 }
