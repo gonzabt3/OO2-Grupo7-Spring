@@ -55,6 +55,7 @@
                     <th>Estado</th>
                     <th>Prioridad</th>
                     <th>Procesos</th>
+                    <th>Acciones</th> <!-- Nueva columna -->
                 </tr>
             </thead>
             <tbody>
@@ -71,6 +72,18 @@
                         <ul>
                             <li th:each="proceso : ${ticket.procesos}" th:text="${proceso.nombre}"></li>
                         </ul>
+                    </td>
+                    <td>
+                        <!-- Evaluar el rol del usuario -->
+                         <!--  <div th:if="${#rol == 'ROLE_EMPLEADO'}">  -->
+                            <button class="btn btn-warning">Editar</button>
+                         <!--  </div>  -->
+                          <!-- <div th:if="${#rol == 'ROLE_MANAGER'}">  -->
+                            <button class="btn btn-info">Asignar</button>
+                         <!--  </div>  -->
+                          <!-- <div th:if="${#rol == 'ROLE_CLIENTE'}">  -->
+                            <button class="btn btn-success">Ver Detalles</button>
+                          <!-- </div>  -->
                     </td>
                 </tr>
             </tbody>
