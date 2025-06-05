@@ -1,48 +1,66 @@
-<h2>Lista de Usuarios</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Usuarios</title>
 
-<!-- Mensajes de éxito o error fuera de la tabla -->
-<div th:if="${success}" th:text="${success}" style="color: green;"></div>
-<div th:if="${error}" th:text="${error}" style="color: red;"></div>
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 
-<table>
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>DNI</th>
-            <th>Email</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="usuario : ${usuarios}">
-            <td th:text="${usuario.nombre}">Nombre</td>
-            <td th:text="${usuario.apellido}">Apellido</td>
-            <td th:text="${usuario.dni}">DNI</td>
-            <td th:text="${usuario.email}">Email</td>
-			<td>
-				<form th:if="${usuario.rol.name() == 'CLIENTE'}"
-				      th:action="@{/manager/{id}/a-empleado(id=${usuario.idUsuario})}"
-				      method="get"
-				      style="display:inline;">
-				  
-				  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <!-- Custom styles -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
 
-				  <button type="submit" class="btn btn-primary">
-				    Convertir en Empleado
-				  </button>
-				</form>
+<div class="container mt-5">
+    <h2 class="mb-4">Lista de Usuarios</h2>
 
-			  <form th:if="${usuario.rol.name() == 'EMPLEADO'}"
-			        th:action="@{/manager/{id}/sacar-permisos(id=${usuario.idUsuario})}" 
-			        method="post" style="display:inline;">
-					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-			    <button type="submit" 
-			      onclick="return confirm('¿Estás seguro que querés sacar permisos a este empleado?');">
-			      Sacar permisos
-			    </button>
-			  </form>
-			</td>
-        </tr>
-    </tbody>
-</table>
+    <!-- Mensajes de éxito o error -->
+    <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>DNI</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="usuario : ${usuarios}">
+                    <td th:text="${usuario.nombre}">Nombre</td>
+                    <td th:text="${usuario.apellido}">Apellido</td>
+                    <td th:text="${usuario.dni}">DNI</td>
+                    <td th:text="${usuario.email}">Email</td>
+                    <td>
+                        <form th:if="${usuario.rol.name() == 'CLIENTE'}"
+                              th:action="@{/manager/{id}/a-empleado(id=${usuario.idUsuario})}"
+                              method="get"
+                              class="d-inline">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="btn btn-sm btn-success">Convertir en Empleado</button>
+                        </form>
+
+                        <form th:if="${usuario.rol.name() == 'EMPLEADO'}"
+                              th:action="@{/manager/{id}/sacar-permisos(id=${usuario.idUsuario})}"
+                              method="post"
+                              class="d-inline">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="btn btn-sm btn-danger"
+                                    onclick="return confirm('¿Estás seguro que querés sacar permisos a este empleado?');">
+                                Sacar permisos
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
