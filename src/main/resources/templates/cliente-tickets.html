@@ -8,7 +8,35 @@
 <body>
     <div class="container mt-5">
         <h1 class="text-center my-4">Lista de Tickets</h1>
-        
+        <form th:action="@{/cliente/tickets}" method="get" class="mb-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="titulo">Título:</label>
+                    <input type="text" id="titulo" name="titulo" class="form-control" placeholder="Buscar por título">
+                </div>
+                <div class="col-md-3">
+                    <label for="estado">Estado:</label>
+                    <select id="estado" name="estado" class="form-control">
+                        <option value="">Todos</option>
+                        <option value="PENDIENTE">Pendiente</option>
+                        <option value="EN_PROGRESO">En progreso</option>
+                        <option value="FINALIZADO">Finalizado</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="prioridad">Prioridad:</label>
+                    <select id="prioridad" name="prioridad" class="form-control">
+                        <option value="">Todas</option>
+                        <option value="ALTA">Alta</option>
+                        <option value="MEDIA">Media</option>
+                        <option value="BAJA">Baja</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary mt-4">Filtrar</button>
+                </div>
+            </div>
+        </form>
         <!-- Mostrar mensaje si no hay tickets -->
         <div th:if="${tickets.size() == 0}" class="alert alert-warning text-center">
             No hay tickets disponibles.
