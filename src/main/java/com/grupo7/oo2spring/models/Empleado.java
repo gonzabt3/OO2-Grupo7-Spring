@@ -10,12 +10,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@PrimaryKeyJoinColumn(name = "id_usuario")
 public class Empleado extends Usuario {
 		 
 
@@ -24,13 +26,11 @@ public class Empleado extends Usuario {
 	
 	private boolean disponibilidad;
 	
-	private Rol rol;
-	
 	public Empleado(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña, Area area, boolean disponibilidad) throws Exception {
 		super(nombre, apellido, dni, email, nombreUsuario, contraseña);
 		this.area = area;
 		this.disponibilidad = disponibilidad;
-		this.rol = Rol.EMPLEADO;
+		this.setRol(Rol.EMPLEADO);
 	}
 	
 	public Area getArea() {

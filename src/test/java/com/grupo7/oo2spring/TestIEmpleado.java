@@ -18,26 +18,30 @@ import com.grupo7.oo2spring.repositories.*;
 public class TestIEmpleado {
 	
 	@Autowired
-    private IEmpleadoRepository empleadoRepository;
+    private IUsuarioRepository usuarioRepository;
 
 
     @Test
     void testGuardarYBuscarEmpleado() throws Exception {
         // Crear empleado
-        Empleado empleado = new Empleado("Juan", "Perez", "20.308.232", "juan.perez@example.com","juan","password", Area.DESARROLLO, true);
+    	usuarioRepository.deleteById(15);
+        Empleado empleado = new Empleado("Juan", "Perez", "20308232", "juan.perez@example.com","juan","password", Area.DESARROLLO, true);
         // Guardar en DB
-        empleado = empleadoRepository.save(empleado);
+        //TODO: encode password
+        empleado = usuarioRepository.save(empleado);
 
         // Buscar por ID
-        Optional<Empleado> encontrado = empleadoRepository.findById(empleado.getIdUsuario());
+        Optional<Empleado> encontrado = usuarioRepository.findEmpleadoById(empleado.getIdUsuario());
         assertThat(encontrado).isPresent();
+        
+        System.out.println("Rol del empleado creado: " + empleado.getRol());
 
         // Verificar datos
         assertThat(encontrado.get().getNombre()).isEqualTo("Juan");
         assertThat(encontrado.get().getApellido()).isEqualTo("Perez");
 
         // Buscar todos los empleados
-        List<Empleado> lista = empleadoRepository.findAll();
+        List<Empleado> lista = usuarioRepository.findAllEmpleados();
         assertThat(lista).isNotEmpty();
         assertThat(lista).contains(empleado);
     }

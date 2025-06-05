@@ -3,6 +3,8 @@
   <input type="text" name="username" placeholder="Usuario" required/>
   <input type="password" name="password" placeholder="Contraseña" required/>
   <button type="submit">Ingresar</button>
+  <a th:href="@{/registro}" class="btn">Crear nuevo usuario</a>
+
   
   <p th:if="${param.error}">Usuario o contraseña incorrectos</p>
 </form>

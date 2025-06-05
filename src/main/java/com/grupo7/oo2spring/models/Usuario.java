@@ -40,7 +40,11 @@ public abstract class Usuario {
      validarNombreUsuario(nombreUsuario);
      validarEmail(email);
      validarDNI(dni);
+     this.nombre = nombre;
+     this.apellido = apellido;
      this.nombreUsuario = nombreUsuario;
+     this.dni = dni;
+     this.email = email;
      this.contraseña = contraseña;
      this.rol = rol.USER;
    }
@@ -83,7 +87,7 @@ public abstract class Usuario {
      return idUsuario;
    }
 
-   private void setIdUsuario(int idUsuario) {
+   public void setIdUsuario(int idUsuario) {
      this.idUsuario = idUsuario;
    }
 

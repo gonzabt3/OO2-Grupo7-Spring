@@ -61,7 +61,6 @@ public class SeguridadConfig {
         });
 
         registrationBean.addUrlPatterns("/*");
-        System.out.println("✅ Filtro registrado");
         return registrationBean;
     }
     
@@ -72,7 +71,7 @@ public class SeguridadConfig {
         public String mostrarErrorLogin(HttpServletRequest request, Model model) {
             Object errorMessage = request.getAttribute("error_message");
             model.addAttribute("mensaje", errorMessage != null ? errorMessage : "Error desconocido");
-            return "/error"; // debe existir este HTML
+            return "/error";
         }
     }
 

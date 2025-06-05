@@ -1,5 +1,6 @@
 package com.grupo7.oo2spring.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +8,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.grupo7.oo2spring.models.Empleado;
+import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import com.grupo7.oo2spring.services.UsuarioService;
@@ -20,17 +25,15 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/usuarios")
+@RequestMapping("/usuario")
 public class UsuarioController {
 
-    private final IUsuarioRepository userRepository;
-    
- 
+    private final IUsuarioRepository usuarioRepository;
+
     private final UsuarioService usuarioService;
 
     @GetMapping("/registrar")
     public String mostrarFormularioRegistro() {
-    	//usuarioService.guardarUsuario("Alex","apellido", "12345678", "alex.asdasd@gmail.com", "user2000", "user200");
         return "usuario/registro_form"; // Nombre del formulario HTML
     }
 
@@ -49,7 +52,7 @@ public class UsuarioController {
     }
     @GetMapping("/verificar/{id}")
     public String verificarUsuario(@PathVariable int id, Model model) {
-        Optional<Usuario> usuarioOptional = userRepository.findById(id);
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
             model.addAttribute("existeUsuario", true);
@@ -59,6 +62,11 @@ public class UsuarioController {
             model.addAttribute("existeUsuario", false);
             model.addAttribute("idUsuario", id);
         }
-        return "usuario/verificacion"; // Nombre de la vista HTML
+        return "usuario/verificacion";
     }
+    
+    
+
+
+
 }

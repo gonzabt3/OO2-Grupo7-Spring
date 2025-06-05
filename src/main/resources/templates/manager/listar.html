@@ -1,0 +1,48 @@
+<h2>Lista de Usuarios</h2>
+
+<!-- Mensajes de éxito o error fuera de la tabla -->
+<div th:if="${success}" th:text="${success}" style="color: green;"></div>
+<div th:if="${error}" th:text="${error}" style="color: red;"></div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>DNI</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="usuario : ${usuarios}">
+            <td th:text="${usuario.nombre}">Nombre</td>
+            <td th:text="${usuario.apellido}">Apellido</td>
+            <td th:text="${usuario.dni}">DNI</td>
+            <td th:text="${usuario.email}">Email</td>
+			<td>
+				<form th:if="${usuario.rol.name() == 'CLIENTE'}"
+				      th:action="@{/manager/{id}/a-empleado(id=${usuario.idUsuario})}"
+				      method="get"
+				      style="display:inline;">
+				  
+				  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+				  <button type="submit" class="btn btn-primary">
+				    Convertir en Empleado
+				  </button>
+				</form>
+
+			  <form th:if="${usuario.rol.name() == 'EMPLEADO'}"
+			        th:action="@{/manager/{id}/sacar-permisos(id=${usuario.idUsuario})}" 
+			        method="post" style="display:inline;">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			    <button type="submit" 
+			      onclick="return confirm('¿Estás seguro que querés sacar permisos a este empleado?');">
+			      Sacar permisos
+			    </button>
+			  </form>
+			</td>
+        </tr>
+    </tbody>
+</table>

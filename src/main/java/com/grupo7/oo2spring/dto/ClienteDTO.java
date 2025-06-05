@@ -1,21 +1,22 @@
-package com.grupo7.oo2spring.models;
+package com.grupo7.oo2spring.dto;
 
 import java.util.Objects;
+
+import com.grupo7.oo2spring.models.Usuario;
 
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@Entity
-public class Cliente extends Usuario {
+public class ClienteDTO extends UsuarioDTO {
 
     private String nroCliente;
 
-    public Cliente(String nombre, String apellido, String dni, String email,
-    String nombreUsuario, String contraseña) throws Exception {
+    public ClienteDTO(String nombre, String apellido, String dni, String email,
+    String nombreUsuario, String contraseña, String nroCliente) throws Exception {
         super(nombre, apellido, dni, email, nombreUsuario, contraseña);
+        this.nroCliente = nroCliente;
         this.setRol(Rol.CLIENTE);
     }
 
@@ -40,7 +41,7 @@ public class Cliente extends Usuario {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Cliente other = (Cliente) obj;
+		ClienteDTO other = (ClienteDTO) obj;
 		return Objects.equals(nroCliente, other.nroCliente);
 	}
 
@@ -48,10 +49,7 @@ public class Cliente extends Usuario {
 	public String toString() {
 		return "Cliente [nroCliente=" + nroCliente + "]";
 	}
-	
-	
-	
-	
+
     
     
 }

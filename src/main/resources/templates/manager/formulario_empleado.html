@@ -1,0 +1,34 @@
+<h2>Convertir en Empleado</h2>
+
+<form th:action="@{/manager/convertir-a-empleado}" method="post" th:object="${empleado}">
+    <input type="hidden" th:field="*{idUsuario}" />
+
+    <label>Nombre:</label>
+    <input type="text" th:field="*{nombre}" readonly /><br/>
+
+    <label>Apellido:</label>
+    <input type="text" th:field="*{apellido}" readonly /><br/>
+
+    <label>DNI:</label>
+    <input type="text" th:field="*{dni}" readonly /><br/>
+
+    <label>Email:</label>
+    <input type="email" th:field="*{email}" readonly /><br/>
+
+    <label>Usuario:</label>
+    <input type="text" th:field="*{nombreUsuario}" readonly /><br/>
+
+    <!-- Contraseña no se muestra -->
+
+	<label>Area:</label>
+	<select th:field="*{area}" required>
+	    <option th:each="areaEnum : ${T(com.grupo7.oo2spring.models.Area).values()}" 
+	            th:value="${areaEnum}" 
+	            th:text="${areaEnum}">Área</option>
+	</select>
+
+    <label>Disponible:</label>
+    <input type="checkbox" th:field="*{disponibilidad}" /><br/>
+
+    <button type="submit">Guardar</button>
+</form>

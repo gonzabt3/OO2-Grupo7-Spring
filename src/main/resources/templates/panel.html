@@ -16,7 +16,7 @@
 
             <!-- Mis Tickets visible solo para usuarios -->
             <a href="/cliente/tickets" class="btn btn-secondary btn-lg mx-2"
-               th:if="${rol == 'USER'}">
+               th:if="${rol == 'CLIENTE'}">
                 Mis Tickets
             </a>
 
@@ -25,6 +25,12 @@
                th:if="${rol == 'EMPLEADO'}">
                 Ver Tickets Asignados
             </a>
+			
+			<!-- Ver Tickets Asignados visible solo para empleados -->
+			<a href="/manager/listar" class="btn btn-info btn-lg mx-2"
+			   th:if="${rol == 'MANAGER'}">
+			    Ver Lista de Usuarios / Asignar Empleado
+			</a>
 
             <!-- Cerrar Sesión visible para todos -->
             <a href="/logout" class="btn btn-danger btn-lg mx-2">

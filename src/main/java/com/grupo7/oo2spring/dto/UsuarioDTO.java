@@ -1,6 +1,6 @@
 package com.grupo7.oo2spring.dto;
 
-import com.grupo7.oo2spring.models.Rol;
+import com.grupo7.oo2spring.dto.Rol;
 
 import lombok.NoArgsConstructor;
 
@@ -23,7 +23,7 @@ public class UsuarioDTO {
 			     validarDNI(dni);
 			     this.nombreUsuario = nombreUsuario;
 			     this.contraseña = contraseña;
-			this.rol = Rol.USER;
+			     this.rol = Rol.USER;
 		}
 	  
 	  public static void validarNombreApellido(String nombre, String apellido) throws Exception {
