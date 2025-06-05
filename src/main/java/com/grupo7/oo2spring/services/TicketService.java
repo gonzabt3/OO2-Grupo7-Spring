@@ -1,6 +1,7 @@
 package com.grupo7.oo2spring.services;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,4 +32,8 @@ public class TicketService {
 
 	       return ticketRepository.save(nuevoTicket);
 	   }
+
+	public List<Ticket> getTicketsByUsuario(Usuario usuario) {
+		return ticketRepository.findByUsuarioCreador_IdUsuario(usuario.getIdUsuario());
+	}
 }
