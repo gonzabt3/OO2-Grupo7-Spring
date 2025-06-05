@@ -5,7 +5,7 @@ import com.grupo7.oo2spring.models.Rol;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class UsuarioDTO extends PersonaDTO {
+public class UsuarioDTO {
 	
 	 private int idUsuario;
 	 
@@ -16,14 +16,13 @@ public class UsuarioDTO extends PersonaDTO {
 	  private Rol rol;
 	  
 	  public UsuarioDTO(String nombre, String apellido, String dni, String email,
-				String nombreUsuario, String contraseña, Rol rol) throws Exception {
-			super(nombre, apellido, dni, email);
-			validarNombreApellido(nombre, apellido);
-			validarNombreUsuario(nombreUsuario);
-			validarEmail(email);
-			validarDNI(dni);
-			this.nombreUsuario = nombreUsuario;
-			this.contraseña = contraseña;
+		       String nombreUsuario, String contraseña)  throws Exception {
+			     validarNombreApellido(nombre, apellido);
+			     validarNombreUsuario(nombreUsuario);
+			     validarEmail(email);
+			     validarDNI(dni);
+			     this.nombreUsuario = nombreUsuario;
+			     this.contraseña = contraseña;
 			this.rol = Rol.USER;
 		}
 	  
@@ -81,7 +80,7 @@ public class UsuarioDTO extends PersonaDTO {
 			return contraseña;
 		}
 
-		private void setContraseña(String contraseña) {
+		public void setContraseña(String contraseña) {
 			this.contraseña = contraseña;
 		}
 
@@ -92,6 +91,7 @@ public class UsuarioDTO extends PersonaDTO {
 		public void setRol(Rol rol) {
 			this.rol = rol;
 		}
+		
 		
 		
 	  

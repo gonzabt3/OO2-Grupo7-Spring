@@ -13,7 +13,6 @@ import com.grupo7.oo2spring.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
 
 import com.grupo7.oo2spring.models.Ticket;
-import com.grupo7.oo2spring.models.Usuario;
 
 @Controller
 @RequiredArgsConstructor

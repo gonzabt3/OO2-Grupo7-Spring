@@ -1,7 +1,8 @@
 package com.grupo7.oo2spring.services;
 
-import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
+import com.grupo7.oo2spring.models.Cliente;
+import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 
 import jakarta.annotation.PostConstruct;
@@ -18,11 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.grupo7.oo2spring.models.Usuario;
-import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 
 
 @Service
@@ -39,8 +35,8 @@ public class UsuarioService {
     }
     
     
-    public Usuario guardarUsuario(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) {
-        Usuario nuevoUsuario = new Usuario();
+    public Cliente guardarUsuario(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) {
+        Cliente nuevoUsuario = new Cliente();
         nuevoUsuario.setNombreUsuario(nombreUsuario);
         nuevoUsuario.setNombre(nombre);
         nuevoUsuario.setApellido(apellido);
@@ -59,4 +55,7 @@ public class UsuarioService {
     }
    
 
+        public void guardarUsuario(Usuario usuario) {
+        usuarioRepository.save(usuario);
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.grupo7.oo2spring.models.Cliente;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 
@@ -28,9 +29,10 @@ public class TestIUsuario {
         // Crear usuario
 		try { 
 			//usuarioRepository.deleteById(1);
-        Usuario usuario = new Usuario("Roberto", "Jimenez", "34672169", "roberto.jimenez@example.com", "rober", "test");
+	    Usuario usuario = new Cliente("Roberto", "Jimenez", "34672169", "roberto.jimenez@example.com", "rober", "test", "123");
         String encodedPassword = passwordEncoder.encode(usuario.getContraseña());
         usuario.setContraseña(encodedPassword);
+
      // Guardar en DB
         usuario = usuarioRepository.save(usuario);
 

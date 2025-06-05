@@ -8,7 +8,7 @@ import com.grupo7.oo2spring.models.Rol;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class EmpleadoDTO extends PersonaDTO {
+public class EmpleadoDTO extends UsuarioDTO {
 
 	private int idEmpleado;
 	 
@@ -16,16 +16,13 @@ public class EmpleadoDTO extends PersonaDTO {
 	
 	private Rol rol;
 	
-
 	private boolean disponibilidad;
-	private int nivelAcceso;
 	
-	public EmpleadoDTO(String nombre, String apellido, String dni, String email, Area area, boolean disponibilidad,
-			int nivelAcceso) {
-		super(nombre, apellido, dni, email);
+	public EmpleadoDTO(String nombre, String apellido, String dni, String email,String nombreUsuario, String contraseña, Area area, boolean disponibilidad) throws Exception {
+		super(nombre, apellido, dni, email,
+			       nombreUsuario, contraseña);
 		this.area = area;
 		this.disponibilidad = disponibilidad;
-		this.nivelAcceso = nivelAcceso;
 		this.rol = Rol.EMPLEADO;
 	}
 
@@ -54,22 +51,14 @@ public class EmpleadoDTO extends PersonaDTO {
 		this.disponibilidad = disponibilidad;
 	}
 
-	public int getNivelAcceso() {
-		return nivelAcceso;
-	}
-
-	public void setNivelAcceso(int nivelAcceso) {
-		this.nivelAcceso = nivelAcceso;
-	}
-
 	@Override
 	public String toString() {
-		return "Empleado [area=" + area + ", disponibilidad=" + disponibilidad + ", nivelAcceso=" + nivelAcceso + "]";
+		return "Empleado [area=" + area + ", disponibilidad=" + disponibilidad + ", nivelAcceso=" + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(area, disponibilidad, idEmpleado, nivelAcceso);
+		return Objects.hash(area, disponibilidad, idEmpleado);
 	}
 
 	@Override
@@ -81,8 +70,7 @@ public class EmpleadoDTO extends PersonaDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		EmpleadoDTO other = (EmpleadoDTO) obj;
-		return area == other.area && disponibilidad == other.disponibilidad && idEmpleado == other.idEmpleado
-				&& nivelAcceso == other.nivelAcceso;
+		return area == other.area && disponibilidad == other.disponibilidad && idEmpleado == other.idEmpleado;
 	}
 	
 	

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.grupo7.oo2spring.models.Estado;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.models.Ticket;
+import com.grupo7.oo2spring.models.Usuario;
 
 @Repository
 public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
@@ -26,7 +27,7 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
     List<Ticket> findByPrioridad(Prioridad prioridad);
 	
     // Buscar tickets creados por un usuario específico
-    List<Ticket> findByUsuarioCreadorIdUsuario(int idUsuario);
+    List<Ticket> findByUsuarioCreadorIdUsuario(Usuario usuarioCreador);
     
     // Buscar tickets creados entre dos fechas
     List<Ticket> findByFechaCreacionBetween(LocalDate fechaInicio, LocalDate fechaFin);

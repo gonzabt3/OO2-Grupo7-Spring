@@ -16,39 +16,21 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class Empleado extends Persona {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int idEmpleado;
-	 
+public class Empleado extends Usuario {
+		 
 
 	@Enumerated(EnumType.STRING)
 	private Area area;
 	
-	@Enumerated(EnumType.STRING)
+	private boolean disponibilidad;
+	
 	private Rol rol;
 	
-
-	private boolean disponibilidad;
-	private int nivelAcceso;
-	
-	public Empleado(String nombre, String apellido, String dni, String email, Area area, boolean disponibilidad,
-			int nivelAcceso) {
-		super(nombre, apellido, dni, email);
+	public Empleado(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña, Area area, boolean disponibilidad) throws Exception {
+		super(nombre, apellido, dni, email, nombreUsuario, contraseña);
 		this.area = area;
 		this.disponibilidad = disponibilidad;
-		this.nivelAcceso = nivelAcceso;
 		this.rol = Rol.EMPLEADO;
-	}
-
-	
-	public int getIdEmpleado() {
-		return idEmpleado;
-	}
-
-	private void setIdEmpleado(int idEmpleado) {
-		this.idEmpleado = idEmpleado;
 	}
 	
 	public Area getArea() {
@@ -67,22 +49,14 @@ public class Empleado extends Persona {
 		this.disponibilidad = disponibilidad;
 	}
 
-	public int getNivelAcceso() {
-		return nivelAcceso;
-	}
-
-	public void setNivelAcceso(int nivelAcceso) {
-		this.nivelAcceso = nivelAcceso;
-	}
-
 	@Override
 	public String toString() {
-		return "Empleado [area=" + area + ", disponibilidad=" + disponibilidad + ", nivelAcceso=" + nivelAcceso + "]";
+		return "Empleado [area=" + area + ", disponibilidad=" + disponibilidad + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(area, disponibilidad, idEmpleado, nivelAcceso);
+		return Objects.hash(area, disponibilidad);
 	}
 
 	@Override
@@ -94,12 +68,8 @@ public class Empleado extends Persona {
 		if (getClass() != obj.getClass())
 			return false;
 		Empleado other = (Empleado) obj;
-		return area == other.area && disponibilidad == other.disponibilidad && idEmpleado == other.idEmpleado
-				&& nivelAcceso == other.nivelAcceso;
-	}
-	
-	
-	
-	
+		return area == other.area && disponibilidad == other.disponibilidad;
+	}	
+
 
 }
