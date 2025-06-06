@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.grupo7.oo2spring.models.Cliente;
@@ -20,15 +21,31 @@ public class RegistroController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping("/registro")
+    @GetMapping("/usuario/registro")
     public String mostrarFormularioRegistro() {
-        return "/usuario/registro_form";
+        return "usuario/registro";
     }
 
-    @PostMapping("/registro")
-    public String registrarUsuario(@ModelAttribute Cliente usuario) {
-        usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
+    @PostMapping("/usuario/registro")
+    public String registrarUsuario(@ModelAttribute Cliente usuario, Model model) {
+      
+        
+     // Validar si el nombre de usuario ya existe
+        if (usuarioRepository.existsByNombreUsuario(usuario.getNombreUsuario())) {
+            model.addAttribute("errorUsuario", "El nombre de usuario ya está registrado.");
+            model.addAttribute("usuario", usuario);
+            return "/usuario/registro"; // vuelve a mostrar el formulario con error
+        }
+        
+        // Validar si el email ya existe
+        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+            model.addAttribute("errorEmail", "El email ya está registrado.");
+            model.addAttribute("usuario", usuario);  // Mantenemos el usuario con los datos ingresados
+            return "/usuario/registro"; // vuelve a mostrar el formulario con error
+        }
+        
         usuario.setRol(Rol.CLIENTE); // Asignar rol ROLE_CLIENTE
+        usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
 
         
         usuarioRepository.save(usuario);
@@ -36,5 +53,9 @@ public class RegistroController {
         return "redirect:/usuario/registro_exito";
     }
     
+    @GetMapping("/usuario/registro_exito")
+    public String mostrarRegistroExito() {
+        return "usuario/registro_exito";
+    }
 }
 

@@ -25,10 +25,13 @@ public class PanelController {
 	        UsuarioDetails usuarioDetails = (UsuarioDetails) auth.getPrincipal();
 	        Usuario usuario = usuarioDetails.getUsuario();
 	        model.addAttribute("usuario", usuario);
-	        model.addAttribute("rol", usuario.getRol().toString());
+
+	        String rolStr = (usuario.getRol() != null) ? usuario.getRol().toString() : "CLIENTE";
+	        model.addAttribute("rol", rolStr);
 	    }
 
 	    return "panel";
 	}
+
 
 	}

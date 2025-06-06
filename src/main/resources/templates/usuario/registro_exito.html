@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro Exitoso</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Registro Exitoso</h1>
-    <p th:text="${mensaje}"></p>
-    <a href="/usuario/registro_form">Registrar Otro Usuario</a>
-	<a href="/usuario/login">Ir al login</a>
+<body class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+    <div class="alert alert-success text-center" role="alert" style="max-width: 400px;">
+        <h2>¡Registro exitoso!</h2>
+        <p>Tu usuario ha sido creado correctamente.</p>
+        <a href="/usuario/login" class="btn btn-primary">Iniciar sesión</a>
+    </div>
+    <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

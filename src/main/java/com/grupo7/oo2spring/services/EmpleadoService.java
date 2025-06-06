@@ -24,6 +24,7 @@ public class EmpleadoService {
 
 			    // Cambiar el rol
 			    usuario.setRol(Rol.CLIENTE);
+			    
 
 
 			    // Guardar el usuario actualizado

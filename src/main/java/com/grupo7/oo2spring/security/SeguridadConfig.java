@@ -90,7 +90,7 @@ public class SeguridadConfig {
                     "/js/**",
                     "/usuario/formulario",
                     "/usuario/registro_form",
-                    "/registro",
+                    "/usuario/registro",
                     "/usuario/registro_exito"
                 ).permitAll()
                 .anyRequest().authenticated()
@@ -103,7 +103,7 @@ public class SeguridadConfig {
                 .permitAll()
             )
             .logout(logout -> logout
-                .logoutUrl("/usuario/logout")
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/usuario/login?logout")
                 .permitAll()
             );

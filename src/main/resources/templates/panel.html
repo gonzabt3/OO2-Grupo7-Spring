@@ -3,41 +3,92 @@
 <head>
     <title>Panel de Control</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .panel-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .role-badge {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #6c757d;
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .btn-lg {
+            min-width: 220px;
+        }
+
+        .btn + .btn {
+            margin-left: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .d-flex {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn + .btn {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
+<div class="container mt-5">
+    <div class="panel-container mx-auto" style="max-width: 800px;">
         <h1 class="text-center mb-4">Panel de Control</h1>
-        <div class="d-flex justify-content-center">
-			<p>ROL ACTUAL: <span th:text="${rol}">[rol]</span></p>
-            <!-- Crear Ticket visible para todos -->
-            <a href="/ticket/formulario_simple" class="btn btn-primary btn-lg mx-2">
+
+        <div class="text-center">
+            <span class="role-badge" th:text="'ROL ACTUAL: ' + ${rol}">ROL ACTUAL: [ROL]</span>
+        </div>
+
+        <div class="d-flex justify-content-center flex-wrap mt-4">
+            <!-- Visible para todos -->
+            <a href="/ticket/formulario_simple" class="btn btn-primary btn-lg mx-2 my-2">
                 Crear Ticket
             </a>
 
-            <!-- Mis Tickets visible solo para usuarios -->
-            <a href="/cliente/tickets" class="btn btn-secondary btn-lg mx-2"
+            <!-- Solo para clientes -->
+            <a href="/cliente/tickets" class="btn btn-secondary btn-lg mx-2 my-2"
                th:if="${rol == 'CLIENTE'}">
                 Mis Tickets
             </a>
 
-            <!-- Ver Tickets Asignados visible solo para empleados -->
-            <a href="/empleado/tickets-asignados" class="btn btn-info btn-lg mx-2"
+            <!-- Solo para empleados -->
+            <a href="/empleado/tickets-asignados" class="btn btn-info btn-lg mx-2 my-2"
                th:if="${rol == 'EMPLEADO'}">
-                Ver Tickets Asignados
+                Tickets Asignados
             </a>
-			
-			<!-- Ver Tickets Asignados visible solo para empleados -->
-			<a href="/manager/listar" class="btn btn-info btn-lg mx-2"
-			   th:if="${rol == 'MANAGER'}">
-			    Ver Lista de Usuarios / Asignar Empleado
-			</a>
 
-            <!-- Cerrar Sesión visible para todos -->
-            <a href="/logout" class="btn btn-danger btn-lg mx-2">
-                Cerrar Sesión
+            <!-- Solo para managers -->
+            <a href="/manager/listar" class="btn btn-warning btn-lg mx-2 my-2"
+               th:if="${rol == 'MANAGER'}">
+                Usuarios / Asignar Empleado
             </a>
+
+            <!-- Logout usando formulario POST -->
+            <form th:action="@{/logout}" method="post" class="mx-2 my-2">
+                <button type="submit" class="btn btn-danger btn-lg">
+                    Cerrar Sesión
+                </button>
+            </form>
         </div>
     </div>
-    <script src="/js/bootstrap.bundle.min.js"></script>
+</div>
+<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,54 +1,89 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Lista de Tickets</title>
-    <!-- Bootstrap CSS desde archivo local -->
+    
+    <!-- Bootstrap CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons (para el ícono de flecha) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #343a40;
+        }
+        .btn-back {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center my-4">Lista de Tickets</h1>
-        
+        <!-- Botón de volver al panel -->
+        <div class="btn-back">
+            <a href="/panel" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i> Volver al Panel
+            </a>
+        </div>
+
+        <h1 class="text-center mb-4">Lista de Tickets</h1>
+
         <!-- Mostrar mensaje si no hay tickets -->
         <div th:if="${tickets.size() == 0}" class="alert alert-warning text-center">
             No hay tickets disponibles.
         </div>
-        
-        <!-- Mostrar tabla si hay tickets -->
-        <table th:if="${tickets.size() > 0}" class="table table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Descripción</th>
-                    <th>Fecha Creación</th>
-                    <th>Fecha Cierre</th>
-                    <th>Usuario Creador</th>
-                    <th>Estado</th>
-                    <th>Prioridad</th>
-                    <th>Procesos</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="ticket : ${tickets}">
-                    <td th:text="${ticket.idTicket}"></td>
-                    <td th:text="${ticket.titulo}"></td>
-                    <td th:text="${ticket.descripcion}"></td>
-                    <td th:text="${ticket.fechaCreacion}"></td>
-                    <td th:text="${ticket.fechaCierre}"></td>
-                    <td th:text="${ticket.usuarioCreador.nombre}"></td>
-                    <td th:text="${ticket.estado}"></td>
-                    <td th:text="${ticket.prioridad}"></td>
-                    <td>
-                        <ul>
-                            <li th:each="proceso : ${ticket.procesos}" th:text="${proceso.nombre}"></li>
-                        </ul>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+
+        <!-- Tabla de tickets -->
+        <div class="table-responsive" th:if="${tickets.size() > 0}">
+            <table class="table table-bordered table-hover align-middle text-center">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Fecha Creación</th>
+                        <th>Fecha Cierre</th>
+                        <th>Usuario Creador</th>
+                        <th>Estado</th>
+                        <th>Prioridad</th>
+                        <th>Procesos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="ticket : ${tickets}">
+                        <td th:text="${ticket.idTicket}"></td>
+                        <td th:text="${ticket.titulo}"></td>
+                        <td th:text="${ticket.descripcion}"></td>
+                        <td th:text="${ticket.fechaCreacion}"></td>
+                        <td th:text="${ticket.fechaCierre}"></td>
+                        <td th:text="${ticket.usuarioCreador.nombre}"></td>
+                        <td th:text="${ticket.estado}"></td>
+                        <td th:text="${ticket.prioridad}"></td>
+                        <td>
+                            <ul class="list-unstyled mb-0">
+                                <li th:each="proceso : ${ticket.procesos}" th:text="${proceso.nombre}"></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <!-- Bootstrap JS desde archivo local -->
+
+    <!-- Bootstrap JS -->
     <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
