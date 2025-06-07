@@ -15,9 +15,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.grupo7.oo2spring.models.Cliente;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
+import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.repositories.ITicketRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import com.grupo7.oo2spring.services.EmpleadoService;
+import com.grupo7.oo2spring.services.TicketService;
 import com.grupo7.oo2spring.services.UsuarioService;
 
 import jakarta.persistence.EntityManager;
@@ -32,6 +35,7 @@ public class ManagerController {
 	private final IUsuarioRepository usuarioRepository;
     private final EmpleadoService empleadoService;
     private final UsuarioService usuarioService;
+    private final ITicketRepository ticketRepository;
 	
 	@GetMapping("/listar")
     public String listarUsuarios(Model model) {
@@ -95,6 +99,7 @@ public class ManagerController {
     	    }
         return "redirect:/manager/listar";
     }
+
 
 
 }

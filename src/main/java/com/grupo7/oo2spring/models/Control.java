@@ -25,6 +25,8 @@ public class Control {
     private LocalDate fechaEntrada;
 
     private LocalDate fechaSalida;
+    
+    private String accion;
 
     private boolean finalizado;
 
@@ -76,4 +78,12 @@ public class Control {
     public void setFinalizado(boolean finalizado) {
         this.finalizado = finalizado;
     }
+
+	public String getAccion() {
+		return accion;
+	}
+
+	public void setAccion(String accion) {
+		this.accion = accion;
+	}
 }

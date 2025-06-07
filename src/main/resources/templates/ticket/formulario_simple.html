@@ -7,7 +7,8 @@
 </head>
 <body>
     <h1>Crear Nuevo Ticket</h1>
-    <form action="/tickets/nuevo-simple" method="post">
+    <form action="/ticket/crear" method="post">
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div>
             <label for="titulo">Título:</label>
             <input type="text" id="titulo" name="titulo" required>

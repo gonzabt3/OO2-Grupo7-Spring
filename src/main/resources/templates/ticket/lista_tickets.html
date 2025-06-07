@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Todos los Tickets (Empleado)</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <main>
+        <h1>Todos los Tickets del Sistema</h1>
+
+        <div th:if="${successMessage}" class="alert alert-success">
+            <p th:text="${successMessage}"></p>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <div th:if="${tickets.isEmpty()}">
+            <p>No hay tickets en el sistema en este momento.</p>
+        </div>
+        <div th:if="${!tickets.isEmpty()}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Estado</th>
+                        <th>Prioridad</th>
+                        <th>Área Asignada</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="ticket : ${tickets}">
+                        <td th:text="${ticket.idTicket}"></td>
+                        <td th:text="${ticket.titulo}"></td>
+                        <td th:text="${ticket.estado}"></td>
+                        <td th:text="${ticket.prioridad}"></td>
+                        <td th:text="${ticket.area != null ? ticket.area: 'Sin Asignar'}"></td>
+<!--                        <td th:text="${ticket.usuarioCreador != null ? (ticket.usuarioCreador.nombre + ' ' + ticket.usuarioCreador.apellido) : 'N/A'}"></td>-->
+                        <td>
+							<a th:href="@{/ticket/{idTicket}/tomarTicket(idTicket=${ticket.idTicket})}" class="button">Tomar Ticket</a>
+<!--                            <span th:if="${ticket.estado == 'ABIERTO'}">-->
+<!--                                <span th:if="${ticket.area != null and empleado.area != null and ticket.area == empleado.area.name()}">-->
+<!--                                    <a th:href="@{/ticket/{idTicket}/tomarTicket(idTicket=${ticket.idTicket})}" class="button">Tomar Ticket</a>-->
+<!--                                </span>-->
+<!--                                <span th:unless="${ticket.area != null and empleado.area != null and ticket.area.name() == empleado.area.name()}">-->
+<!--                                    <button disabled>No en mi Área</button>-->
+<!--                                </span>-->
+<!--                            </span>-->
+<!--                            <span th:unless="${ticket.estado == 'ABIERTO'}">-->
+<!--                                <button disabled th:text="${'Estado: ' + ticket.estado}"></button>-->
+<!--                            </span>-->
+                            <a th:href="@{/ticket/{idTicket}/detail(idTicket=${ticket.idTicket})}" class="button">Ver Detalle</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p><a th:href="@{/ticket/lista}">Volver al incio</a></p>
+    </main>
+</body>
+</html>

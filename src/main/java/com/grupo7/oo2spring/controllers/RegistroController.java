@@ -14,12 +14,14 @@ import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 @Controller
 public class RegistroController {
 
-    @Autowired
-    private IUsuarioRepository usuarioRepository;
+    private final IUsuarioRepository usuarioRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
+    public RegistroController(PasswordEncoder passwordEncoder, IUsuarioRepository usuarioRepository) {
+    	this.usuarioRepository = usuarioRepository;
+    	this.passwordEncoder = passwordEncoder;
+    }
     @GetMapping("/registro")
     public String mostrarFormularioRegistro() {
         return "/usuario/registro_form";
@@ -28,7 +30,7 @@ public class RegistroController {
     @PostMapping("/registro")
     public String registrarUsuario(@ModelAttribute Cliente usuario) {
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
-        usuario.setRol(Rol.CLIENTE); // Asignar rol ROLE_CLIENTE
+        usuario.setRol(Rol.EMPLEADO); // Asignar rol ROLE_CLIENTE
 
         
         usuarioRepository.save(usuario);

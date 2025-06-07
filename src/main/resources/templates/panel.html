@@ -31,6 +31,12 @@
 			   th:if="${rol == 'MANAGER'}">
 			    Ver Lista de Usuarios / Asignar Empleado
 			</a>
+			
+			<!-- Ver Todos los Tickets sin Empleado Asignado -->
+			<a href="/manager/listar" class="btn btn-info btn-lg mx-2"
+			   th:if="${rol == 'CLIENTE'}">
+			    Ver Lista de Tickets
+			</a>
 
             <!-- Cerrar Sesión visible para todos -->
             <a href="/logout" class="btn btn-danger btn-lg mx-2">

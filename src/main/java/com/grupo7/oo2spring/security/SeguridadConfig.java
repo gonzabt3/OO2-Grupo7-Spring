@@ -7,8 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +34,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
+@EnableWebSecurity // Habilita la seguridad web de Spring
+@EnableMethodSecurity 
 @RequiredArgsConstructor
 public class SeguridadConfig {
 	
@@ -39,14 +43,14 @@ public class SeguridadConfig {
     
     
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) throws Exception {
+    AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) throws Exception {
         AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
         return authBuilder.build();
     }
     
     @Bean
-    public FilterRegistrationBean<OncePerRequestFilter> loggingFilter() {
+    FilterRegistrationBean<OncePerRequestFilter> loggingFilter() {
         FilterRegistrationBean<OncePerRequestFilter> registrationBean = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(new OncePerRequestFilter() {
@@ -78,7 +82,7 @@ public class SeguridadConfig {
     
     
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
         .authorizeHttpRequests(auth -> auth
                 .requestMatchers(

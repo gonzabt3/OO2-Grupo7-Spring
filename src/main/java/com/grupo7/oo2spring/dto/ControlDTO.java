@@ -12,6 +12,7 @@ public class ControlDTO {
     private EmpleadoDTO empleado;
     private LocalDate fechaEntrada;
     private LocalDate fechaSalida;
+    private String accion;
     private boolean finalizado;
 
     // Getters y setters
@@ -62,4 +63,12 @@ public class ControlDTO {
     public void setFinalizado(boolean finalizado) {
         this.finalizado = finalizado;
     }
+
+	public String getAccion() {
+		return accion;
+	}
+
+	public void setAccion(String accion) {
+		this.accion = accion;
+	}
 }

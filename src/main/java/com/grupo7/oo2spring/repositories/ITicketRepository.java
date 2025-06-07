@@ -17,6 +17,7 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
 	
 	public Optional<Ticket> findById(int idTicket);
 	
+	public Ticket getByIdTicket(int idTicket);
 	 // Buscar tickets por título
     List<Ticket> findByTituloContainingIgnoreCase(String titulo);
     
