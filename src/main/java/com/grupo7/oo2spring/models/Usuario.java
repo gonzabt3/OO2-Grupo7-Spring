@@ -35,6 +35,8 @@ public abstract class Usuario {
    @Column(nullable = false, unique = true)
    private String email;
    
+   private boolean usuarioActivo;
+   
    public Usuario(String nombre, String apellido, String dni, String email,
        String nombreUsuario, String contraseña) throws Exception {
      validarNombreApellido(nombre, apellido);
@@ -48,6 +50,7 @@ public abstract class Usuario {
      this.email = email;
      this.contraseña = contraseña;
      this.rol = rol.USER;
+     this.usuarioActivo = false;
    }
    
    public static void validarNombreApellido(String nombre, String apellido) throws Exception {
@@ -121,6 +124,14 @@ public abstract class Usuario {
    }
    public void setApellido(String apellido) {
      this.apellido = apellido;
+   }
+   
+   public void setUsuarioActivo(boolean bool) {
+	   this.usuarioActivo = bool;
+   }
+   
+   public boolean getUsuarioActivo() {
+	   return this.usuarioActivo;
    }
    
 }

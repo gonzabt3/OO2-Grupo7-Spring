@@ -58,7 +58,8 @@
 			
 			<div class="mb-3">
 			    <label for="dni" class="form-label">DNI:</label>
-			    <input type="text" id="dni" name="dni" class="form-control" required  th:value="${usuario != null} ? ${usuario.dni} : ''">
+				<input type="text" id="dni" name="dni" class="form-control" required
+				           pattern="\d{7,10}" title="Debe contener solo números (7 a 10 dígitos)"  th:value="${usuario != null} ? ${usuario.dni} : ''">
 			</div>
 
             <div class="mb-3">
@@ -74,7 +75,16 @@
             <button type="submit" class="btn btn-primary">Registrar</button>
         </form>
     </div>
-
     <script src="/js/bootstrap.bundle.min.js"></script>
+	<script>
+	  const form = document.querySelector('form');
+	  const btn = form.querySelector('button[type="submit"]');
+
+	  form.addEventListener('submit', () => {
+	    btn.disabled = true;
+	    btn.innerHTML = 'Registrando... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+	  });
+	</script>
+
 </body>
 </html>

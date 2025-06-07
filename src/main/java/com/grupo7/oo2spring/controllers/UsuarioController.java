@@ -1,5 +1,6 @@
 package com.grupo7.oo2spring.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.grupo7.oo2spring.models.EmailToken;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.repositories.IEmailTokenRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import com.grupo7.oo2spring.services.UsuarioService;
 
@@ -29,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioController {
 
     private final IUsuarioRepository usuarioRepository;
+    
+    private final IEmailTokenRepository emailTokenRepository;
 
     private final UsuarioService usuarioService;
 
@@ -37,6 +42,7 @@ public class UsuarioController {
         return "usuario/registro_form"; // Nombre del formulario HTML
     }
 
+    //TODO: Duplicado? No lo hace ya RegistroController
     @PostMapping("/registrar")
     public String registrarUsuario(
             @RequestParam("nombre") String nombre,
@@ -50,6 +56,7 @@ public class UsuarioController {
         model.addAttribute("mensaje", "Usuario registrado exitosamente con ID: " + usuarioGuardado.getIdUsuario());
         return "usuario/registro_exito";
     }
+    
     @GetMapping("/verificar/{id}")
     public String verificarUsuario(@PathVariable int id, Model model) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
@@ -64,6 +71,8 @@ public class UsuarioController {
         }
         return "usuario/verificacion";
     }
+    
+    
     
     
 

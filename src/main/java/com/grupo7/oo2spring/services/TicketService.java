@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Estado;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
@@ -45,5 +46,10 @@ public class TicketService {
 
 	       return ticketRepository.save(nuevoTicket);
    }
+	
+	 public Ticket buscarTicketPorId(int idTicket) throws TicketNoEncontradoException {
+	        return ticketRepository.findById(idTicket)
+	            .orElseThrow(() -> new TicketNoEncontradoException("Ticket con ID " + idTicket + " no encontrado"));
+	    }
 	
 }

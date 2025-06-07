@@ -13,7 +13,7 @@ public class InicioController {
 
     @GetMapping({"/", "/inicio"})
     public String raiz(Model model) {
-        return "redirect:/panel"; 
+    	  return "index"; 
     }
     
 
