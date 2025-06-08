@@ -37,7 +37,7 @@ public class Ticket {
     private Area area;
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Control> procesos = new ArrayList<>();
+    private List<Control> procesos;
     
     public void addControl(Control control) {
         if (!this.procesos.contains(control)) {
@@ -56,6 +56,7 @@ public class Ticket {
     		this.estado = Estado.PENDIENTE;
     		this.prioridad = Prioridad.SIN_ASIGNAR;
     		this.area = Area.SIN_ASIGNAR;
+    		this.procesos = new ArrayList<Control>();
     	}
         
         
