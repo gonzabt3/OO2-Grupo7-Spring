@@ -34,7 +34,7 @@ public class UsuarioController {
 
     @GetMapping("/registrar")
     public String mostrarFormularioRegistro() {
-        return "usuario/registro_form";
+        return "usuario/registro_form";// Nombre del formulario HTML
     }
 
     @PostMapping("/registrar")
