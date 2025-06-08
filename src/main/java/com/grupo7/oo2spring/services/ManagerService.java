@@ -46,18 +46,18 @@ public class ManagerService {
 	
 	@Transactional
 	public Empleado convertirUsuarioAEmpleado(int idUsuario, Empleado datosEmpleado) throws Exception {
-		 // Buscar el usuario por ID
+		// 1. Buscar el usuario por ID
 	    Usuario usuario = usuarioRepository.findById(idUsuario)
 	        .orElseThrow(() -> new Exception("Usuario no encontrado"));
 
-	    // Verificar si ya tiene el rol de EMPLEADO
+	    // 2. Verificar si ya tiene el rol de EMPLEADO
 	    if (usuario.getRol() == Rol.EMPLEADO) {
 	        throw new Exception("El usuario ya es un empleado");
 	    }
 
 	    Empleado empleado;
 
-	    // Verificar si ya existe una fila en la tabla empleado
+	    // 3. Verificar si ya existe una fila en la tabla empleado
 	    if (empleadoRepository.existsById(idUsuario)) {
 	        // Si existe, actualizarla
 	        empleado = empleadoRepository.findById(idUsuario)
@@ -65,22 +65,32 @@ public class ManagerService {
 
 	        empleado.setArea(datosEmpleado.getArea());
 	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
+
+	        empleado = empleadoRepository.save(empleado); // Actualiza
 	    } else {
-	        // Si no existe, crear una nueva
+	        // Si no existe, crear una nueva instancia
 	        empleado = new Empleado();
-	        empleado.setIdUsuario(idUsuario); // o setId(idUsuario) si no tenés relación directa
+	        empleado.setIdUsuario(idUsuario); // hereda de Usuario
 	        empleado.setArea(datosEmpleado.getArea());
 	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
+	        empleado.setNombre(usuario.getNombre());
+	        empleado.setApellido(usuario.getApellido());
+	        empleado.setDni(usuario.getDni());
+	        empleado.setEmail(usuario.getEmail());
+	        empleado.setNombreUsuario(usuario.getNombreUsuario());
+	        empleado.setContraseña(usuario.getContraseña());
+	        empleado.setRol(Rol.EMPLEADO);
+
+	        // Guardar usando persist para respetar la herencia
+	        entityManager.persist(empleado);
+	        entityManager.flush(); // Escribir ya mismo
 	    }
 
-	    // Guardar el empleado (crea o actualiza)
-	    empleado = empleadoRepository.save(empleado);
-
-	    // Cambiar rol a EMPLEADO
+	    // 4. Cambiar rol en el usuario base (por si no lo setea bien al persist)
 	    usuario.setRol(Rol.EMPLEADO);
 	    usuarioRepository.save(usuario);
 
-	    // Devolver el empleado actualizado/creado
+	    // 5. Retornar el empleado recién creado o actualizado
 	    return empleado;
 	}
 	
