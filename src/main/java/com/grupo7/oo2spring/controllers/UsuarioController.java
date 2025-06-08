@@ -43,7 +43,7 @@ public class UsuarioController {
 
     @GetMapping("/registrar")
     public String mostrarFormularioRegistro() {
-        return "usuario/registro_form"; // Nombre del formulario HTML
+        return "usuario/registro_form";// Nombre del formulario HTML
     }
 
     //TODO: Duplicado? No lo hace ya RegistroController

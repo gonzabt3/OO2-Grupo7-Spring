@@ -51,6 +51,220 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tomar Ticket #<span th:text="${ticket.idTicket}"></span></title>
     <link rel="stylesheet" href="/css/style.css"> </head>
+	    <style>
+	        /* General Body Styles */
+	        body {
+	            font-family: 'Arial', sans-serif;
+	            line-height: 1.6;
+	            color: #333;
+	            background-color: #f4f7f6; /* Light, calming background */
+	            margin: 0;
+	            padding: 0;
+	            display: flex;
+	            flex-direction: column;
+	            min-height: 100vh;
+	        }
+
+	        /* Header Styles */
+	        header {
+	            background-color: #2c3e50; /* Dark blue-gray */
+	            color: #ffffff;
+	            padding: 15px 30px;
+	            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	            display: flex;
+	            justify-content: space-between;
+	            align-items: center;
+	        }
+
+	        header h1 {
+	            margin: 0;
+	            font-size: 1.8em;
+	        }
+
+	        header h1 span {
+	            color: #3498db; /* Highlight ticket ID */
+	        }
+
+	        header nav ul {
+	            list-style: none;
+	            margin: 0;
+	            padding: 0;
+	            display: flex;
+	        }
+
+	        header nav ul li {
+	            margin-left: 25px;
+	        }
+
+	        header nav ul li a {
+	            color: #ffffff;
+	            text-decoration: none;
+	            font-weight: bold;
+	            padding: 5px 0;
+	            transition: color 0.3s ease;
+	        }
+
+	        header nav ul li a:hover {
+	            color: #3498db; /* Blue accent on hover */
+	        }
+
+	        /* Main Content Area */
+	        main {
+	            flex: 1; /* Allows main content to grow and fill available space */
+	            max-width: 800px;
+	            margin: 30px auto;
+	            background: #fff;
+	            padding: 30px 40px;
+	            border-radius: 8px;
+	            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	        }
+
+	        /* Heading Styles */
+	        h2, h3 {
+	            color: #2c3e50;
+	            border-bottom: 1px solid #eee;
+	            padding-bottom: 10px;
+	            margin-top: 25px;
+	            margin-bottom: 20px;
+	        }
+
+	        h2 {
+	            font-size: 1.6em;
+	        }
+
+	        h3 {
+	            font-size: 1.3em;
+	            color: #34495e; /* Slightly different shade */
+	            border-bottom: none; /* No underline for sub-heading */
+	        }
+
+	        /* Ticket Details Paragraphs */
+	        main p {
+	            margin-bottom: 10px;
+	            font-size: 1.05em;
+	        }
+
+	        main p strong {
+	            color: #555;
+	            display: inline-block;
+	            width: 150px; /* Aligns values */
+	        }
+
+	        /* Alert Messages */
+	        .alert {
+	            padding: 15px;
+	            margin-bottom: 20px;
+	            border-radius: 5px;
+	            font-size: 1em;
+	            border: 1px solid transparent;
+	        }
+
+	        .alert-danger {
+	            background-color: #f8d7da;
+	            color: #721c24;
+	            border-color: #f5c6cb;
+	        }
+
+	        .alert-success {
+	            background-color: #d4edda;
+	            color: #155724;
+	            border-color: #c3e6cb;
+	        }
+
+	        /* Form Styling */
+	        form {
+	            background-color: #fcfcfc; /* Slightly different background for form */
+	            padding: 25px;
+	            border-radius: 6px;
+	            border: 1px solid #e0e0e0;
+	            margin-top: 25px;
+	        }
+
+	        form div {
+	            margin-bottom: 20px;
+	        }
+
+	        label {
+	            display: block;
+	            margin-bottom: 8px;
+	            color: #444;
+	            font-weight: bold;
+	            font-size: 1em;
+	        }
+
+	        textarea {
+	            width: calc(100% - 20px); /* Adjust for padding */
+	            padding: 10px;
+	            border: 1px solid #ccc;
+	            border-radius: 4px;
+	            font-size: 0.95em;
+	            resize: vertical; /* Allow vertical resizing */
+	            min-height: 100px;
+	            box-sizing: border-box;
+	            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+	        }
+
+	        textarea:focus {
+	            border-color: #3498db;
+	            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25); /* Bootstrap-like focus glow */
+	            outline: none;
+	        }
+
+	        /* Error message for form fields */
+	        .text-danger {
+	            color: #dc3545; /* Bootstrap danger red */
+	            font-size: 0.85em;
+	            margin-top: 5px;
+	            display: block; /* Ensures it's on its own line */
+	        }
+
+	        /* Submit Button */
+	        button[type="submit"] {
+	            display: block;
+	            width: 100%;
+	            padding: 12px 20px;
+	            background-color: #28a745; /* Green for "Start Management" */
+	            color: white;
+	            border: none;
+	            border-radius: 5px;
+	            font-size: 1.1em;
+	            font-weight: bold;
+	            cursor: pointer;
+	            transition: background-color 0.3s ease, transform 0.1s ease;
+	            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+	        }
+
+	        button[type="submit"]:hover {
+	            background-color: #218838;
+	            transform: translateY(-1px);
+	        }
+
+	        /* Back to List Link */
+	        main > p > a {
+	            display: inline-block;
+	            margin-top: 30px;
+	            padding: 10px 15px;
+	            background-color: #6c757d; /* Gray for navigation */
+	            color: white;
+	            text-decoration: none;
+	            border-radius: 5px;
+	            transition: background-color 0.3s ease;
+	        }
+
+	        main > p > a:hover {
+	            background-color: #5a6268;
+	        }
+
+	        /* Footer Styles */
+	        footer {
+	            background-color: #34495e; /* Darker blue-gray */
+	            color: #ffffff;
+	            text-align: center;
+	            padding: 15px;
+	            margin-top: 30px; /* Space above footer */
+	            font-size: 0.9em;
+	        }
+	    </style>
 <body>
     <header>
         <h1>Tomar Ticket #<span th:text="${ticket.idTicket}"></span></h1>

@@ -209,18 +209,18 @@ public class TicketController {
         try {
             List<Ticket> ticketSinArea = ticketService.findByAreaIsNull();
             model.addAttribute("tickets", ticketSinArea);
-            model.addAttribute("areas", Area.values()); // Pasa todos los valores del enum Area al HTML
-            return "ticket/ticket-sin-area"; // Crea esta plantilla en src/main/resources/templates/manager/
+            model.addAttribute("areas", Area.values());
+            return "ticket/ticket-sin-area"; 
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "redirect:/ticket/ticket-sin-area"; // O a un dashboard de manager
+            return "redirect:/ticket/ticket-sin-area"; 
         }
     }
 	
 	@PostMapping("/{idTicket}/asignarArea")
     //@PreAuthorize("hasRole('MANAGER')") // Solo un manager puede asignar área
     public String assignAreaToTicket(@PathVariable int idTicket,
-                                     @RequestParam("area") Area area, // Captura el valor seleccionado del enum Area
+                                     @RequestParam("area") Area area,
                                      Model model) {
         try {
             ticketService.asignarAreaTicket(idTicket, area);
@@ -228,7 +228,7 @@ public class TicketController {
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", "Error al asignar área al ticket #" + idTicket + ": " + e.getMessage());
         }
-        return "redirect:/ticket/sinasignar"; // Redirige de vuelta a la lista de tickets sin área
+        return "redirect:/ticket/sinasignar";
     }
 	
 	@GetMapping("/tickets")
