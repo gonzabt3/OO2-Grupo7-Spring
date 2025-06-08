@@ -179,9 +179,12 @@
 			    Ver Todos los Tickets
 			</a>
 
-            <a href="/logout" class="btn btn-danger">
-                Cerrar Sesión
-            </a>
+			<!-- Logout usando formulario POST -->
+	         <form th:action="@{/logout}" method="post" class="mx-2 my-2">
+	             <button type="submit" class="btn btn-danger btn-lg">
+	                 Cerrar Sesión
+	             </button>
+	         </form>
         </div>
     </div>
     <script src="/js/bootstrap.bundle.min.js"></script>
