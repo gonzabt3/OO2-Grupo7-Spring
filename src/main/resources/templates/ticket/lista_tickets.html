@@ -84,8 +84,9 @@
                                         <button class="btn btn-sm btn-secondary" disabled>No en mi Área</button>
                                     </span>
                                 </span>
-                                <span th:unless="${ticket.estado?.name() == 'ABIERTO'}">
-                                    <button class="btn btn-sm btn-secondary" disabled th:text="${'Estado: ' + ticket.estado.name()}"></button>
+                                <span th:unless="${ticket.estado != null and ticket.estado.name() == 'ABIERTO'}">
+									<button class="btn btn-sm btn-secondary" disabled 
+									        th:text="${ticket.estado != null ? 'Estado: ' + ticket.estado.name() : 'Estado: N/A'}"></button>
                                 </span>
                             </span>
 
