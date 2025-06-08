@@ -1,64 +1,113 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Todos los Tickets (Empleado)</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <title>Lista de Tickets</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles -->
+    <link href="/css/style.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
-    <main>
-        <h1>Todos los Tickets del Sistema</h1>
 
-        <div th:if="${successMessage}" class="alert alert-success">
-            <p th:text="${successMessage}"></p>
-        </div>
-        <div th:if="${errorMessage}" class="alert alert-danger">
-            <p th:text="${errorMessage}"></p>
-        </div>
+<div class="container mt-5">
+    <h2 class="mb-4">Lista de Tickets</h2>
 
-        <div th:if="${tickets.isEmpty()}">
-            <p>No hay tickets en el sistema en este momento.</p>
-        </div>
-        <div th:if="${!tickets.isEmpty()}">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Título</th>
-                        <th>Estado</th>
-                        <th>Prioridad</th>
-                        <th>Área Asignada</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="ticket : ${tickets}">
-                        <td th:text="${ticket.idTicket}"></td>
-                        <td th:text="${ticket.titulo}"></td>
-                        <td th:text="${ticket.estado}"></td>
-                        <td th:text="${ticket.prioridad}"></td>
-                        <td th:text="${ticket.area != null ? ticket.area: 'Sin Asignar'}"></td>
-<!--                        <td th:text="${ticket.usuarioCreador != null ? (ticket.usuarioCreador.nombre + ' ' + ticket.usuarioCreador.apellido) : 'N/A'}"></td>-->
-                        <td>
-							<a th:href="@{/ticket/{idTicket}/tomarTicket(idTicket=${ticket.idTicket})}" class="button">Tomar Ticket</a>
-<!--                            <span th:if="${ticket.estado == 'ABIERTO'}">-->
-<!--                                <span th:if="${ticket.area != null and empleado.area != null and ticket.area == empleado.area.name()}">-->
-<!--                                    <a th:href="@{/ticket/{idTicket}/tomarTicket(idTicket=${ticket.idTicket})}" class="button">Tomar Ticket</a>-->
-<!--                                </span>-->
-<!--                                <span th:unless="${ticket.area != null and empleado.area != null and ticket.area.name() == empleado.area.name()}">-->
-<!--                                    <button disabled>No en mi Área</button>-->
-<!--                                </span>-->
-<!--                            </span>-->
-<!--                            <span th:unless="${ticket.estado == 'ABIERTO'}">-->
-<!--                                <button disabled th:text="${'Estado: ' + ticket.estado}"></button>-->
-<!--                            </span>-->
-                            <a th:href="@{/ticket/{idTicket}/detail(idTicket=${ticket.idTicket})}" class="button">Ver Detalle</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <p><a th:href="@{/ticket/lista}">Volver al incio</a></p>
-    </main>
+    <!-- Botón de volver al panel -->
+    <div class="mb-3">
+        <a href="/panel" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left"></i> Volver al Panel
+        </a>
+    </div>
+
+    <!-- Alertas -->
+    <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+    <div th:if="${message}" class="alert alert-info" role="alert" th:text="${message}"></div>
+
+    <div th:if="${#lists.isEmpty(tickets)}" class="alert alert-info">
+        No hay tickets para mostrar.
+    </div>
+
+    <div th:unless="${#lists.isEmpty(tickets)}" class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Estado</th>
+                    <th>Prioridad</th>
+                    <th>Área Asignada</th>
+                    <th sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')">Usuario Creador</th>
+                    <th sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')">Fecha Creación</th>
+                    <th sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')">Fecha Cierre</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="ticket : ${tickets}">
+                    <td th:text="${ticket.idTicket}">ID</td>
+                    <td th:text="${ticket.titulo}">Título</td>
+                    <td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}">Estado</td>
+                    <td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'N/A'}">Prioridad</td>
+                    <td th:text="${ticket.area != null ? ticket.area.name() : 'Sin Asignar'}">Área</td>
+
+                    <td sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')"
+                        th:text="${ticket.usuarioCreador != null ? (ticket.usuarioCreador.nombre + ' ' + ticket.usuarioCreador.apellido) : 'N/A'}">
+                        Usuario
+                    </td>
+                    <td sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')"
+                        th:text="${ticket.fechaCreacion != null ? ticket.fechaCreacion : 'N/A'}">
+                        Fecha Creación
+                    </td>
+                    <td sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')"
+                        th:text="${ticket.fechaCierre != null ? ticket.fechaCierre : 'N/A'}">
+                        Fecha Cierre
+                    </td>
+
+                    <td>
+                        <div class="d-flex flex-column gap-1">
+                            <span sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')">
+                                <span th:if="${ticket.estado?.name() == 'ABIERTO'}">
+                                    <span th:if="${usuarioLogueado?.area != null and ticket.area != null and ticket.area.equals(usuarioLogueado.area)}">
+                                        <a th:href="@{/ticket/{idTicket}/tomarTicket(idTicket=${ticket.idTicket})}" 
+                                           class="btn btn-sm btn-success">Tomar Ticket</a>
+                                    </span>
+                                    <span th:unless="${usuarioLogueado?.area != null and ticket.area != null and ticket.area.equals(usuarioLogueado.area)}">
+                                        <button class="btn btn-sm btn-secondary" disabled>No en mi Área</button>
+                                    </span>
+                                </span>
+                                <span th:unless="${ticket.estado?.name() == 'ABIERTO'}">
+                                    <button class="btn btn-sm btn-secondary" disabled th:text="${'Estado: ' + ticket.estado.name()}"></button>
+                                </span>
+                            </span>
+
+                            <a th:href="@{/ticket/{idTicket}/detail(idTicket=${ticket.idTicket})}" 
+                               class="btn btn-sm btn-outline-info">
+                                Ver Detalle
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-3">
+        <a th:href="@{/ticket/lista}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-clockwise"></i> Actualizar Lista
+        </a>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.grupo7.oo2spring.models.EmailToken;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
+import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IEmailTokenRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
@@ -71,6 +72,8 @@ public class UsuarioController {
         }
         return "usuario/verificacion";
     }
+    
+   
     
     
     

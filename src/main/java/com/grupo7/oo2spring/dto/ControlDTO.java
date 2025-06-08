@@ -2,6 +2,8 @@ package com.grupo7.oo2spring.dto;
 
 import java.time.LocalDate;
 
+import com.grupo7.oo2spring.models.Empleado;
+
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -9,12 +11,23 @@ public class ControlDTO {
 
     private int idControl;
     private TicketDTO ticket;
-    private EmpleadoDTO empleado;
+    private Empleado empleado;
     private LocalDate fechaEntrada;
     private LocalDate fechaSalida;
     private String accion;
     private boolean finalizado;
 
+    public ControlDTO(TicketDTO ticket, Empleado empleado, LocalDate fechaEntrada,
+			LocalDate fechaSalida, String accion, boolean finalizado) {
+		super();
+		this.ticket = ticket;
+		this.empleado = empleado;
+		this.fechaEntrada = fechaEntrada;
+		this.fechaSalida = fechaSalida;
+		this.accion = accion;
+		this.finalizado = finalizado;
+	}
+    
     // Getters y setters
     public int getIdControl() {
         return idControl;
@@ -24,11 +37,11 @@ public class ControlDTO {
         this.idControl = idControl;
     }
 
-    public EmpleadoDTO getEmpleadoDTO() {
+    public Empleado getEmpleadoDTO() {
 		return empleado;
 	}
 
-	public void setEmpleadoDTO(EmpleadoDTO empleado) {
+	public void setEmpleadoDTO(Empleado empleado) {
 		this.empleado = empleado;
 	}
 
@@ -71,4 +84,6 @@ public class ControlDTO {
 	public void setAccion(String accion) {
 		this.accion = accion;
 	}
+
+	
 }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Estado;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.models.Ticket;
@@ -28,7 +29,7 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
     List<Ticket> findByPrioridad(Prioridad prioridad);
 	
     // Buscar tickets creados por un usuario específico
-    List<Ticket> findByUsuarioCreadorIdUsuario(Usuario usuarioCreador);
+    List<Ticket> findByUsuarioCreadorIdUsuario(int usuarioCreadorId);
     
     // Buscar tickets creados entre dos fechas
     List<Ticket> findByFechaCreacionBetween(LocalDate fechaInicio, LocalDate fechaFin);
@@ -39,8 +40,10 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
     // Buscar tickets cerrados antes de una fecha
     List<Ticket> findByFechaCierreBefore(LocalDate fecha);
     
+	// Busca los tickets sin area
+    List<Ticket> findByAreaIsNull();
 	
-
+    List<Ticket> findByArea(Area area);
 	
 
 }

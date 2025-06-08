@@ -42,12 +42,13 @@
         <h1 class="text-center mb-4">Lista de Tickets</h1>
 
         <!-- Mostrar mensaje si no hay tickets -->
-        <div th:if="${tickets.size() == 0}" class="alert alert-warning text-center">
-            No hay tickets disponibles.
-        </div>
+		<div th:if="${#lists.isEmpty(tickets)}" class="alert alert-warning text-center">
+		    No hay tickets disponibles.
+		</div>
+
 
         <!-- Tabla de tickets -->
-        <div class="table-responsive" th:if="${tickets.size() > 0}">
+       <div class="table-responsive" th:if="${!#lists.isEmpty(tickets)}">
             <table class="table table-bordered table-hover align-middle text-center">
                 <thead class="table-primary">
                     <tr>

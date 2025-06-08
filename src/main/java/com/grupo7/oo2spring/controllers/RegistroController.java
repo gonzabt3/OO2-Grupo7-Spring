@@ -64,7 +64,7 @@ public class RegistroController {
             return "usuario/registro";
         }
         
-        usuario.setRol(Rol.CLIENTE); // Asignar rol ROLE_CLIENTE
+        usuario.setRol(Rol.USER);
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
         usuario.setUsuarioActivo(false);
         

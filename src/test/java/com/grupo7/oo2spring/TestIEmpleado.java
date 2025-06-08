@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Area;
@@ -18,20 +19,20 @@ import com.grupo7.oo2spring.repositories.*;
 public class TestIEmpleado {
 	
 	@Autowired
-    private IUsuarioRepository usuarioRepository;
+    private IUsuarioRepository empleadoRepository;
+	@Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Test
     void testGuardarYBuscarEmpleado() throws Exception {
         // Crear empleado
-    	//usuarioRepository.deleteById(15);
-        Empleado empleado = new Empleado("Juan", "Perez", "20308232", "juan.perez@example.com","juan","password", Area.DESARROLLO, true);
-        // Guardar en DB
-        //TODO: encode password
-        empleado = usuarioRepository.save(empleado);
+    	//empleadoRepository.deleteById(4);
+        Empleado empleado = new Empleado("Juan", "Perez", "20308232", "juan.perez@example.com","juan", passwordEncoder.encode("password"), Area.DESARROLLO, true);
+        empleado = empleadoRepository.save(empleado);
 
         // Buscar por ID
-        Optional<Empleado> encontrado = usuarioRepository.findEmpleadoById(empleado.getIdUsuario());
+        Optional<Empleado> encontrado = empleadoRepository.findEmpleadoById(empleado.getIdUsuario());
         assertThat(encontrado).isPresent();
         
         System.out.println("Rol del empleado creado: " + empleado.getRol());
@@ -41,7 +42,7 @@ public class TestIEmpleado {
         assertThat(encontrado.get().getApellido()).isEqualTo("Perez");
 
         // Buscar todos los empleados
-        List<Empleado> lista = usuarioRepository.findAllEmpleados();
+        List<Empleado> lista = empleadoRepository.findAllEmpleados();
         assertThat(lista).isNotEmpty();
         assertThat(lista).contains(empleado);
     }

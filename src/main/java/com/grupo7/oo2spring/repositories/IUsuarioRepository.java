@@ -64,6 +64,12 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     @Query("SELECT u FROM Empleado u WHERE u.idUsuario = :id AND u.rol = 'EMPLEADO'")
     Optional<Empleado> findEmpleadoById(@Param("id") int id);
+//    
+//    @Query("SELECT u FROM Empleado u WHERE u.nombreUsuario = :nombreUsuario AND u.rol = 'EMPLEADO'")
+//    Optional<Empleado> findEmpleadoByNombre(@Param("nombreUsuario") String nombreUsuario);
+//    
+    @Query("SELECT u FROM Empleado u WHERE u.nombreUsuario = :nombreUsuario AND u.rol = 'EMPLEADO'")
+    public Empleado findEmpleadoByNombre(@Param("nombreUsuario") String nombreUsuario);
     
     @Query("SELECT u FROM Empleado u WHERE u.rol = 'EMPLEADO'")
     List<Empleado> findAllEmpleados();

@@ -9,17 +9,17 @@
     <main>
         <h1>Detalle del Ticket #<span th:text="${ticketDetail.idTicket}"></span></h1>
 
-        <div th:if="${successMessage}" class="alert alert-success">
-            <p th:text="${successMessage}"></p>
-        </div>
-        <div th:if="${errorMessage}" class="alert alert-danger">
-            <p th:text="${errorMessage}"></p>
-        </div>
+<!--        <div th:if="${successMessage}" class="alert alert-success">-->
+<!--            <p th:text="${successMessage}"></p>-->
+<!--        </div>-->
+<!--        <div th:if="${errorMessage}" class="alert alert-danger">-->
+<!--            <p th:text="${errorMessage}"></p>-->
+<!--        </div>-->
 
         <h2>Información General</h2>
         <p><strong>Título:</strong> <span th:text="${ticketDetail.titulo}"></span></p>
         <p><strong>Descripción:</strong> <span th:text="${ticketDetail.descripcion}"></span></p>
-        <p><strong>Creado por:</strong> <span th:text="${ticketDetail.usuarioCreador != null ? (ticketDetail.usuarioCreador.nombre + ' ' + ticketDetail.usuarioCreador.apellido) : 'N/A'}"></span></p>
+<!--        <p><strong>Creado por:</strong> <span th:text="${ticketDetail.usuarioCreador != null ? (ticketDetail.usuarioCreador.nombre + ' ' + ticketDetail.usuarioCreador.apellido) : 'N/A'}"></span></p>-->
         <p><strong>Fecha de Creación:</strong> <span th:text="${#temporals.format(ticketDetail.fechaCreacion, 'dd-MM-yyyy')}"></span></p>
         <p><strong>Fecha de Cierre:</strong> <span th:text="${ticketDetail.fechaCierre != null ? #temporals.format(ticketDetail.fechaCierre, 'dd-MM-yyyy') : 'Pendiente'}"></span></p>
         <p><strong>Estado:</strong> <span th:text="${ticketDetail.estado}"></span></p>
@@ -37,7 +37,6 @@
                         <th>ID Proceso</th>
                         <th>Fecha Entrada</th>
                         <th>Fecha Salida</th>
-                        <th>Función</th>
                         <th>Acción</th>
                         <th>Realizado por</th>
                         <th>¿Finalizado?</th>
@@ -49,8 +48,7 @@
                         <td th:text="${#temporals.format(control.fechaEntrada, 'dd-MM-yyyy')}"></td>
                         <td th:text="${control.fechaSalida != null ? #temporals.format(control.fechaSalida, 'dd-MM-yyyy') : 'N/A'}"></td>
                         <td th:text="${control.accion}"></td>
-<!--                        <td th:text="${control.accionRealizada}"></td>-->
-<!--                        <td th:text="${control.empleadoNombreCompleto != null ? control.empleadoNombreCompleto : 'N/A'}"></td>-->
+                        <td th:text="${control.empleado != null ? (control.empleado.nombre) : 'N/A'}"></td>
                         <td th:text="${control.finalizado ? 'Sí' : 'No'}"></td>
                     </tr>
                 </tbody>

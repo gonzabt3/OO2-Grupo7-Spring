@@ -17,6 +17,14 @@ import lombok.RequiredArgsConstructor;
 public class EmpleadoService {
 	
 	 private final IUsuarioRepository usuarioRepository;
+	 
+	 public Optional<Empleado> findByEmpledo(int idEmpleado) {
+		 return usuarioRepository.findEmpleadoById(idEmpleado);
+	 }
+	 
+	 public Empleado findByEmpleadoNombre(String nombreEmpleado) {
+		 return usuarioRepository.findEmpleadoByNombre(nombreEmpleado);
+	 }
 	
 	public Empleado guardarEmpleado(Empleado empleado) {
         // Aquí podés hacer validaciones adicionales si querés
