@@ -1,6 +1,7 @@
 package com.grupo7.oo2spring.security;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -23,7 +24,16 @@ public class UsuarioDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER")); 
+    	if (usuario != null && usuario.getRol() != null) {
+            // Obtiene el nombre del enum (ej. "MANAGER", "CLIENTE")
+            String roleName = usuario.getRol().name();
+            
+            // Construye la autoridad con el prefijo "ROLE_"
+            // y en mayúsculas (aunque .name() ya devuelve en mayúsculas por convención)
+            return List.of(new SimpleGrantedAuthority("ROLE_" + roleName));
+        }
+    	return Collections.emptyList();
+        //return List.of(new SimpleGrantedAuthority("ROLE_USER")); 
     }
 
     @Override

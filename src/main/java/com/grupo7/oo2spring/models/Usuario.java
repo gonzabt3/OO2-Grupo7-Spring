@@ -1,6 +1,7 @@
 package com.grupo7.oo2spring.models;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,11 +9,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED) // Herencia en JPA
-public abstract class Usuario {
+@Inheritance(strategy = InheritanceType.JOINED) 
+public class Usuario {
 
   @Id
+  @EqualsAndHashCode.Include
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int idUsuario;
   
@@ -30,7 +33,7 @@ public abstract class Usuario {
    private String nombre;
    @Column(nullable = false)
    private String apellido;
-   @Column(nullable = false, unique = true)
+   @Column(nullable = false)
    private String dni;
    @Column(nullable = false, unique = true)
    private String email;

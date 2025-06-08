@@ -33,7 +33,5 @@ public interface IControlRepository extends JpaRepository<Control, Integer> {
     // Buscar controles de un ticket que no estén finalizados (ej: en curso)
     List<Control> findByTicketIdTicketAndFinalizado(int ticketId, boolean finalizado);
     
-	
-	
 
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,10 +32,20 @@ public class Ticket {
 
     @Enumerated(EnumType.STRING)
     private Prioridad prioridad;
+    
+    @Enumerated(EnumType.STRING)
+    private Area area;
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
-    private List<Control> procesos;
+    private List<Control> procesos = new ArrayList<>();
 
+    public void addControl(Control control) {
+        if (this.procesos == null) {
+            this.procesos = new ArrayList<>();
+        }
+        this.procesos.add(control);
+        control.setTicket(this); // Esto es crucial para la relación bidireccional
+    }
     // Getters y setters
     public int getIdTicket() {
         return idTicket;
@@ -108,4 +119,12 @@ public class Ticket {
     public void setProcesos(List<Control> procesos) {
         this.procesos = procesos;
     }
+
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
+	}
 }

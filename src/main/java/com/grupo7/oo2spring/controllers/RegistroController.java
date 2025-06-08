@@ -141,4 +141,3 @@ public class RegistroController {
         return "usuario/confirmacion_exitosa";
 }
 }
-

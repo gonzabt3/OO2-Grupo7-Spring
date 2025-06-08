@@ -1,10 +1,14 @@
 package com.grupo7.oo2spring.dto;
 
-
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
+import com.grupo7.oo2spring.models.Ticket;
+import jakarta.persistence.Entity;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 public class TicketDTO {
@@ -24,6 +28,8 @@ public class TicketDTO {
     private Estado estado;
 
     private Prioridad prioridad;
+    
+    private Area area;
 
     private List<ControlDTO> procesos;
     
@@ -31,7 +37,6 @@ public class TicketDTO {
 	public TicketDTO(String titulo, String descripcion,
 			UsuarioDTO usuarioCreador, Estado estado, Prioridad prioridad) {
 		super();
-		this.idTicket = idTicket;
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.fechaCreacion = LocalDate.now();
@@ -113,5 +118,12 @@ public class TicketDTO {
     public void setProcesos(List<ControlDTO> procesos) {
         this.procesos = procesos;
     }
-    
+
+	public Area getArea() {
+		return area;
+	}
+
+	public void setArea(Area area) {
+		this.area = area;
+	}
 }

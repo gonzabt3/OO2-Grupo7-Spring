@@ -37,7 +37,7 @@
                     <td th:text="${usuario.dni}">DNI</td>
                     <td th:text="${usuario.email}">Email</td>
                     <td>
-                        <form th:if="${usuario.rol.name() == 'CLIENTE'}"
+                        <form th:if="${usuario.rol.name() == 'USER'}"
                               th:action="@{/manager/{id}/a-empleado(id=${usuario.idUsuario})}"
                               method="get"
                               class="d-inline">

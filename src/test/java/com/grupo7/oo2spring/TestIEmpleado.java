@@ -24,7 +24,7 @@ public class TestIEmpleado {
     @Test
     void testGuardarYBuscarEmpleado() throws Exception {
         // Crear empleado
-    	usuarioRepository.deleteById(15);
+    	//usuarioRepository.deleteById(15);
         Empleado empleado = new Empleado("Juan", "Perez", "20308232", "juan.perez@example.com","juan","password", Area.DESARROLLO, true);
         // Guardar en DB
         //TODO: encode password

@@ -64,15 +64,16 @@
 
             <!-- Solo para clientes -->
             <a href="/cliente/tickets" class="btn btn-secondary btn-lg mx-2 my-2"
-               th:if="${rol == 'CLIENTE'}">
+               th:if="${rol == 'USER'}">
                 Mis Tickets
             </a>
+			
+			<!-- Ver Tickets Asignados visible solo para empleados -->
+			          <a href="/empleado/tickets-asignados" class="btn btn-info btn-lg mx-2"
+			             th:if="${rol == 'EMPLEADO'}">
+			              Ver Tickets Asignados
+			          </a>
 
-            <!-- Solo para empleados -->
-            <a href="/empleado/tickets-asignados" class="btn btn-info btn-lg mx-2 my-2"
-               th:if="${rol == 'EMPLEADO'}">
-                Tickets Asignados
-            </a>
 
             <!-- Solo para managers -->
             <a href="/manager/listar" class="btn btn-warning btn-lg mx-2 my-2"
