@@ -58,12 +58,6 @@ public class RegistroController {
             return "usuario/registro"; // vuelve a mostrar el formulario con error
         }
         
-        if (usuarioRepository.existsByDni(usuario.getDni())) {
-            model.addAttribute("errorDni", "El DNI ya está registrado.");
-            model.addAttribute("usuario", usuario);  // para que no se borren los datos ya cargados
-            return "usuario/registro";
-        }
-        
         usuario.setRol(Rol.USER);
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
         usuario.setUsuarioActivo(false);
