@@ -1,6 +1,7 @@
 package com.grupo7.oo2spring.models;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,11 +9,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED) // Herencia en JPA
-public abstract class Usuario {
+@Inheritance(strategy = InheritanceType.JOINED) 
+public class Usuario {
 
   @Id
+  @EqualsAndHashCode.Include
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int idUsuario;
   
@@ -22,6 +25,7 @@ public abstract class Usuario {
    @Column(name="contraseña", nullable = false)
    private String contraseña;
 
+   @Column(nullable = false)
    @Enumerated(EnumType.STRING)
    private Rol rol;
 
@@ -29,10 +33,12 @@ public abstract class Usuario {
    private String nombre;
    @Column(nullable = false)
    private String apellido;
-   @Column(nullable = false, unique = true)
+   @Column(nullable = false)
    private String dni;
    @Column(nullable = false, unique = true)
    private String email;
+   
+   private boolean usuarioActivo;
    
    public Usuario(String nombre, String apellido, String dni, String email,
        String nombreUsuario, String contraseña) throws Exception {
@@ -47,6 +53,7 @@ public abstract class Usuario {
      this.email = email;
      this.contraseña = contraseña;
      this.rol = rol.USER;
+     this.usuarioActivo = false;
    }
    
    public static void validarNombreApellido(String nombre, String apellido) throws Exception {
@@ -120,6 +127,14 @@ public abstract class Usuario {
    }
    public void setApellido(String apellido) {
      this.apellido = apellido;
+   }
+   
+   public void setUsuarioActivo(boolean bool) {
+	   this.usuarioActivo = bool;
+   }
+   
+   public boolean getUsuarioActivo() {
+	   return this.usuarioActivo;
    }
    
 }

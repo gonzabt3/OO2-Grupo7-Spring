@@ -39,16 +39,16 @@ public class TicketDTO {
     private List<ControlDTO> procesos = new ArrayList<>();
     
    
-	public TicketDTO(String titulo, String descripcion,
-			Usuario usuarioCreador, Estado estado, Prioridad prioridad) {
-		super();
+    public TicketDTO(String titulo, String descripcion,
+			Usuario usuarioCreador) {
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.fechaCreacion = LocalDate.now();
 		this.fechaCierre = null;
 		this.usuarioCreador = usuarioCreador;
-		this.estado = estado;
-		this.prioridad = prioridad;
+		this.estado = Estado.PENDIENTE;
+		this.prioridad = Prioridad.SIN_ASIGNAR;
+		this.area = Area.SIN_ASIGNAR;
 	}
 
     public int getIdTicket() {

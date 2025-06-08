@@ -26,17 +26,15 @@ public class EmpleadoService {
 		 return usuarioRepository.findEmpleadoByNombre(nombreEmpleado);
 	 }
 	
-	public void sacarPermisosEmpleado(int idEmpleado) throws Exception {
-		 Usuario usuario = usuarioRepository.findById(idEmpleado)
-			        .orElseThrow(() -> new Exception("Usuario no encontrado"));
+	public Empleado guardarEmpleado(Empleado empleado) {
+        // Aquí podés hacer validaciones adicionales si querés
 
-			    // Cambiar el rol
-			    usuario.setRol(Rol.CLIENTE);
-
-
-			    // Guardar el usuario actualizado
-			    usuarioRepository.save(usuario);
-	    
+        // Guarda o actualiza el empleado en la base
+        return usuarioRepository.save(empleado);
+    }
+	
+	public Optional<Empleado> buscarPorId(int idEmpleado) {
+		return usuarioRepository.findEmpleadoById(idEmpleado);
 	}
 
 }

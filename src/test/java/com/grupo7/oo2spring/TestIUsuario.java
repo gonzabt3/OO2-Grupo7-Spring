@@ -29,8 +29,8 @@ public class TestIUsuario {
     void testGuardarYBuscarUsuario() {
         // Crear usuario
 		try { 
-			//usuarioRepository.deleteById(1);
-	    Usuario usuario = new Cliente("Roberto", "Jimenez", "34672169", "roberto.jimenez@example.com", "rober", "test");
+			//usuarioRepository.deleteAll();
+	    Usuario usuario = new Usuario("Roberto", "Jimenez", "34672169", "roberto.jimenez@example.com", "rober", "test");
 	    Manager manager = new Manager(
 	            "Carlos",           // nombre
 	            "Gómez",            // apellido

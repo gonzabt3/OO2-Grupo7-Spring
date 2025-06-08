@@ -3,17 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Lista de Usuarios</title>
-
-    <!-- Bootstrap core CSS -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles -->
     <link href="/css/style.css" rel="stylesheet">
+	
+	<!-- Bootstrap Icons -->
+	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
 </head>
 <body>
 
 <div class="container mt-5">
     <h2 class="mb-4">Lista de Usuarios</h2>
+
+	<div class="btn-back">
+	            <a href="/panel" class="btn btn-outline-primary">
+	                <i class="bi bi-arrow-left"></i> Volver al Panel
+	            </a>
+	        </div>
 
     <!-- Mensajes de éxito o error -->
     <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
@@ -37,7 +45,7 @@
                     <td th:text="${usuario.dni}">DNI</td>
                     <td th:text="${usuario.email}">Email</td>
                     <td>
-                        <form th:if="${usuario.rol.name() == 'CLIENTE'}"
+                        <form th:if="${usuario.rol.name() == 'USER'}"
                               th:action="@{/manager/{id}/a-empleado(id=${usuario.idUsuario})}"
                               method="get"
                               class="d-inline">
@@ -61,6 +69,6 @@
         </table>
     </div>
 </div>
-
+<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -86,16 +86,22 @@ public class SeguridadConfig {
         http
         .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
+                    "/",
+                    "/index",
                     "/usuario/login",
-                    "/usuario/login?error=true",
                     "/usuario/login/process",
                     "/error",
                     "/css/**",
                     "/js/**",
                     "/usuario/formulario",
                     "/usuario/registro_form",
-                    "/registro",
-                    "/usuario/registro_exito"
+                    "/usuario/registro",
+                    "/usuario/registro/*",
+                    "/usuario/registro_exito",
+                    "/usuario/confirmar",
+                    "/usuario/confirmar/**",
+                    "/usuario/confirmacion_exitosa",
+                    "/usuario/token_invalido"
                 ).permitAll()
                 .anyRequest().authenticated()
             )

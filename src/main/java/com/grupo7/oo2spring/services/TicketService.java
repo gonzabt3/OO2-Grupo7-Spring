@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.dto.ControlDTO;
 import com.grupo7.oo2spring.dto.TicketDTO;
@@ -60,16 +61,13 @@ public class TicketService {
 		return ticketRepository.findByArea(area);
 	}
 
-	public Ticket crearTicket(TicketDTO ticket, Usuario usuariocreador) {
-		Ticket nuevoTicket = new Ticket();
-		nuevoTicket.setUsuarioCreador(usuariocreador);
-		nuevoTicket.setTitulo(ticket.getTitulo());
-		nuevoTicket.setDescripcion(ticket.getDescripcion());
-		nuevoTicket.setFechaCreacion(LocalDate.now());
-		nuevoTicket.setEstado(Estado.PENDIENTE);
-		nuevoTicket.setPrioridad(Prioridad.MEDIA);
-		nuevoTicket.setArea(null);
-		return ticketRepository.save(nuevoTicket);
+	@Transactional
+	public Ticket crearTicket(TicketDTO ticket, Usuario usuarioCreador) {
+	    System.out.println("SERVICIO: Creando ticket con DTO: " + ticket);
+	    Ticket nuevoTicket = new Ticket(ticket.getDescripcion(), ticket.getTitulo(),  usuarioCreador);
+	    Ticket guardado = ticketRepository.save(nuevoTicket);
+	    System.out.println("SERVICIO: Ticket guardado con ID: " + guardado.getIdTicket());
+	    return guardado;
 	}
 
 	// @PreAuthorize("hasRole('EMPLEADO')")
@@ -145,6 +143,11 @@ public class TicketService {
 		ticketRepository.save(ticket);
 	}
 	
+	 public Ticket buscarTicketPorId(int idTicket) throws TicketNoEncontradoException {
+	        return ticketRepository.findById(idTicket)
+	            .orElseThrow(() -> new TicketNoEncontradoException("Ticket con ID " + idTicket + " no encontrado"));
+	    }
+	
 	@Transactional
 	public void asignarAreaTicket(int idTicket, Area area) {
 		Ticket ticket = ticketRepository.getByIdTicket(idTicket);
@@ -162,7 +165,12 @@ public class TicketService {
 	
 	@Transactional(readOnly = true)
     public TicketDTO getTicketDetailForView(int idTicket) {
+<<<<<<< HEAD
         Ticket ticket = ticketRepository.findById(idTicket)
+=======
+
+        Ticket ticket = ticketRepository.findById(idTicket) // Usa findById o el método con fetch
+>>>>>>> 3217439d5e3859a19e16b86697739d52f4a8684f
                 .orElseThrow(() -> new RuntimeException("Ticket no encontrado con ID: " + idTicket));
 
         TicketDTO ticketDetailDTO = new TicketDTO();
@@ -192,6 +200,10 @@ public class TicketService {
         
         return controlDTO;
     }
+
+	public List<Ticket> getTicketsByUsuario(int usuarioIdCreador) {
+		return ticketRepository.findByUsuarioCreadorIdUsuario(usuarioIdCreador);
+	}
 }
 
 

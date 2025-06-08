@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.grupo7.oo2spring.dto.ControlDTO;
 import com.grupo7.oo2spring.dto.TicketDTO;
@@ -61,48 +62,35 @@ public class TicketController {
     }
 
     @PostMapping("/crear")
-    public String crearTicket(@ModelAttribute("ticket") TicketDTO ticketDTO, Model model,
-    		@AuthenticationPrincipal UserDetails usuariolog) {
-    	
-    	if(usuariolog == null) {
-    		 model.addAttribute("mensaje", "Error con el Usuario");
-    		return "redirect:/panel";
-    	}
-    	
-    	String nombreDelUsuarioEnSesion = usuariolog.getUsername();
-    	
-    	Usuario usuarioCreador = usuarioService.getUsuarioByUsername(nombreDelUsuarioEnSesion);
-    	try {
-        	ticketService.crearTicket(ticketDTO, usuarioCreador); 
-        	model.addAttribute("successMessage", "¡Ticket exitoso! Ya puedes iniciar sesión.");
-            return "ticket/exito";
+    public String crearTicket(@ModelAttribute("ticket") TicketDTO ticketDTO, RedirectAttributes redirectAttributes,
+                              @AuthenticationPrincipal UserDetails usuariolog) {
+        System.out.println("CONTROLADOR: Recibido POST /crear con ticketDTO: " + ticketDTO);
+
+        if (usuariolog == null) {
+            System.out.println("CONTROLADOR: Usuario no autenticado");
+            redirectAttributes.addFlashAttribute("mensaje", "Error con el Usuario");
+            return "redirect:/panel";
+        }
+
+        String nombreDelUsuarioEnSesion = usuariolog.getUsername();
+        System.out.println("CONTROLADOR: Usuario en sesión: " + nombreDelUsuarioEnSesion);
+
+        Usuario usuarioCreador = usuarioService.getUsuarioByUsername(nombreDelUsuarioEnSesion);
+        System.out.println("CONTROLADOR: Usuario creador obtenido: " + usuarioCreador);
+
+        try {
+            Ticket ticketCreado = ticketService.crearTicket(ticketDTO, usuarioCreador); 
+            System.out.println("CONTROLADOR: Ticket creado con ID: " + ticketCreado.getIdTicket());
+            redirectAttributes.addFlashAttribute("successMessage", "¡Ticket exitoso! Ya puedes iniciar sesión.");
+            return "redirect:/ticket/exito";
         } catch (RuntimeException e) {
-        	System.err.println("Error al registrar usuario: " + e.getMessage());
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("ticket", ticketDTO); // Para que los datos no se borren al volver al form
-            return "formulario-ticket";
+            System.err.println("CONTROLADOR: Error al registrar ticket: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("ticket", ticketDTO);
+            return "redirect:/formulario-ticket";
         }
     }
  
-
-    /*@PostMapping("/nuevo-simple")
-    public String guardarTicketSimple(
-            @RequestParam("titulo") String titulo,
-            @RequestParam("descripcion") String descripcion,
-            Model model) {
-    	model.addAttribute("se creo con exito post");
-        Usuario usuarioCreador = usuarioRepository.findById(1).orElse(null); // Asumiendo que existe un usuario con ID 1
-        
-        
-        if (usuarioCreador == null) {
-            model.addAttribute("mensaje", "Error: No se encontró el usuario creador.");
-            return "ticket/exito";
-        }
-
-        Ticket nuevoTicket = ticketService.crearTicket(usuarioCreador, titulo, descripcion);
-        model.addAttribute("mensaje", "Ticket creado exitosamente con ID: " + nuevoTicket.getIdTicket());
-        return "redirect:/exito"; // Redirigir a la página de éxito
-    }*/
 
     @GetMapping("/exito")
     public String mostrarExito(Model model) {
@@ -242,5 +230,20 @@ public class TicketController {
         }
         return "redirect:/ticket/sinasignar";
     }
+	
+	@GetMapping("/tickets")
+	public String verTicketsUsuario(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+	    if (userDetails == null) {
+	        return "redirect:/login";
+	    }
+
+	    String username = userDetails.getUsername();
+	    Usuario usuario = usuarioService.getUsuarioByUsername(username);
+
+	    List<Ticket> tickets = ticketService.getTicketsByUsuario(usuario.getIdUsuario());
+	    model.addAttribute("tickets", tickets);
+
+	    return "ticket/usuario-tickets"; // Vista con la tabla de tickets
+	}
 }
 

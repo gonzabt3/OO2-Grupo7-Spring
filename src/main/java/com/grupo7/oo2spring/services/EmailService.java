@@ -1,30 +1,31 @@
-/*package com.grupo7.oo2spring.services;
+package com.grupo7.oo2spring.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class EmailService {
 
-	 @Autowired
-	    private JavaMailSender mailSender;
+	    private final JavaMailSender mailSender;
 	 
-	 @Value("${EMAIL_TEST}")
+	    @Value("${EMAIL_TEST}") //Este email va a enviar el email a receptor
 		private String emailUsername;
 	 
-	 public void enviarEmail(String to, String subject, String body) {
+	 public void enviarEmail(String receptor, String asunto, String cuerpo) {
 		 
 		 
 	        SimpleMailMessage mensaje = new SimpleMailMessage();
-	        mensaje.setTo(to);
-	        mensaje.setSubject(subject);
-	        mensaje.setText(body);
+	        mensaje.setTo(receptor);
+	        mensaje.setSubject(asunto);
+	        mensaje.setText(cuerpo);
 	        mensaje.setFrom(emailUsername);
 	        mailSender.send(mensaje);
-	        System.out.println("Mensaje enviado a " + to);
+	        System.out.println("Mensaje enviado a " + receptor);
 	 
 }
-}*/
+}
