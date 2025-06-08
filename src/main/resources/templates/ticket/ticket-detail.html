@@ -5,16 +5,112 @@
     <title>Detalle del Ticket #<span th:text="${ticketDetail.idTicket}"></span></title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
+<style>
+        /* Estilos básicos para el cuerpo */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Contenedor principal para centrar el contenido */
+        main {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Títulos */
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.2em;
+            border-bottom: 3px solid #3498db;
+        }
+
+        h2 {
+            font-size: 1.8em;
+        }
+
+        h3 {
+            font-size: 1.4em;
+        }
+
+        /* Estilo para párrafos de información general */
+        p {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        p strong {
+            color: #555;
+            display: inline-block; /* Para que ocupe espacio y se alinee bien */
+            width: 150px; /* Ancho fijo para las etiquetas */
+        }
+
+        /* Estilo para tablas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        tbody tr:nth-child(even) { /* Filas impares para un efecto de cebra */
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        /* Estilo para enlaces */
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #218838;
+        }
+    </style>
 <body>
     <main>
         <h1>Detalle del Ticket #<span th:text="${ticketDetail.idTicket}"></span></h1>
-
-<!--        <div th:if="${successMessage}" class="alert alert-success">-->
-<!--            <p th:text="${successMessage}"></p>-->
-<!--        </div>-->
-<!--        <div th:if="${errorMessage}" class="alert alert-danger">-->
-<!--            <p th:text="${errorMessage}"></p>-->
-<!--        </div>-->
 
         <h2>Información General</h2>
         <p><strong>Título:</strong> <span th:text="${ticketDetail.titulo}"></span></p>

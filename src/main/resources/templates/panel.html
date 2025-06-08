@@ -3,43 +3,183 @@
 <head>
     <title>Panel de Control</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos Generales */
+        body {
+            font-family: 'Lato', sans-serif; /* Fuente elegante para el cuerpo */
+            background-color: #f5f7f9; /* Un gris muy claro, casi blanco */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 30px; /* Más padding general */
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Contenedor Principal del Panel */
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px; /* Bordes suavemente redondeados */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07); /* Sombra sutil y difusa */
+            padding: 50px 40px; /* Espacio interno generoso */
+            max-width: 950px; /* Un poco más ancho para más espacio */
+            width: 100%;
+            text-align: center;
+            position: relative; /* Para posicionar el rol dentro */
+        }
+
+        /* Encabezado Principal */
+        h1 {
+            font-family: 'Playfair Display', serif; /* Fuente elegante para el título */
+            color: #2c3e50; /* Gris oscuro para elegancia */
+            font-size: 3em; /* Tamaño impactante */
+            margin-bottom: 25px; /* Espacio debajo del título */
+            font-weight: 700;
+            letter-spacing: -0.8px; /* Ajuste para un look más compacto */
+        }
+
+        /* Estilo para el Rol del Usuario (dentro del contenedor) */
+        .user-role-tag {
+            position: absolute; /* Posicionamiento absoluto dentro del .container */
+            top: 25px;
+            right: 25px;
+            background-color: #e0e6eb; /* Fondo suave para la etiqueta */
+            padding: 7px 12px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            color: #5d6d7e; /* Texto en un gris medio */
+            font-weight: 600;
+            text-transform: uppercase; /* Mayúsculas para el rol */
+            letter-spacing: 0.5px;
+        }
+
+        .user-role-tag strong {
+            color: #007bff; /* Color de acento para el valor del rol */
+        }
+
+        /* Cuadrícula de Botones */
+        .button-grid {
+            display: grid;
+            /* Columnas que se ajustan: al menos 250px, hasta 1 fracción del espacio disponible */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px; /* Espacio generoso entre los botones */
+            margin-top: 50px; /* Espacio superior para separar del título */
+            justify-content: center; /* Centrar los elementos en la cuadrícula */
+        }
+
+        /* Estilo General de los Botones */
+        .btn {
+            padding: 18px 25px; /* Padding generoso */
+            font-size: 1.05em;
+            border-radius: 6px; /* Suavemente redondeados */
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            transition: all 0.25s ease-in-out; /* Transición suave */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Sombra muy sutil */
+            border: 1px solid transparent; /* Borde transparente por defecto */
+        }
+
+        /* Colores y Hover de Botones Bootstrap Personalizados para Elegancia */
+        .btn-primary {
+            background-color: #007bff; /* Azul clásico */
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-3px); /* Ligero levantamiento */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Sombra al levantar */
+        }
+
+        .btn-secondary {
+            background-color: #6c757d; /* Gris medio */
+            border-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-info {
+            background-color: #17a2b8; /* Azul verdoso */
+            border-color: #17a2b8;
+        }
+        .btn-info:hover {
+            background-color: #138496;
+            border-color: #138496;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+		
+		.btn-success {
+            background-color: #28a745; /* Verde estándar */
+            border-color: #28a745;
+        }
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-danger {
+            background-color: #dc3545; /* Rojo de advertencia */
+            border-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #c82333;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Eliminar márgenes de Bootstrap que podrían interferir con Grid */
+        .mx-2, .mb-4 {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            margin-bottom: 0 !important;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Panel de Control</h1>
-        <div class="d-flex justify-content-center">
-			<p>ROL ACTUAL: <span th:text="${rol}">[rol]</span></p>
-            <!-- Crear Ticket visible para todos -->
-            <a href="/ticket/formulario_simple" class="btn btn-primary btn-lg mx-2">
-                Crear Ticket
+    <div class="container">
+        <div class="user-role-tag">
+            Tu ROL: <strong><span th:text="${rol}">[rol]</span></strong>
+        </div>
+        
+        <h1>Panel de Control</h1>
+        
+        <div class="button-grid">
+            <a href="/ticket/formulario_simple" class="btn btn-primary">
+                Crear Nuevo Ticket
             </a>
 
-            <!-- Mis Tickets visible solo para usuarios -->
-            <a href="/cliente/tickets" class="btn btn-secondary btn-lg mx-2"
+            <a href="/cliente/tickets" class="btn btn-secondary"
                th:if="${rol == 'CLIENTE'}">
-                Mis Tickets
+                Ver Mis Tickets
             </a>
 
-            <!-- Ver Tickets Asignados visible solo para empleados -->
-            <a href="/empleado/tickets-asignados" class="btn btn-info btn-lg mx-2"
+            <a href="/ticket/lista" class="btn btn-info"
                th:if="${rol == 'EMPLEADO'}">
-                Ver Tickets Asignados
+                Tickets de mi Área
             </a>
 			
-			<!-- Ver Tickets Asignados visible solo para empleados -->
-			<a href="/manager/listar" class="btn btn-info btn-lg mx-2"
+			<a href="/manager/listar" class="btn btn-info"
 			   th:if="${rol == 'MANAGER'}">
-			    Ver Lista de Usuarios / Asignar Empleado
+			    Administrar Usuarios
 			</a>
 			
-			<!-- Ver Todos los Tickets sin Empleado Asignado -->
-			<a href="/manager/listar" class="btn btn-info btn-lg mx-2"
-			   th:if="${rol == 'CLIENTE'}">
-			    Ver Lista de Tickets
+			<a href="/ticket/lista" class="btn btn-secondary"
+			   th:if="${rol == 'MANAGER'}">
+			    Ver Todos los Tickets
 			</a>
 
-            <!-- Cerrar Sesión visible para todos -->
-            <a href="/logout" class="btn btn-danger btn-lg mx-2">
+            <a href="/logout" class="btn btn-danger">
                 Cerrar Sesión
             </a>
         </div>

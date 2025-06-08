@@ -51,6 +51,11 @@ public class TicketService {
 	}
 	
 	@Transactional(readOnly = true)
+	public List<Ticket> findByUsuario(Usuario usuario) {
+		return ticketRepository.findByUsuarioCreador(usuario);
+	}
+	
+	@Transactional(readOnly = true)
 	public List<Ticket> findByArea(Area area) {
 		return ticketRepository.findByArea(area);
 	}
@@ -133,7 +138,7 @@ public class TicketService {
 		if (finalizaTicket) {
 			nuevoControl.setFechaSalida(LocalDate.now());
 			ticket.setFechaCierre(LocalDate.now());
-			ticket.setEstado(Estado.RESUELTO); // O Estado.CERRADO, según tu flujo
+			ticket.setEstado(Estado.RESUELTO); 
 		}
 
 		controlRepository.save(nuevoControl);
@@ -155,16 +160,9 @@ public class TicketService {
 		
 	}
 	
-	@Transactional(readOnly = true) // La transacción asegura que las relaciones lazy se carguen aquí
+	@Transactional(readOnly = true)
     public TicketDTO getTicketDetailForView(int idTicket) {
-        // Asegúrate de que el repositorio cargue 'procesos' y sus 'empleado' si son LAZY.
-        // Una buena práctica es usar @EntityGraph o un JOIN FETCH en @Query en tu ITicketRepository.
-        // Ejemplo (en ITicketRepository):
-        // @Query("SELECT t FROM Ticket t LEFT JOIN FETCH t.procesos p LEFT JOIN FETCH p.empleado WHERE t.idTicket = :idTicket")
-        // Optional<Ticket> findByIdWithDetails(@Param("idTicket") int idTicket);
-        // Y aquí llamarías: ticketRepository.findByIdWithDetails(idTicket)
-
-        Ticket ticket = ticketRepository.findById(idTicket) // Usa findById o el método con fetch
+        Ticket ticket = ticketRepository.findById(idTicket)
                 .orElseThrow(() -> new RuntimeException("Ticket no encontrado con ID: " + idTicket));
 
         TicketDTO ticketDetailDTO = new TicketDTO();
