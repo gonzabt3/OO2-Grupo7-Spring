@@ -165,12 +165,9 @@ public class TicketService {
 	
 	@Transactional(readOnly = true)
     public TicketDTO getTicketDetailForView(int idTicket) {
-<<<<<<< HEAD
-        Ticket ticket = ticketRepository.findById(idTicket)
-=======
+        Ticket ticket = ticketRepository.findById(idTicket);
 
-        Ticket ticket = ticketRepository.findById(idTicket) // Usa findById o el método con fetch
->>>>>>> 3217439d5e3859a19e16b86697739d52f4a8684f
+        Ticket ticket = ticketRepository.findById(idTicket)
                 .orElseThrow(() -> new RuntimeException("Ticket no encontrado con ID: " + idTicket));
 
         TicketDTO ticketDetailDTO = new TicketDTO();
