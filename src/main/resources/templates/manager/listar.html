@@ -15,6 +15,11 @@
 <div class="container mt-5">
     <h2 class="mb-4">Lista de Usuarios</h2>
 
+    <!-- Botón Atrás -->
+    <div class="mb-3">
+        <button class="btn btn-secondary" onclick="history.back()">← Atrás</button>
+    </div>
+
     <!-- Mensajes de éxito o error -->
     <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
     <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
