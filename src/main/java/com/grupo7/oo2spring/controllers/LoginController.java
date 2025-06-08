@@ -23,19 +23,6 @@ public class LoginController {
 	
 	private final UsuarioService usuarioService;
 
-    //@PostMapping("/usuario/login")
-    //public String login(@RequestParam String username, @RequestParam String password, HttpSession session) {
-     //   Optional<Usuario> usuarioOpt = usuarioService.buscarPorUsernameYPassword(username, password);
-
-       // if (usuarioOpt.isPresent()) {
-        //	Usuario usuario = usuarioOpt.get();
-          //  session.setAttribute("usuario", usuario);
-           // session.setAttribute("rolUsuario", usuario.getRol());
-           // return "redirect:/panel";
-       // } else {
-        //    return "redirect:/usuario/login?error";
-       // }
-   // }
 
     @GetMapping("/usuario/login")
     public String mostrarFormularioLogin(Model model, String error) {
