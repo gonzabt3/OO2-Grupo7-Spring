@@ -7,7 +7,8 @@ public enum Area {
     DESARROLLO("Desarrollo"),
     FINANZAS("Finanzas"),
     RECURSOS_HUMANOS("Recursos Humanos"),
-    MARKETING("Marketing");
+    MARKETING("Marketing"),
+	SIN_ASIGNAR("Sin Asignar");
     
     public final String nombre;
 	

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Convertir en Empleado</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+
+    <h2 class="mb-4">Convertir en Empleado</h2>
+
+    <form th:action="@{/manager/convertir-a-empleado}" method="post" th:object="${empleado}" class="needs-validation" novalidate>
+
+        <input type="hidden" th:field="*{idUsuario}" />
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" th:field="*{nombre}" class="form-control" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Apellido</label>
+            <input type="text" th:field="*{apellido}" class="form-control" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">DNI</label>
+            <input type="text" th:field="*{dni}" class="form-control" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" th:field="*{email}" class="form-control" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Usuario</label>
+            <input type="text" th:field="*{nombreUsuario}" class="form-control" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Área</label>
+            <select th:field="*{area}" class="form-select" required>
+                <option value="" disabled selected>Seleccioná un área</option>
+                <option th:each="areaEnum : ${T(com.grupo7.oo2spring.models.Area).values()}" 
+                        th:value="${areaEnum}" 
+                        th:text="${areaEnum}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-check mb-4">
+            <input type="checkbox" th:field="*{disponibilidad}" class="form-check-input" id="disponibilidadCheck">
+            <label class="form-check-label" for="disponibilidadCheck">Disponible</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+
+    </form>
+
+</body>
+</html>

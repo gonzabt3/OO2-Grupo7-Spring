@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle del Ticket #<span th:text="${ticketDetail.idTicket}"></span></title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <main>
+        <h1>Detalle del Ticket #<span th:text="${ticketDetail.idTicket}"></span></h1>
+
+<!--        <div th:if="${successMessage}" class="alert alert-success">-->
+<!--            <p th:text="${successMessage}"></p>-->
+<!--        </div>-->
+<!--        <div th:if="${errorMessage}" class="alert alert-danger">-->
+<!--            <p th:text="${errorMessage}"></p>-->
+<!--        </div>-->
+
+        <h2>Información General</h2>
+        <p><strong>Título:</strong> <span th:text="${ticketDetail.titulo}"></span></p>
+        <p><strong>Descripción:</strong> <span th:text="${ticketDetail.descripcion}"></span></p>
+<!--        <p><strong>Creado por:</strong> <span th:text="${ticketDetail.usuarioCreador != null ? (ticketDetail.usuarioCreador.nombre + ' ' + ticketDetail.usuarioCreador.apellido) : 'N/A'}"></span></p>-->
+        <p><strong>Fecha de Creación:</strong> <span th:text="${#temporals.format(ticketDetail.fechaCreacion, 'dd-MM-yyyy')}"></span></p>
+        <p><strong>Fecha de Cierre:</strong> <span th:text="${ticketDetail.fechaCierre != null ? #temporals.format(ticketDetail.fechaCierre, 'dd-MM-yyyy') : 'Pendiente'}"></span></p>
+        <p><strong>Estado:</strong> <span th:text="${ticketDetail.estado}"></span></p>
+        <p><strong>Prioridad:</strong> <span th:text="${ticketDetail.prioridad}"></span></p>
+        <p><strong>Área Asignada:</strong> <span th:text="${ticketDetail.area != null ? ticketDetail.area.name() : 'Sin Asignar'}"></span></p>
+
+        <h3>Historial de Procesos (Controles)</h3>
+        <div th:if="${ticketDetail.procesos.isEmpty()}">
+            <p>No hay procesos registrados para este ticket aún.</p>
+        </div>
+        <div th:if="${!ticketDetail.procesos.isEmpty()}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Proceso</th>
+                        <th>Fecha Entrada</th>
+                        <th>Fecha Salida</th>
+                        <th>Acción</th>
+                        <th>Realizado por</th>
+                        <th>¿Finalizado?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="control : ${ticketDetail.procesos}">
+                        <td th:text="${control.idControl}"></td>
+                        <td th:text="${#temporals.format(control.fechaEntrada, 'dd-MM-yyyy')}"></td>
+                        <td th:text="${control.fechaSalida != null ? #temporals.format(control.fechaSalida, 'dd-MM-yyyy') : 'N/A'}"></td>
+                        <td th:text="${control.accion}"></td>
+                        <td th:text="${control.empleado != null ? (control.empleado.nombre) : 'N/A'}"></td>
+                        <td th:text="${control.finalizado ? 'Sí' : 'No'}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p><a th:href="@{/ticket/lista}">Volver</a></p>
+<!--        <p><a th:href="@{/ticket/all}">Ver Todos los Tickets del Sistema</a></p>-->
+    </main>
+</body>
+</html>

@@ -13,8 +13,12 @@ Pasos a seguir para levantar el proyecto:
    * DB_PASSWORD -> colocar tu password de la base de datos.
    * EMAIL_USERNAME -> colocar email emisor para el envio de emails.
    * EMAIL_APIKEY -> colocar API key para enviar mails por SMTP
-   * EMAIL_TEST -> (opcional) email donde se reciben los email
+   * EMAIL_TEST -> email que emite el mail
  * Ejecutar el proyecto. Si todo esta correcto aparece que la aplicacion inicio en x segundos en el puerto 8080.
  * Abrir el navegador e ir a la siguiente url: **http://localhost:8080/swagger-ui/index.html**
  * IMPORTANTE! Si al correr el proyecto por terminal hay errores, escribir las siguientes lineas: DB_USERNAME=*tu username*, DB_PASSWORD=*tu password*, DB_URL=jdbc:mysql://localhost:3306/bd-oo2-grupo7
 
+INFO: 
+- El panel tendra diferentes vistas dependiendo del rol de usuario (USER, EMPLEADO o MANAGER)
+- Pueden crear usuarios tipo Manager y Empleado usando ITestUsuario y ITestEmpleado respectivamente. También pueden crear Empleados usando el boton "Usuarios / Asignar Empleado" del panel de un usuario de tipo Manager.
+- El registro puede tomar algunos segundos en enviar el email de confirmación! Por favor esperar 10-30 segundos. 

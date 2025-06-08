@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Usuario</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #28a745, #218838);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .registro-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .registro-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .btn-success {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="registro-container">
+        <h2>Registrar Usuario</h2>
+        <form th:action="@{/usuarios/guardar}" th:object="${usuario}" method="post">
+            <div class="mb-3">
+                <label class="form-label">Nombre:</label>
+                <input type="text" th:field="*{nombre}" class="form-control" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Apellido:</label>
+                <input type="text" th:field="*{apellido}" class="form-control" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">DNI:</label>
+                <input type="text" th:field="*{dni}" class="form-control" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email:</label>
+                <input type="email" th:field="*{email}" class="form-control" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nombre de Usuario:</label>
+                <input type="text" th:field="*{nombreUsuario}" class="form-control" required/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Contraseña:</label>
+                <input type="password" th:field="*{clave}" class="form-control" required/>
+            </div>
+
+            <button type="submit" class="btn btn-success">Guardar</button>
+        </form>
+    </div>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
