@@ -1,34 +1,81 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Registro de Usuario</title>
+<meta charset="utf-8" />
+<title>Registro</title>
+
+
+<script src="avisos.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
 </head>
+
 <body>
-    <h1>Registrarse</h1>
-    <form th:action="@{/registro}" method="post">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required><br>
 
-        <label for="apellido">Apellido:</label>
-        <input type="text" id="apellido" name="apellido" required><br>
+	<section>
+		<div class="container p-3">
+			<div class="row">
+				<div class="col-md-6 offset-md-3">
+					<div class="card">
+						<div class="card-header text-center fs-4"> Registro</div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br>
+						<th:block th:if="${session.msg}">
+							<p class="text-center fs-4 text-success">[[${session.msg}]]</p>
 
-        <label for="nombreUsuario">Username:</label>
-        <input type="text" id="nombreUsuario" name="nombreUsuario" required><br>
+							<th:block
+								th:text="${@sessionUtilityBean.removeMessageFromSession()}"></th:block>
 
-        <label for="contraseña">Contraseña:</label>
-        <input type="password" id="contraseña" name="contraseña" required><br>
-        
-        <label for="dni">Dni:</label>
-        <input type="text" id="dni" name="dni" required><br>
+						</th:block>
 
-        <label for="dni">Nro Cliente:</label>
-        <input type="text" id="nroCliente" name="nroCliente" required><br>
+						<div class="card-body">
 
-        <button type="submit">Registrar</button>
-    </form>
+							<form th:action="@{/registro}" method="post">
+								<div class="mb-3">
+									<label for="nombre">Nombre:</label>
+									        <input type="text" id="nombre" name="nombre" required class="form-control">
+								</div>
+								<div class="mb-3">
+									<label for="apellido">Apellido:</label>
+									<input type="text" id="apellido" name="apellido" required class="form-control">
+								</div>
+								<div class="mb-3">
+									<label for="dni">DNI:</label>
+									        <input type="text" id="dni" name="dni" required class="form-control">
+								</div>
+								<div class="mb-3">
+									<label for="email">Email:</label>
+									       <input type="email" id="email" name="email" required class="form-control">
+								</div>
+								<div class="mb-3">
+									<label for="nombreUsuario">Username:</label>
+									        <input type="text" id="nombreUsuario" name="nombreUsuario" required class="form-control">		
+							    </div>
+								<div class="mb-3">
+									<label for="contraseña">Contraseña:</label>
+									        <input type="password" id="contraseña" name="contraseña" required class="form-control">
+								</div>
+								<div class="mb-3">
+									<label for="dni">Nro Cliente:</label>
+									        <input type="text" id="nroCliente" name="nroCliente" required class="form-control">
+								</div>
+							
+							
+								<button type="submit" class="btn btn-primary col-md-12">Registrarse</button>
+
+								
+							</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</section>
+
 </body>
+
 </html>

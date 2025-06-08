@@ -11,4 +11,8 @@ public class InicioController {
     public String mostrarInicio(Model model) {
         return "index"; 
     }
+    @GetMapping("/sigin")
+    public String login(){
+    	return "login";
+    }
 }
