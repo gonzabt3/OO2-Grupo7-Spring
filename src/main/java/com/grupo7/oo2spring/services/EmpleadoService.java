@@ -17,6 +17,14 @@ import lombok.RequiredArgsConstructor;
 public class EmpleadoService {
 	
 	 private final IUsuarioRepository usuarioRepository;
+	 
+	 public Optional<Empleado> findByEmpledo(int idEmpleado) {
+		 return usuarioRepository.findEmpleadoById(idEmpleado);
+	 }
+	 
+	 public Empleado findByEmpleadoNombre(String nombreEmpleado) {
+		 return usuarioRepository.findEmpleadoByNombre(nombreEmpleado);
+	 }
 	
 	public void sacarPermisosEmpleado(int idEmpleado) throws Exception {
 		 Usuario usuario = usuarioRepository.findById(idEmpleado)

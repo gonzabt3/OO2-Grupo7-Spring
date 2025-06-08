@@ -2,6 +2,7 @@ package com.grupo7.oo2spring.controllers;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo7.oo2spring.dto.ControlDTO;
 import com.grupo7.oo2spring.dto.TicketDTO;
+import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
+import com.grupo7.oo2spring.services.EmpleadoService;
 import com.grupo7.oo2spring.services.TicketService;
 import com.grupo7.oo2spring.services.UsuarioService;
 
@@ -46,6 +49,8 @@ public class TicketController {
     
     private final TicketService ticketService;
 
+    private final EmpleadoService empleadoService;
+    
     private final UsuarioService usuarioService;
     
 
@@ -113,6 +118,24 @@ public class TicketController {
 		return "ticket/lista_tickets";
     }
 	
+	@GetMapping("/listaArea")
+	@PreAuthorize("hasRole('EMPLEADO')")
+	public String listarticketsPorArea(Model model, @AuthenticationPrincipal UserDetails usuariolog){
+		model.addAttribute("usuarioLogueado", usuariolog);
+		List<Ticket> tickets = null;
+		//Empleado usuario = (Empleado) usuarioService.getUsuarioByUsername(usuariolog.getUsername());
+		Empleado emp = new Empleado();
+		if(emp.getArea() != null) {
+			tickets = ticketService.findByArea(emp.getArea());
+			model.addAttribute("message", "Mostrando solo tickets de su área: " + emp.getArea().name());
+			model.addAttribute("tickets", tickets);
+		}else {
+			model.addAttribute("message", "No existen tickets asignados a su Area ");
+		}
+		model.addAttribute("tickets", tickets);
+		return "ticket/lista_tickets";
+    }
+	
 	@GetMapping("/{idTicket}/tomarTicket")
 	public String tomarTicket(@PathVariable int idTicket, Model model) {
 		try {
@@ -137,13 +160,13 @@ public class TicketController {
                                     Model model) throws Exception {
 		String nombreDelUsuarioEnSesion = usuariolog.getUsername();
     	Usuario usuarioCreador = usuarioService.getUsuarioByUsername(nombreDelUsuarioEnSesion);
-        try {
-            // Llama al servicio con los datos del Control inicial
+    	try {
+
             ticketService.tomarTicketConControlInicial(idTicket, usuarioCreador, control);
             model.addAttribute("successMessage", "¡Ticket #" + idTicket + " tomado y gestión iniciada!");
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", "Error al tomar el ticket #" + idTicket + ": " + e.getMessage());
-            // Si hay un error, redirigir al formulario de toma con el ticket para que pueda intentar de nuevo
+            // Si hay un error, redirie al formulario de toma con el ticket para que pueda intentar de nuevo
             return "redirect:/ticket/" + idTicket + "/tomarTicket";
         }
         return "redirect:/ticket/lista"; // Redirige al dashboard o a la vista de detalle del ticket recién tomado
@@ -182,15 +205,42 @@ public class TicketController {
 //        }
 
 		String nombreDelUsuarioEnSesion = usuariolog.getUsername();
-		Usuario usuarioCreador = usuarioService.getUsuarioByUsername(nombreDelUsuarioEnSesion);
-        Empleado empleado = (Empleado) usuariolog;
+		Empleado usuarioCreador = (Empleado)empleadoService.findByEmpleadoNombre(nombreDelUsuarioEnSesion);
         try {
-            ticketService.agregarControlATicket(idTicket, empleado, control, finalizado);
+            ticketService.agregarControlATicket(idTicket, usuarioCreador, control, finalizado);
             model.addAttribute("successMessage", "Control agregado con éxito.");
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", "Error al agregar control: " + e.getMessage());
         }
         return "redirect:/ticket/" + idTicket + "/detail";
+    }
+	
+	@GetMapping("/sinasignar")
+    //@PreAuthorize("hasRole('MANAGER')") // Solo un manager puede ver y asignar tickets sin área
+    public String ticketSinArea(Model model) {
+        try {
+            List<Ticket> ticketSinArea = ticketService.findByAreaIsNull();
+            model.addAttribute("tickets", ticketSinArea);
+            model.addAttribute("areas", Area.values()); // Pasa todos los valores del enum Area al HTML
+            return "ticket/ticket-sin-area"; // Crea esta plantilla en src/main/resources/templates/manager/
+        } catch (RuntimeException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "redirect:/ticket/ticket-sin-area"; // O a un dashboard de manager
+        }
+    }
+	
+	@PostMapping("/{idTicket}/asignarArea")
+    //@PreAuthorize("hasRole('MANAGER')") // Solo un manager puede asignar área
+    public String assignAreaToTicket(@PathVariable int idTicket,
+                                     @RequestParam("area") Area area, // Captura el valor seleccionado del enum Area
+                                     Model model) {
+        try {
+            ticketService.asignarAreaTicket(idTicket, area);
+            model.addAttribute("successMessage", "¡Área '" + area.name() + "' asignada al ticket #" + idTicket + " con éxito!");
+        } catch (RuntimeException e) {
+            model.addAttribute("errorMessage", "Error al asignar área al ticket #" + idTicket + ": " + e.getMessage());
+        }
+        return "redirect:/ticket/sinasignar"; // Redirige de vuelta a la lista de tickets sin área
     }
 }
 

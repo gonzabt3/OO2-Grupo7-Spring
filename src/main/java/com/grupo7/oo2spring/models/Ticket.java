@@ -36,15 +36,14 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private Area area;
 
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Control> procesos = new ArrayList<>();
-
+    
     public void addControl(Control control) {
-        if (this.procesos == null) {
-            this.procesos = new ArrayList<>();
+        if (!this.procesos.contains(control)) {
+            this.procesos.add(control);
+            control.setTicket(this); // Establece el Ticket en el Control, que es el lado dueño
         }
-        this.procesos.add(control);
-        control.setTicket(this); // Esto es crucial para la relación bidireccional
     }
     // Getters y setters
     public int getIdTicket() {

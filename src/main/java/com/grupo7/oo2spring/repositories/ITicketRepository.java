@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Estado;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.models.Ticket;
@@ -39,8 +40,10 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
     // Buscar tickets cerrados antes de una fecha
     List<Ticket> findByFechaCierreBefore(LocalDate fecha);
     
+	// Busca los tickets sin area
+    List<Ticket> findByAreaIsNull();
 	
-
+    List<Ticket> findByArea(Area area);
 	
 
 }

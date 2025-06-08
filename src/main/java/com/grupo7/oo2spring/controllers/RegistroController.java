@@ -30,7 +30,7 @@ public class RegistroController {
     @PostMapping("/registro")
     public String registrarUsuario(@ModelAttribute Cliente usuario) {
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
-        usuario.setRol(Rol.EMPLEADO); // Asignar rol ROLE_CLIENTE
+        usuario.setRol(Rol.CLIENTE); // Asignar rol ROLE_CLIENTE
 
         
         usuarioRepository.save(usuario);

@@ -1,46 +1,46 @@
-<!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Todos los Tickets (Empleado)</title>
-    <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-    <main>
-        <h1>Todos los Tickets del Sistema</h1>
+<!--<!DOCTYPE html>-->
+<!--<html lang="es" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Todos los Tickets (Empleado)</title>-->
+<!--    <link rel="stylesheet" href="/css/styles.css">-->
+<!--</head>-->
+<!--<body>-->
+<!--    <main>-->
+<!--        <h1>Todos los Tickets del Sistema</h1>-->
 
-        <div th:if="${successMessage}" class="alert alert-success">
-            <p th:text="${successMessage}"></p>
-        </div>
-        <div th:if="${errorMessage}" class="alert alert-danger">
-            <p th:text="${errorMessage}"></p>
-        </div>
+<!--        <div th:if="${successMessage}" class="alert alert-success">-->
+<!--            <p th:text="${successMessage}"></p>-->
+<!--        </div>-->
+<!--        <div th:if="${errorMessage}" class="alert alert-danger">-->
+<!--            <p th:text="${errorMessage}"></p>-->
+<!--        </div>-->
 
-        <div th:if="${tickets.isEmpty()}">
-            <p>No hay tickets en el sistema en este momento.</p>
-        </div>
-        <div th:if="${!tickets.isEmpty()}">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Título</th>
-                        <th>Estado</th>
-                        <th>Prioridad</th>
-                        <th>Área Asignada</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="ticket : ${tickets}">
-                        <td th:text="${ticket.idTicket}"></td>
-                        <td th:text="${ticket.titulo}"></td>
-                        <td th:text="${ticket.estado}"></td>
-                        <td th:text="${ticket.prioridad}"></td>
-                        <td th:text="${ticket.area != null ? ticket.area: 'Sin Asignar'}"></td>
-<!--                        <td th:text="${ticket.usuarioCreador != null ? (ticket.usuarioCreador.nombre + ' ' + ticket.usuarioCreador.apellido) : 'N/A'}"></td>-->
-                        <td>
-							<a th:href="@{/ticket/{idTicket}/tomarTicket(idTicket=${ticket.idTicket})}" class="button">Tomar Ticket</a>
+<!--        <div th:if="${tickets.isEmpty()}">-->
+<!--            <p>No hay tickets en el sistema en este momento.</p>-->
+<!--        </div>-->
+<!--        <div th:if="${!tickets.isEmpty()}">-->
+<!--            <table>-->
+<!--                <thead>-->
+<!--                    <tr>-->
+<!--                        <th>ID</th>-->
+<!--                        <th>Título</th>-->
+<!--                        <th>Estado</th>-->
+<!--                        <th>Prioridad</th>-->
+<!--                        <th>Área Asignada</th>-->
+<!--                        <th>Acciones</th>-->
+<!--                    </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                    <tr th:each="ticket : ${tickets}">-->
+<!--                        <td th:text="${ticket.idTicket}"></td>-->
+<!--                        <td th:text="${ticket.titulo}"></td>-->
+<!--                        <td th:text="${ticket.estado}"></td>-->
+<!--                        <td th:text="${ticket.prioridad}"></td>-->
+<!--                        <td th:text="${ticket.area != null ? ticket.area: 'Sin Asignar'}"></td>-->
+<!--                        <td>-->
+<!--							<a th:href="@{/ticket/{idTicket}/tomarTicket(idTicket=${ticket.idTicket})}" class="button">Tomar Ticket</a>-->
+<!--							----------------------------------------------------------------------->
 <!--                            <span th:if="${ticket.estado == 'ABIERTO'}">-->
 <!--                                <span th:if="${ticket.area != null and empleado.area != null and ticket.area == empleado.area.name()}">-->
 <!--                                    <a th:href="@{/ticket/{idTicket}/tomarTicket(idTicket=${ticket.idTicket})}" class="button">Tomar Ticket</a>-->
@@ -52,13 +52,114 @@
 <!--                            <span th:unless="${ticket.estado == 'ABIERTO'}">-->
 <!--                                <button disabled th:text="${'Estado: ' + ticket.estado}"></button>-->
 <!--                            </span>-->
+<!--							---------------------------------------------------------------------->
+<!--                            <a th:href="@{/ticket/{idTicket}/detail(idTicket=${ticket.idTicket})}" class="button">Ver Detalle</a>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--        <p><a th:href="@{/ticket/lista}">Volver al incio</a></p>-->
+<!--    </main>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tickets</title>
+    <link rel="stylesheet" href="/css/style.css"> </head>
+<body>
+    <header>
+        <h1>Lista de Tickets</h1>
+        <nav>
+            <ul>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/panel}">Panel de Control</a></li>
+                <li sec:authorize="hasRole('ROLE_MANAGER')"><a th:href="@{/ticket/listaArea}">Tickets sin Área</a></li>
+<!--                <li sec:authorize="hasAnyRole('ROLE_CLIENTE', 'ROLE_EMPLEADO', 'ROLE_MANAGER')">-->
+<!--                    <a th:href="@{/ticket/crear}">Crear Nuevo Ticket</a>-->
+                </li>
+                <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div th:if="${successMessage}" class="alert alert-success">
+            <p th:text="${successMessage}"></p>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger">
+            <p th:text="${errorMessage}"></p>
+        </div>
+        <div th:if="${message}" class="alert alert-info">
+            <p th:text="${message}"></p>
+        </div>
+
+        <div th:if="${#lists.isEmpty(tickets)}" class="alert alert-info">
+            <p>No hay tickets para mostrar.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(tickets)}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Estado</th>
+                        <th>Prioridad</th>
+                        <th>Área Asignada</th>
+                        <th sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')">Usuario Creador</th>
+                        <th sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')">Fecha Creación</th>
+                        <th sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')">Fecha Cierre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="ticket : ${tickets}">
+                        <td th:text="${ticket.idTicket}"></td>
+                        <td th:text="${ticket.titulo}"></td>
+                        <td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}"></td>
+                        <td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'N/A'}"></td>
+                        <td th:text="${ticket.area != null ? ticket.area.name() : 'Sin Asignar'}"></td>
+
+                        <td sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')"
+                            th:text="${ticket.usuarioCreador != null ? (ticket.usuarioCreador.nombre + ' ' + ticket.usuarioCreador.apellido) : 'N/A'}"></td>
+                        <td sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')"
+                            th:text="${ticket.fechaCreacion != null ? ticket.fechaCreacion : 'N/A'}"></td>
+                        <td sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')"
+                            th:text="${ticket.fechaCierre != null ? ticket.fechaCierre : 'N/A'}"></td>
+
+                        <td>
+                            <span sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')">
+                                <span th:if="${ticket.estado != null and ticket.estado.name() == 'ABIERTO'}">
+                                    <span th:if="${usuarioLogueado != null and usuarioLogueado.area != null and ticket.area != null and ticket.area.equals(usuarioLogueado.area)}">
+                                        <a th:href="@{/ticket/{idTicket}/tomarTicket(idTicket=${ticket.idTicket})}" class="button">Tomar Ticket</a>
+                                    </span>
+                                    <span th:unless="${usuarioLogueado != null and usuarioLogueado.area != null and ticket.area != null and ticket.area.equals(usuarioLogueado.area)}">
+                                        <button disabled>No en mi Área</button>
+                                    </span>
+                                </span>
+                                <span th:unless="${ticket.estado != null and ticket.estado.name() == 'ABIERTO'}">
+                                    <button disabled th:text="${'Estado: ' + ticket.estado.name()}"></button>
+                                </span>
+                            </span>
+
                             <a th:href="@{/ticket/{idTicket}/detail(idTicket=${ticket.idTicket})}" class="button">Ver Detalle</a>
+
+                            <span sec:authorize="hasRole('ROLE_MANAGER')">
+                                </span>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <p><a th:href="@{/ticket/lista}">Volver al incio</a></p>
+        <p><a th:href="@{/ticket/lista}">Actualizar Lista</a></p>
     </main>
+
+    <footer>
+        <p>&copy; 2025 Tu Aplicación</p>
+    </footer>
 </body>
 </html>
