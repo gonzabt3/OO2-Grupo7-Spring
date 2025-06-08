@@ -18,3 +18,7 @@ Pasos a seguir para levantar el proyecto:
  * Abrir el navegador e ir a la siguiente url: **http://localhost:8080/swagger-ui/index.html**
  * IMPORTANTE! Si al correr el proyecto por terminal hay errores, escribir las siguientes lineas: DB_USERNAME=*tu username*, DB_PASSWORD=*tu password*, DB_URL=jdbc:mysql://localhost:3306/bd-oo2-grupo7
 
+INFO: 
+- El panel tendra diferentes vistas dependiendo del rol de usuario (USER, EMPLEADO o MANAGER)
+- Pueden crear usuarios tipo Manager y Empleado usando ITestUsuario y ITestEmpleado respectivamente. También pueden crear Empleados usando el boton "Usuarios / Asignar Empleado" del panel de un usuario de tipo Manager.
+- El registro puede tomar algunos segundos en enviar el email de confirmación! Por favor esperar 10-30 segundos. 
