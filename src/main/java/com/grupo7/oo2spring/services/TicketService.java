@@ -2,8 +2,7 @@ package com.grupo7.oo2spring.services;
 
 import java.time.LocalDate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import com.grupo7.oo2spring.models.Ticket;
@@ -15,22 +14,18 @@ import com.grupo7.oo2spring.dto.TicketDTO;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Estado;
-import com.grupo7.oo2spring.models.Prioridad;
+
 import com.grupo7.oo2spring.repositories.IControlRepository;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
 
 import lombok.RequiredArgsConstructor;
-import java.time.LocalDateTime;
+
 import java.util.List;
-import java.util.Optional;
+
 import java.util.stream.Collectors;
 
-import javax.management.RuntimeErrorException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
-
 
 @Service
 @RequiredArgsConstructor
