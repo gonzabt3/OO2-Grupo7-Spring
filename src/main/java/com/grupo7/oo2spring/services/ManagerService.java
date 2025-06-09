@@ -80,10 +80,6 @@ public class ManagerService {
 	        empleado.setNombreUsuario(usuario.getNombreUsuario());
 	        empleado.setContraseña(usuario.getContraseña());
 	        empleado.setRol(Rol.EMPLEADO);
-
-	        // Guardar usando persist para respetar la herencia
-	        entityManager.persist(empleado);
-	        entityManager.flush(); // Escribir ya mismo
 	    }
 
 	    // 4. Cambiar rol en el usuario base (por si no lo setea bien al persist)
