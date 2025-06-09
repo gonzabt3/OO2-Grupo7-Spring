@@ -3,9 +3,9 @@ package com.grupo7.oo2spring.services;
 import com.grupo7.oo2spring.models.Cliente;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
-import com.grupo7.oo2spring.models.Ticket;
+
 import com.grupo7.oo2spring.models.Usuario;
-import com.grupo7.oo2spring.repositories.ITicketRepository;
+
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 

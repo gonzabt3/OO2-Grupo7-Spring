@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.grupo7.oo2spring.models.Area;
-import com.grupo7.oo2spring.models.Cliente;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Manager;
 import com.grupo7.oo2spring.models.Rol;

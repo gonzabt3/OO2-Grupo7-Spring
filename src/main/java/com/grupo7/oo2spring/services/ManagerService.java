@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.grupo7.oo2spring.models.Cliente;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
