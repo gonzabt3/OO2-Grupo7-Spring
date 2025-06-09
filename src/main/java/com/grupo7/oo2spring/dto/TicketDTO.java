@@ -3,17 +3,13 @@ package com.grupo7.oo2spring.dto;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.models.Estado;
-import jakarta.persistence.Entity;
-import lombok.Getter;
+
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 public class TicketDTO {
