@@ -64,7 +64,7 @@ public class TicketService {
 	@Transactional
 	public Ticket crearTicket(TicketDTO ticket, Usuario usuarioCreador) {
 	    System.out.println("SERVICIO: Creando ticket con DTO: " + ticket);
-	    Ticket nuevoTicket = new Ticket(ticket.getDescripcion(), ticket.getTitulo(),  usuarioCreador);
+	    Ticket nuevoTicket = new Ticket(ticket.getTitulo(),ticket.getDescripcion(),  usuarioCreador);
 	    Ticket guardado = ticketRepository.save(nuevoTicket);
 	    System.out.println("SERVICIO: Ticket guardado con ID: " + guardado.getIdTicket());
 	    return guardado;

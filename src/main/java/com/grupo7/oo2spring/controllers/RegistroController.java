@@ -3,8 +3,7 @@ package com.grupo7.oo2spring.controllers;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +16,7 @@ import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IEmailTokenRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import com.grupo7.oo2spring.services.EmailService;
-import com.grupo7.oo2spring.services.UsuarioService;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,5 @@
 package com.grupo7.oo2spring.dto;
 
-import com.grupo7.oo2spring.dto.Rol;
-
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor

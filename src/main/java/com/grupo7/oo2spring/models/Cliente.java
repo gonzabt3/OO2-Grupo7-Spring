@@ -3,9 +3,9 @@ package com.grupo7.oo2spring.models;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
-import lombok.Getter;
+
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 @NoArgsConstructor
 @Entity
