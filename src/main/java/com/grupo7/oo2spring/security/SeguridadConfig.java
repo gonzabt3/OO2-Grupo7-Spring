@@ -11,12 +11,16 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +35,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableWebSecurity // Habilita la seguridad web de Spring
+@EnableWebSecurity 
 @EnableMethodSecurity 
 @RequiredArgsConstructor
 public class SeguridadConfig {
@@ -64,24 +68,18 @@ public class SeguridadConfig {
         registrationBean.addUrlPatterns("/*");
         return registrationBean;
     }
-    
-    @Controller
-    public class AuthErrorController {
-
-        @GetMapping("/usuario/error_login")
-        public String mostrarErrorLogin(HttpServletRequest request, Model model) {
-            Object errorMessage = request.getAttribute("error_message");
-            model.addAttribute("mensaje", errorMessage != null ? errorMessage : "Error desconocido");
-            return "/error";
-        }
-    }
 
     
     
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
+        FiltroAutenticacionJson filtro = new FiltroAutenticacionJson();
+        filtro.setAuthenticationManager(authManager);
+        filtro.setFilterProcessesUrl("/api/auth/login");
+
         http
-        .authorizeHttpRequests(auth -> auth
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
+            .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/",
                     "/index",
@@ -98,28 +96,23 @@ public class SeguridadConfig {
                     "/usuario/confirmar",
                     "/usuario/confirmar/**",
                     "/usuario/confirmacion_exitosa",
-                    "/usuario/token_invalido"
+                    "/usuario/token_invalido",
+                    "/api/auth/**",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/swagger-ui.html"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
-            .formLogin(form -> form
-                .loginPage("/usuario/login")
-                .loginProcessingUrl("/usuario/login/process")
-                .defaultSuccessUrl("/panel", true)
-                .failureUrl("/usuario/login?error=true")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/usuario/login?logout")
-                .permitAll()
-            );
-        
+            .addFilterBefore(filtro, UsernamePasswordAuthenticationFilter.class)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+            .formLogin(form -> form.disable()) // 🚫 Deshabilita el login por formulario
+            .httpBasic(httpBasic -> httpBasic.disable()); // 🚫 Deshabilita HTTP Basic login
 
         return http.build();
+    }
     }
     
     
     
     
-}

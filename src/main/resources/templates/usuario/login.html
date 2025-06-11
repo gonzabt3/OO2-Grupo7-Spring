@@ -52,8 +52,7 @@
 <body>
     <div class="login-container">
         <h2>Iniciar Sesión</h2>
-        <form th:action="@{/usuario/login/process}" method="post">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+       <form id="login-form">
 
             <input type="text" name="username" placeholder="Usuario" required class="form-control" />
 			<div class="form-group position-relative mb-3">
@@ -83,6 +82,27 @@
 		        togglePassword.classList.add('bi-eye');        
 		    }
 		});
+		
+		document.getElementById("login-form").addEventListener("submit", async function (e) {
+		        e.preventDefault();
+
+		        const username = document.querySelector('input[name="username"]').value;
+		        const password = document.querySelector('input[name="password"]').value;
+
+                const response = await fetch("/api/auth/login", {
+                  method: "POST",
+                  credentials: "include", 
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ usuario: username, clave: password })
+                });
+
+		        if (response.ok) {
+		            window.location.href = "/panel";
+		        } else {
+		            // Mostrar mensaje de error
+		            alert("Usuario o contraseña incorrectos");
+		        }
+		    });
 	</script>
 </body>
 </html>
