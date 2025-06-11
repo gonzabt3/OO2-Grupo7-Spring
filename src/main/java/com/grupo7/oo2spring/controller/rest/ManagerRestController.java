@@ -63,7 +63,7 @@ public class ManagerRestController {
             return ResponseEntity.badRequest().body("Usuario no encontrado");
         }
         
-        Area area = areaRepository.findById(dto.areaId())
+        Area area = areaRepository.findById(dto.idArea())
         	    .orElseThrow(() -> new RuntimeException("Área no encontrada"));
 
         try {
@@ -121,4 +121,3 @@ public class ManagerRestController {
 
         
     }
-
