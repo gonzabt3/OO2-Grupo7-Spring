@@ -29,5 +29,17 @@ public class DatabaseSeeder implements CommandLineRunner {
             }
         }
     }
+    
+    private void seedRoles() {
+        if (rolRepository.count() == 0) {
+            Rol[] roles = new Rol[]{
+                new Rol(RoleType.USER),
+                new Rol(RoleType.MANAGER),
+                new Rol(RoleType.EMPLEADO)
+            };
+            rolRepository.saveAll(Arrays.asList(roles));
+        }
+    }
+}
 }
 

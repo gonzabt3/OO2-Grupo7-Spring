@@ -38,7 +38,15 @@ server:
       enabled: false
 logging:
   level:
+<<<<<<< HEAD
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.springframework.security: DEBUG
     org.springframework.mail: DEBUG
+=======
+    "org.hibernate.SQL": DEBUG
+    "org.hibernate.type.descriptor.sql.BasicBinder": TRACE
+    "org.springframework.security": DEBUG
+    "org.springframework.web": DEBUG
+
+>>>>>>> 72dff6b (- Se creo una base para la segunda entrega)
