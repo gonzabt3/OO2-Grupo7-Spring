@@ -118,6 +118,22 @@
 <div class="container mt-5">
     <h2 class="mb-4">Detalle del Ticket #<span th:text="${ticketDetail.idTicket}">ID</span></h2>
 
+<<<<<<< HEAD
+        <h2>Información General</h2>
+        <p><strong>Título:</strong> <span th:text="${ticketDetail.titulo}"></span></p>
+        <p><strong>Descripción:</strong> <span th:text="${ticketDetail.descripcion}"></span></p>
+<!--        <p><strong>Creado por:</strong> <span th:text="${ticketDetail.usuarioCreador != null ? (ticketDetail.usuarioCreador.nombre + ' ' + ticketDetail.usuarioCreador.apellido) : 'N/A'}"></span></p>-->
+        <p><strong>Fecha de Creación:</strong> <span th:text="${#temporals.format(ticketDetail.fechaCreacion, 'dd-MM-yyyy')}"></span></p>
+        <p><strong>Fecha de Cierre:</strong> <span th:text="${ticketDetail.fechaCierre != null ? #temporals.format(ticketDetail.fechaCierre, 'dd-MM-yyyy') : 'Pendiente'}"></span></p>
+        <p><strong>Estado:</strong> <span th:text="${ticketDetail.estado}"></span></p>
+        <p><strong>Prioridad:</strong> <span th:text="${ticketDetail.prioridad}"></span></p>
+        <p><strong>Área Asignada:</strong> <span th:text="${ticketDetail.area != null ? ticketDetail.area.name() : 'Sin Asignar'}"></span></p>
+=======
+    <!-- Mensajes opcionales -->
+<!--
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+-->
 
     <div class="mb-4">
         <h4>Información General</h4>
@@ -140,6 +156,7 @@
             </li>
         </ul>
     </div>
+>>>>>>> 3217439d5e3859a19e16b86697739d52f4a8684f
 
     <div class="mb-4">
         <h4>Historial de Procesos (Controles)</h4>

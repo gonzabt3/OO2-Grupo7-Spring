@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 import javax.management.RuntimeErrorException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.access.prepost.PreAuthorize;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 
@@ -46,11 +47,11 @@ public class TicketService {
 		return ticketRepository.getByIdTicket(idTicket);
 	}
 
-	@Transactional(readOnly = true)
-	public List<Ticket> findByAreaIsNull() {
-		return ticketRepository.findByAreaIsNull();
-	}
-	
+	 public List<Ticket> findByAreaIsNull() {
+	        // Call the repository method, passing Area.SIN_ASIGNAR
+	  return ticketRepository.findByArea(Area.SIN_ASIGNAR);
+	 }
+	        
 	@Transactional(readOnly = true)
 	public List<Ticket> findByUsuario(Usuario usuario) {
 		return ticketRepository.findByUsuarioCreador(usuario);
@@ -64,7 +65,7 @@ public class TicketService {
 	@Transactional
 	public Ticket crearTicket(TicketDTO ticket, Usuario usuarioCreador) {
 	    System.out.println("SERVICIO: Creando ticket con DTO: " + ticket);
-	    Ticket nuevoTicket = new Ticket(ticket.getDescripcion(), ticket.getTitulo(),  usuarioCreador);
+	    Ticket nuevoTicket = new Ticket(ticket.getTitulo(), ticket.getDescripcion(),  usuarioCreador);
 	    Ticket guardado = ticketRepository.save(nuevoTicket);
 	    System.out.println("SERVICIO: Ticket guardado con ID: " + guardado.getIdTicket());
 	    return guardado;

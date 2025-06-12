@@ -16,19 +16,31 @@ spring:
   thymeleaf:
     cache: false
   mail:
-    host: smtp-relay.sendinblue.com
+    host: smtp-relay.brevo.com
     port: 587
     username: ${EMAIL_USERNAME}
-    password: ${EMAIL_APIKEY}
+    password: ${EMAIL_PASSWORD}
     properties:
       mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+      smtp:
+       auth: true
+       starttls.enable: true
+       starttls.required: true
+emails.sender_email: ${EMAIL_TEST}
 
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.springframework.security: DEBUG
+
+#   host: smtp.gmail.com            # Servidor SMTP de Gmail
+#   port: 587                       # Puerto estándar para STARTTLS
+#   username: ${EMAIL_USERNAME}     # Tu dirección de correo de Gmail (ej. tunombre@gmail.com)
+#   password: ${EMAIL_PASSWORD}     # ¡IMPORTANTE! Contraseña de aplicación si tienes 2FA
+#   properties:
+#      mail.smtp.auth: true          # Habilitar autenticación SMTP
+#      mail.smtp.starttls.enable: true # Habilitar STARTTLS (recomendado para seguridad)
+#      mail.smtp.starttls.required: true # Forzar STARTTLS
+#      mail.smtp.ssl.trust: smtp.gmail.com
+    

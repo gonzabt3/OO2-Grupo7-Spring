@@ -74,16 +74,10 @@
 	             th:if="${rol == 'EMPLEADO'}">
 	              Ver Tickets Dentro del Area
 	          </a>
-			  
-			  <a href="/ticket/sinasignar" class="btn btn-info btn-lg mx-2 my-2"
-  	             th:if="${rol == 'EMPLEADO'}">
-  	              Asignar un Ticket a un Area
-  	          </a>
 
-			  
 
 			  <a href="/ticket/lista" class="btn btn-info btn-lg mx-2 my-2"
-			     th:if="${rol == 'EMPLEADO'}">
+			     th:if="${rol == 'USER'}">
 			      Ver Todos Los Tickets
 			  </a>
 

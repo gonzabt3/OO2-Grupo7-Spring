@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -25,7 +26,7 @@ public class EmailToken {
 
 	    private String token;
 
-	    @OneToOne(fetch = FetchType.EAGER)
+	    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	    @JoinColumn(nullable = false, name = "usuario_id")
 	    @OnDelete(action = OnDeleteAction.CASCADE)
 	    private Usuario usuario;

@@ -57,9 +57,10 @@
                         <th>Descripción</th>
                         <th>Fecha Creación</th>
                         <th>Fecha Cierre</th>
+                        <th>Usuario Creador</th>
                         <th>Estado</th>
                         <th>Prioridad</th>
-						<th>Proceso</th>
+                        <th>Procesos</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,7 +69,8 @@
                         <td th:text="${ticket.titulo}"></td>
                         <td th:text="${ticket.descripcion}"></td>
                         <td th:text="${ticket.fechaCreacion}"></td>
-                        <td th:text="${ticket.fechaCierre != null ? ticket.fechaCierre : '-'}"></td>
+                        <td th:text="${ticket.fechaCierre}"></td>
+                        <td th:text="${ticket.usuarioCreador.nombre}"></td>
                         <td th:text="${ticket.estado}"></td>
                         <td th:text="${ticket.prioridad}"></td>
                         <td>

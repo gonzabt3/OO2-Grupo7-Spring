@@ -46,51 +46,50 @@ public class ManagerService {
 	
 	@Transactional
 	public Empleado convertirUsuarioAEmpleado(int idUsuario, Empleado datosEmpleado) throws Exception {
-		// 1. Buscar el usuario por ID
+		 // Buscar el usuario por ID
 	    Usuario usuario = usuarioRepository.findById(idUsuario)
 	        .orElseThrow(() -> new Exception("Usuario no encontrado"));
 
-	    // 2. Verificar si ya tiene el rol de EMPLEADO
+	    // Verificar si ya tiene el rol de EMPLEADO
 	    if (usuario.getRol() == Rol.EMPLEADO) {
 	        throw new Exception("El usuario ya es un empleado");
 	    }
+	    usuario.setRol(Rol.EMPLEADO);
+	    usuarioRepository.save(usuario);
+	    Empleado empleado = entityManager.find(Empleado.class, idUsuario);;
 
-	    Empleado empleado;
-
-	    // 3. Verificar si ya existe una fila en la tabla empleado
-	    if (empleadoRepository.existsById(idUsuario)) {
+	    // Verificar si ya existe una fila en la tabla empleado
+	    if (empleado!=null) {
 	        // Si existe, actualizarla
 	        empleado = empleadoRepository.findById(idUsuario)
 	            .orElseThrow(() -> new Exception("Error al recuperar datos del empleado existente"));
 
 	        empleado.setArea(datosEmpleado.getArea());
 	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
-
-	        empleado = empleadoRepository.save(empleado); // Actualiza
 	    } else {
-	        // Si no existe, crear una nueva instancia
-	        empleado = new Empleado();
-	        empleado.setIdUsuario(idUsuario); // hereda de Usuario
-	        empleado.setArea(datosEmpleado.getArea());
-	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
-	        empleado.setNombre(usuario.getNombre());
-	        empleado.setApellido(usuario.getApellido());
-	        empleado.setDni(usuario.getDni());
-	        empleado.setEmail(usuario.getEmail());
-	        empleado.setNombreUsuario(usuario.getNombreUsuario());
-	        empleado.setContraseña(usuario.getContraseña());
-	        empleado.setRol(Rol.EMPLEADO);
-
-	        // Guardar usando persist para respetar la herencia
-	        entityManager.persist(empleado);
-	        entityManager.flush(); // Escribir ya mismo
+	        // Si no existe, crear una nueva
+//	        empleado = new Empleado();
+//	        empleado.setIdUsuario(idUsuario); // o setId(idUsuario) si no tenés relación directa
+//	        empleado.setArea(datosEmpleado.getArea());
+//	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
+//	        entityManager.persist(empleado);
+//
+//            // Opcional: flush si necesitas que los cambios se reflejen en la DB inmediatamente.
+//            entityManager.flush();
+	    	entityManager.createNativeQuery("INSERT INTO empleado (id_usuario, area, disponibilidad) VALUES (?, ?, ?)")
+	        .setParameter(1, usuario.getIdUsuario())
+	        .setParameter(2, datosEmpleado.getArea().name())  // Ajusta según tipo de campo
+	        .setParameter(3, datosEmpleado.isDisponibilidad())
+	        .executeUpdate();
 	    }
 
-	    // 4. Cambiar rol en el usuario base (por si no lo setea bien al persist)
-	    usuario.setRol(Rol.EMPLEADO);
-	    usuarioRepository.save(usuario);
+	    // Guardar el empleado (crea o actualiza)
+	    //empleado = empleadoRepository.save(empleado);
 
-	    // 5. Retornar el empleado recién creado o actualizado
+	    // Cambiar rol a EMPLEADO
+	    
+
+	    // Devolver el empleado actualizado/creado
 	    return empleado;
 	}
 	

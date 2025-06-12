@@ -112,10 +112,10 @@ public class TicketController {
 		model.addAttribute("usuarioLogueado", usuariolog);
 		List<Ticket> tickets = null;
 		//Empleado usuario = (Empleado) usuarioService.getUsuarioByUsername(usuariolog.getUsername());
-		Empleado emp = new Empleado();
-		if(emp.getArea() != null) {
-			tickets = ticketService.findByArea(emp.getArea());
-			model.addAttribute("message", "Mostrando solo tickets de su área: " + emp.getArea().name());
+		Empleado empleadoOpt = empleadoService.findByEmpleadoNombre(usuariolog.getUsername());
+		if(empleadoOpt.getArea() != null) {
+			tickets = ticketService.findByArea(empleadoOpt.getArea());
+			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea());
 			model.addAttribute("tickets", tickets);
 		}else {
 			model.addAttribute("message", "No existen tickets asignados a su Area ");

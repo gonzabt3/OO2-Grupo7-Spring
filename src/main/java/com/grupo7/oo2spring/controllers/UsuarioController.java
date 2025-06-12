@@ -41,7 +41,7 @@ public class UsuarioController {
     
     private final TicketService ticketService;
 
-    @GetMapping("/registrar")
+   /* @GetMapping("/registrar")
     public String mostrarFormularioRegistro() {
         return "usuario/registro_form";// Nombre del formulario HTML
     }
@@ -59,7 +59,7 @@ public class UsuarioController {
         Usuario usuarioGuardado = usuarioService.guardarUsuario(nombre, apellido, dni, email, nombreUsuario, contraseña);
         model.addAttribute("mensaje", "Usuario registrado exitosamente con ID: " + usuarioGuardado.getIdUsuario());
         return "usuario/registro_exito";
-    }
+    }*/
     
     @GetMapping("/verificar/{id}")
     public String verificarUsuario(@PathVariable int id, Model model) {
