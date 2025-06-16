@@ -1,4 +1,4 @@
-package com.grupo7.oo2spring;
+/*package com.grupo7.oo2spring;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -64,4 +64,4 @@ public class TestIUsuario {
 		}
 		
     }
-}
+}*/

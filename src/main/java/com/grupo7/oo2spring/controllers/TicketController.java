@@ -29,6 +29,8 @@ import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.models.Empleado;
+import com.grupo7.oo2spring.models.Estado;
+import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import com.grupo7.oo2spring.services.EmpleadoService;
@@ -121,6 +123,9 @@ public class TicketController {
 			model.addAttribute("message", "No existen tickets asignados a su Area ");
 		}
 		model.addAttribute("tickets", tickets);
+		model.addAttribute("usuarioLogueado", empleadoOpt);
+		model.addAttribute("estados", Estado.values()); // Esto obtiene un array de todas las constantes de tu enum Estado
+        model.addAttribute("prioridades", Prioridad.values());
 		return "ticket/lista_tickets";
     }
 	
@@ -142,26 +147,24 @@ public class TicketController {
 	}
 	
 	@PostMapping("/{idTicket}/tomar")
-    public String processTakeTicket(@PathVariable int idTicket,
+    public String procesaTomarTicket(@PathVariable int idTicket,
                                     @ModelAttribute("control") ControlDTO control, // Captura los datos del formulario en un objeto Control
                                     @AuthenticationPrincipal UserDetails usuariolog,
                                     Model model) throws Exception {
 		String nombreDelUsuarioEnSesion = usuariolog.getUsername();
     	Usuario usuarioCreador = usuarioService.getUsuarioByUsername(nombreDelUsuarioEnSesion);
     	try {
-
             ticketService.tomarTicketConControlInicial(idTicket, usuarioCreador, control);
             model.addAttribute("successMessage", "¡Ticket #" + idTicket + " tomado y gestión iniciada!");
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", "Error al tomar el ticket #" + idTicket + ": " + e.getMessage());
-            // Si hay un error, redirie al formulario de toma con el ticket para que pueda intentar de nuevo
             return "redirect:/ticket/" + idTicket + "/tomarTicket";
         }
-        return "redirect:/ticket/lista"; // Redirige al dashboard o a la vista de detalle del ticket recién tomado
+        return "redirect:/ticket/lista";
     }
 	
 	@GetMapping("/{idTicket}/detail")
-    public String viewTicketDetail(@PathVariable int idTicket, Model model, @AuthenticationPrincipal UserDetails usuariolog) {
+    public String DetalleTicket(@PathVariable int idTicket, Model model, @AuthenticationPrincipal UserDetails usuariolog) {
         try {
             Ticket ticketDetail = ticketService.getByIdTicket(idTicket);
 
@@ -172,35 +175,6 @@ public class TicketController {
         	model.addAttribute("errorMessage", e.getMessage());
             return "redirect:/ticket/lista_tickets";
         }
-    }
-	
-	@PostMapping("/{idTicket}/add-control")
-    public String addControl(@PathVariable int idTicket,
-                             @Valid @ModelAttribute("controlCreationDTO") ControlDTO control,
-                             BindingResult result,
-                             @RequestParam(defaultValue = "false") boolean finalizado,
-                             @AuthenticationPrincipal UserDetails usuariolog,
-                             Model model) throws Exception {
-//        if (result.hasErrors()) {
-//            try {
-//                model.addAttribute("ticketDetail", ticketService.getByIdTicket(idTicket));
-//            } catch (RuntimeException e) {
-//            	model.addAttribute("errorMessage", "Error al cargar detalles del ticket para reintentar: " + e.getMessage());
-//                return "redirect:/empleado/tickets/all";
-//            }
-//            model.addAttribute("errorMessage", "Por favor, corrija los errores en el formulario.");
-//            return "empleado/ticket-detail"; // Vuelve a la misma vista de detalle
-//        }
-
-		String nombreDelUsuarioEnSesion = usuariolog.getUsername();
-		Empleado usuarioCreador = (Empleado)empleadoService.findByEmpleadoNombre(nombreDelUsuarioEnSesion);
-        try {
-            ticketService.agregarControlATicket(idTicket, usuarioCreador, control, finalizado);
-            model.addAttribute("successMessage", "Control agregado con éxito.");
-        } catch (RuntimeException e) {
-            model.addAttribute("errorMessage", "Error al agregar control: " + e.getMessage());
-        }
-        return "redirect:/ticket/" + idTicket + "/detail";
     }
 	
 	@GetMapping("/sinasignar")
@@ -219,7 +193,7 @@ public class TicketController {
 	
 	@PostMapping("/{idTicket}/asignarArea")
     //@PreAuthorize("hasRole('MANAGER')") // Solo un manager puede asignar área
-    public String assignAreaToTicket(@PathVariable int idTicket,
+    public String asigarUnArea(@PathVariable int idTicket,
                                      @RequestParam("area") Area area,
                                      Model model) {
         try {
@@ -244,6 +218,18 @@ public class TicketController {
 	    model.addAttribute("tickets", tickets);
 
 	    return "ticket/usuario-tickets"; // Vista con la tabla de tickets
+	}
+	
+	@PostMapping("/{idTicket}/cambiarPrioridad")
+	public String cambiarPrioridad(@PathVariable int idTicket, @RequestParam("prioridad")Prioridad prioridad, Model model) throws Exception {
+		ticketService.asignarPrioridad(idTicket, prioridad);
+		return "redirect:/ticket/listaArea";
+	}
+	
+	@PostMapping("/{idTicket}/cambiarEstado")
+	public String cambiarEstado(@PathVariable int idTicket, @RequestParam("estado")Estado estado, Model model) throws Exception {
+		ticketService.asignarEstado(idTicket, estado);
+		return "redirect:/ticket/listaArea";
 	}
 }
 

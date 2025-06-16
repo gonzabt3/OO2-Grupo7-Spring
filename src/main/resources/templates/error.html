@@ -1,30 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Algo salió mal</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            text-align: center;
-            padding: 2rem;
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        h1 {
-            font-size: 2rem;
-        }
-        p {
-            font-size: 1.2rem;
-        }
-    </style>
+	<meta charset="UTF-8">
+	<title>Algo salió mal</title>
+	<style>
+		body {
+			font-family: sans-serif;
+			text-align: center;
+			padding: 2rem;
+			background-color: #f8d7da;
+			color: #721c24;
+		}
+
+		h1 {
+			font-size: 2rem;
+		}
+
+		p {
+			font-size: 1.2rem;
+		}
+	</style>
 </head>
+
 <body>
 	<p th:text="'Código de error: ' + ${status}"></p>
 	<p th:text="'Mensaje: ' + ${error}"></p>
 	<p th:text="'Ruta: ' + ${path}"></p>
-    <h1>¡Ups! Ocurrió un error</h1>
-    <p>Lo sentimos, no se encontro la pagina que buscabas.</p>
-    <p><a href="/">Volver al inicio</a></p>
+	<h1>¡Ups! Ocurrió un error</h1>
+	<p>Lo sentimos, no se encontro la pagina que buscabas.</p>
+	<p><a href="/">Volver al inicio</a></p>
 </body>
+
 </html>

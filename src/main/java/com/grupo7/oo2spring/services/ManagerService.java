@@ -4,7 +4,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.grupo7.oo2spring.models.Cliente;
+import com.grupo7.oo2spring.exception.UsuarioEsEmpleadoException;
+import com.grupo7.oo2spring.exception.UsuarioNoEncontradoException;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
@@ -26,7 +27,7 @@ public class ManagerService {
 	public Empleado prepararEmpleadoDesdeUsuario(int idUsuario) throws Exception {
 	    Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
 	    if (usuarioOpt.isEmpty()) {
-	        throw new Exception("Usuario no encontrado");
+	        throw new UsuarioNoEncontradoException("El Usuario no se encuentra en el sistema");
 	    }
 
 	    Usuario usuario = usuarioOpt.get();
@@ -48,11 +49,11 @@ public class ManagerService {
 	public Empleado convertirUsuarioAEmpleado(int idUsuario, Empleado datosEmpleado) throws Exception {
 		 // Buscar el usuario por ID
 	    Usuario usuario = usuarioRepository.findById(idUsuario)
-	        .orElseThrow(() -> new Exception("Usuario no encontrado"));
+	        .orElseThrow(() -> new UsuarioNoEncontradoException("El Usuario no se encuentra en el sistema"));
 
 	    // Verificar si ya tiene el rol de EMPLEADO
 	    if (usuario.getRol() == Rol.EMPLEADO) {
-	        throw new Exception("El usuario ya es un empleado");
+	        throw new UsuarioEsEmpleadoException("El usuario con ID " + idUsuario + " ya es un Empleado.");
 	    }
 	    usuario.setRol(Rol.EMPLEADO);
 	    usuarioRepository.save(usuario);

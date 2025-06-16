@@ -1,35 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Error del servidor</title>
-    <style>
-        body {
-            background-color: #fff3cd;
-            color: #856404;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 2rem;
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        p {
-            font-size: 1.2rem;
-        }
-        a {
-            color: #856404;
-            text-decoration: underline;
-        }
-    </style>
+	<meta charset="UTF-8">
+	<title>Error del servidor</title>
+	<style>
+		body {
+			background-color: #fff3cd;
+			color: #856404;
+			font-family: Arial, sans-serif;
+			text-align: center;
+			padding: 2rem;
+		}
+
+		h1 {
+			font-size: 2.5rem;
+			margin-bottom: 1rem;
+		}
+
+		p {
+			font-size: 1.2rem;
+		}
+
+		a {
+			color: #856404;
+			text-decoration: underline;
+		}
+	</style>
 </head>
+
 <body>
 	<p th:text="'Código de error: ' + ${status}"></p>
 	<p th:text="'Mensaje: ' + ${error}"></p>
 	<p th:text="'Ruta: ' + ${path}"></p>
-    <h1>¡Error del servidor!</h1>
-    <p>Ha ocurrido un problema interno inesperado.</p>
-    <p><a href="/">Volver al inicio</a></p>
+	<h1>¡Error del servidor!</h1>
+	<p>Ha ocurrido un problema interno inesperado.</p>
+	<p><a href="/">Volver al inicio</a></p>
 </body>
+
 </html>

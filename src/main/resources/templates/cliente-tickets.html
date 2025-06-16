@@ -2,355 +2,380 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Tickets</title>
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Lista de Tickets</title>
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: #f0f2f5;
-            color: #333;
-            line-height: 1.6;
-        }
+	<style>
+		body {
+			font-family: 'Segoe UI', Arial, sans-serif;
+			background-color: #f0f2f5;
+			color: #333;
+			line-height: 1.6;
+		}
 
-        .container {
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin-top: 40px;
-            margin-bottom: 40px;
-        }
+		.container {
+			background-color: #ffffff;
+			border-radius: 12px;
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+			padding: 30px;
+			margin-top: 40px;
+			margin-bottom: 40px;
+		}
 
-        h1 {
-            color: #2c3e50;
-            font-weight: 700;
-            margin-bottom: 35px;
-            font-size: 2.8em;
-            text-align: center;
-            position: relative;
-        }
+		h1 {
+			color: #2c3e50;
+			font-weight: 700;
+			margin-bottom: 35px;
+			font-size: 2.8em;
+			text-align: center;
+			position: relative;
+		}
 
-        h1::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background-color: #007bff;
-            margin: 10px auto 0;
-            border-radius: 2px;
-        }
+		h1::after {
+			content: '';
+			display: block;
+			width: 80px;
+			height: 4px;
+			background-color: #007bff;
+			margin: 10px auto 0;
+			border-radius: 2px;
+		}
 
-        .table {
-            border-collapse: separate;
-            border-spacing: 0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 25px;
-        }
+		.table {
+			border-collapse: separate;
+			border-spacing: 0;
+			border-radius: 10px;
+			overflow: hidden;
+			margin-top: 25px;
+		}
 
-        .table-dark thead {
-            background-color: #34495e;
-        }
+		.table-dark thead {
+			background-color: #34495e;
+		}
 
-        .table-dark th {
-            color: #ecf0f1;
-            font-weight: 600;
-            padding: 15px 20px;
-            text-transform: uppercase;
-            font-size: 0.9em;
-            letter-spacing: 0.5px;
-            border-bottom: none;
-        }
+		.table-dark th {
+			color: #ecf0f1;
+			font-weight: 600;
+			padding: 15px 20px;
+			text-transform: uppercase;
+			font-size: 0.9em;
+			letter-spacing: 0.5px;
+			border-bottom: none;
+		}
 
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f8f9fa;
-        }
+		.table-striped tbody tr:nth-of-type(odd) {
+			background-color: #f8f9fa;
+		}
 
-        .table-hover tbody tr:hover {
-            background-color: #eaf2fa;
-        }
+		.table-hover tbody tr:hover {
+			background-color: #eaf2fa;
+		}
 
-        td {
-            padding: 12px 20px;
-            vertical-align: middle;
-            border-top: 1px solid #e9ecef;
-        }
+		td {
+			padding: 12px 20px;
+			vertical-align: middle;
+			border-top: 1px solid #e9ecef;
+		}
 
-        td:nth-child(6) {
-            font-weight: 500;
-            color: #555;
-        }
-        
-        td:nth-child(7) {
-            font-weight: bold;
-            text-transform: uppercase;
-        }
+		td:nth-child(6) {
+			font-weight: 500;
+			color: #555;
+		}
 
-        td:nth-child(8) {
-            font-weight: bold;
-        }
+		td:nth-child(7) {
+			font-weight: bold;
+			text-transform: uppercase;
+		}
 
-        .btn-view-controls {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-            font-weight: 600;
-            transition: background-color 0.2s ease, transform 0.1s ease;
-            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
-        }
+		td:nth-child(8) {
+			font-weight: bold;
+		}
 
-        .btn-view-controls:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
-        }
+		.btn-view-controls {
+			background-color: #007bff;
+			color: white;
+			border: none;
+			padding: 8px 15px;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 0.9em;
+			font-weight: 600;
+			transition: background-color 0.2s ease, transform 0.1s ease;
+			box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+		}
 
-        /* Fila de detalles de procesos (inicialmente oculta) */
-        .procesos-detail-row {
-            display: none;
-            background-color: #fdfdfd;
-            border-top: 1px solid #e0e0e0;
-        }
+		.btn-view-controls:hover {
+			background-color: #0056b3;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+		}
 
-        .procesos-detail-row td {
-            padding: 25px;
-            border-top: none;
-        }
+		/* Fila de detalles de procesos (inicialmente oculta) */
+		.procesos-detail-row {
+			display: none;
+			background-color: #fdfdfd;
+			border-top: 1px solid #e0e0e0;
+		}
 
-        /* --- Estilos para la SECCIÓN DE DETALLES (procesos-content-wrapper) --- */
-        .procesos-content-wrapper {
-            background-color: #ffffff;
-            padding: 25px 35px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e9ecef;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+		.procesos-detail-row td {
+			padding: 25px;
+			border-top: none;
+		}
 
-        .procesos-content-wrapper h4 {
-            color: #34495e;
-            font-size: 1.6em;
-            font-weight: 600;
-            margin-top: 0;
-            margin-bottom: 0;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 12px;
-            text-align: center;
-        }
+		/* --- Estilos para la SECCIÓN DE DETALLES (procesos-content-wrapper) --- */
+		.procesos-content-wrapper {
+			background-color: #ffffff;
+			padding: 25px 35px;
+			border-radius: 10px;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+			border: 1px solid #e9ecef;
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
 
-        .procesos-content-wrapper h4 span {
-            color: #007bff;
-        }
+		.procesos-content-wrapper h4 {
+			color: #34495e;
+			font-size: 1.6em;
+			font-weight: 600;
+			margin-top: 0;
+			margin-bottom: 0;
+			border-bottom: 2px solid #007bff;
+			padding-bottom: 12px;
+			text-align: center;
+		}
 
-        .procesos-content-wrapper ul {
-            list-style: none;
-            padding-left: 0;
-            margin-bottom: 0;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px; /* Aumentado el espacio entre los ítems de la lista */
-        }
-        @media (min-width: 768px) {
-            .procesos-content-wrapper ul {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
+		.procesos-content-wrapper h4 span {
+			color: #007bff;
+		}
 
-        /* --- ESTILOS MEJORADOS PARA CADA ITEM DE PROCESO (li) --- */
-        .procesos-content-wrapper ul li {
-            background-color: #fefefe; /* Fondo más claro para los ítems */
-            border: 1px solid #e0e0e0;
-            border-left: 5px solid #28a745; /* Barra lateral verde */
-            padding: 15px 20px;
-            border-radius: 8px;
-            font-size: 0.95em;
-            color: #495057;
-            display: flex;
-            flex-direction: column;
-            gap: 8px; /* Espacio entre los datos dentro de cada li */
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            position: relative; /* Para el badge de 'Finalizado' */
-            overflow: hidden; /* Para asegurar que el badge no se salga */
-        }
-        
-        .procesos-content-wrapper ul li:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
+		.procesos-content-wrapper ul {
+			list-style: none;
+			padding-left: 0;
+			margin-bottom: 0;
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 15px;
+			/* Aumentado el espacio entre los ítems de la lista */
+		}
 
-        .procesos-content-wrapper ul li .detail-label {
-            font-weight: 600; /* Etiquetas más negritas */
-            color: #34495e; /* Color más oscuro para las etiquetas */
-            margin-right: 5px; /* Espacio entre etiqueta y valor */
-        }
+		@media (min-width: 768px) {
+			.procesos-content-wrapper ul {
+				grid-template-columns: 1fr 1fr;
+			}
+		}
 
-        .procesos-content-wrapper ul li .detail-value {
-            font-weight: 400; /* Valor de los datos */
-            color: #5a646c;
-        }
+		/* --- ESTILOS MEJORADOS PARA CADA ITEM DE PROCESO (li) --- */
+		.procesos-content-wrapper ul li {
+			background-color: #fefefe;
+			/* Fondo más claro para los ítems */
+			border: 1px solid #e0e0e0;
+			border-left: 5px solid #28a745;
+			/* Barra lateral verde */
+			padding: 15px 20px;
+			border-radius: 8px;
+			font-size: 0.95em;
+			color: #495057;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+			/* Espacio entre los datos dentro de cada li */
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+			position: relative;
+			/* Para el badge de 'Finalizado' */
+			overflow: hidden;
+			/* Para asegurar que el badge no se salga */
+		}
 
-        /* Estilo específico para el valor de la acción */
-        .procesos-content-wrapper ul li .detail-value.accion {
-            font-style: italic; /* La descripción de la acción en cursiva */
-            color: #495057;
-        }
+		.procesos-content-wrapper ul li:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+		}
 
-        /* Badge de "Finalizado" */
-        .procesos-content-wrapper ul li .finalizado-badge {
-            position: absolute;
-            top: 0;
-            right: 0;
-            background-color: #28a745; /* Verde para finalizado */
-            color: white;
-            padding: 4px 12px;
-            font-size: 0.75em;
-            font-weight: bold;
-            border-bottom-left-radius: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: -2px 2px 5px rgba(0,0,0,0.1);
-        }
+		.procesos-content-wrapper ul li .detail-label {
+			font-weight: 600;
+			/* Etiquetas más negritas */
+			color: #34495e;
+			/* Color más oscuro para las etiquetas */
+			margin-right: 5px;
+			/* Espacio entre etiqueta y valor */
+		}
 
-        .procesos-content-wrapper .no-procesos-message {
-            text-align: center;
-            font-style: italic;
-            color: #888;
-            padding: 20px;
-            font-size: 1em;
-            background-color: #fefefe;
-            border-radius: 8px;
-            border: 1px dashed #ced4da;
-            margin-top: 20px;
-        }
+		.procesos-content-wrapper ul li .detail-value {
+			font-weight: 400;
+			/* Valor de los datos */
+			color: #5a646c;
+		}
 
-        /* Alertas de Bootstrap */
-        .alert {
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            font-size: 1.05em;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+		/* Estilo específico para el valor de la acción */
+		.procesos-content-wrapper ul li .detail-value.accion {
+			font-style: italic;
+			/* La descripción de la acción en cursiva */
+			color: #495057;
+		}
+
+		/* Badge de "Finalizado" */
+		.procesos-content-wrapper ul li .finalizado-badge {
+			position: absolute;
+			top: 0;
+			right: 0;
+			background-color: #28a745;
+			/* Verde para finalizado */
+			color: white;
+			padding: 4px 12px;
+			font-size: 0.75em;
+			font-weight: bold;
+			border-bottom-left-radius: 8px;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.1);
+		}
+
+		.procesos-content-wrapper .no-procesos-message {
+			text-align: center;
+			font-style: italic;
+			color: #888;
+			padding: 20px;
+			font-size: 1em;
+			background-color: #fefefe;
+			border-radius: 8px;
+			border: 1px dashed #ced4da;
+			margin-top: 20px;
+		}
+
+		/* Alertas de Bootstrap */
+		.alert {
+			padding: 15px 20px;
+			margin-bottom: 20px;
+			border-radius: 8px;
+			font-size: 1.05em;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		}
+
 		.btn-home {
-		    background-color: #6c757d; /* Un gris neutro */
-		    color: white;
-		    border: none;
-		    padding: 10px 20px;
-		    border-radius: 5px;
-		    font-size: 1.1em;
-		    font-weight: 600;
-		    transition: background-color 0.2s ease, transform 0.1s ease;
-		    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-		    text-decoration: none; /* Quita el subrayado de los enlaces */
-		    display: inline-block; /* Para aplicar padding y margen */
-		    margin-bottom: 25px; /* Espacio debajo del botón */
+			background-color: #6c757d;
+			/* Un gris neutro */
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 5px;
+			font-size: 1.1em;
+			font-weight: 600;
+			transition: background-color 0.2s ease, transform 0.1s ease;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+			text-decoration: none;
+			/* Quita el subrayado de los enlaces */
+			display: inline-block;
+			/* Para aplicar padding y margen */
+			margin-bottom: 25px;
+			/* Espacio debajo del botón */
 		}
 
 		.btn-home:hover {
-		    background-color: #5a6268;
-		    transform: translateY(-2px);
-		    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-		    color: white; /* Asegura que el texto siga blanco al hacer hover */
-		    text-decoration: none;
+			background-color: #5a6268;
+			transform: translateY(-2px);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+			color: white;
+			/* Asegura que el texto siga blanco al hacer hover */
+			text-decoration: none;
 		}
-    </style>
+	</style>
 
-    <script>
-        function toggleProcesos(ticketId) {
-            var row = document.getElementById('procesos-detail-row-' + ticketId);
-            if (row.style.display === 'none' || row.style.display === '') {
-                row.style.display = 'table-row';
-            } else {
-                row.style.display = 'none';
-            }
-        }
-    </script>
+	<script>
+		function toggleProcesos(ticketId) {
+			var row = document.getElementById('procesos-detail-row-' + ticketId);
+			if (row.style.display === 'none' || row.style.display === '') {
+				row.style.display = 'table-row';
+			} else {
+				row.style.display = 'none';
+			}
+		}
+	</script>
 </head>
 
 <body>
-    <div class="container mt-5">
-		<a th:href="@{/}" class="btn btn-home">Inicio</a> 
-        <h1 class="text-center my-4">Lista de Tickets</h1>
+	<div class="container mt-5">
+		<a th:href="@{/}" class="btn btn-home">Inicio</a>
+		<h1 class="text-center my-4">Lista de Tickets</h1>
 
-        <div th:if="${tickets.size() == 0}" class="alert alert-warning text-center">
-            No hay tickets disponibles.
-        </div>
+		<div th:if="${tickets.size() == 0}" class="alert alert-warning text-center">
+			No hay tickets disponibles.
+		</div>
 
-        <table th:if="${tickets.size() > 0}" class="table table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Descripción</th>
-                    <th>Fecha Creación</th>
-                    <th>Fecha Cierre</th>
-                    <th>Usuario Creador</th>
-                    <th>Estado</th>
-                    <th>Prioridad</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <th:block th:each="ticket : ${tickets}">
-                    <tr th:id="'ticket-main-row-' + ${ticket.idTicket}">
-                        <td th:text="${ticket.idTicket}"></td>
-                        <td th:text="${ticket.titulo}"></td>
-                        <td th:text="${ticket.descripcion}"></td>
-                        <td th:text="${ticket.fechaCreacion != null ? #temporals.format(ticket.fechaCreacion, 'dd-MM-yyyy') : 'N/A'}"></td>
-                        <td th:text="${ticket.fechaCierre != null ? #temporals.format(ticket.fechaCierre, 'dd-MM-yyyy') : 'N/A'}"></td>
-                        <td th:text="${ticket.usuarioCreador != null ? ticket.usuarioCreador.nombre : 'N/A'}"></td>
-                        <td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}"></td>
-                        <td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'N/A'}"></td>
-                        <td>
-                            <button type="button" class="btn btn-primary btn-view-controls"
-                                th:onclick="'toggleProcesos(\'' + ${ticket.idTicket} + '\')'">
-                                Ver Controles
-                            </button>
-                        </td>
-                    </tr>
-                    <tr th:id="'procesos-detail-row-' + ${ticket.idTicket}" class="procesos-detail-row">
-                        <td th:colspan="9">
-                            <div class="procesos-content-wrapper">
-                                <h4>Controles del Ticket #<span th:text="${ticket.idTicket}"></span></h4>
-                                <div th:if="${ticket.procesos != null and !ticket.procesos.isEmpty()}">
-                                    <ul>
-                                        <li th:each="proceso : ${ticket.procesos}">
-                                            <div>
-                                                <span class="detail-label">Fecha:</span>
-                                                <span class="detail-value" th:text="${#temporals.format(proceso.fechaEntrada, 'dd-MM-yyyy HH:mm')}"></span>
-                                            </div>
-                                            <div>
-                                                <span class="detail-label">Acción Realizada:</span>
-                                                <span class="detail-value accion" th:text="${proceso.accion}"></span>
-                                            </div>
-                                            <div th:if="${proceso.empleado != null}">
-                                                <span class="detail-label">Realizado por:</span>
-                                                <span class="detail-value" th:text="${proceso.empleado.nombre != null ? proceso.empleado.nombre : 'N/A'}"></span>
-                                            </div>
-                                            <div th:if="${proceso.finalizado}" class="finalizado-badge">Finalizado</div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div th:unless="${ticket.procesos != null and !ticket.procesos.isEmpty()}">
-                                    <p class="no-procesos-message">No hay procesos registrados para este ticket.</p>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </th:block>
-            </tbody>
-        </table>
-    </div>
-    <script src="/js/bootstrap.bundle.min.js"></script>
+		<table th:if="${tickets.size() > 0}" class="table table-striped table-hover">
+			<thead class="table-dark">
+				<tr>
+					<th>ID</th>
+					<th>Título</th>
+					<th>Descripción</th>
+					<th>Fecha Creación</th>
+					<th>Fecha Cierre</th>
+					<th>Usuario Creador</th>
+					<th>Estado</th>
+					<th>Prioridad</th>
+					<th>Acciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="ticket : ${tickets}">
+					<tr th:id="'ticket-main-row-' + ${ticket.idTicket}">
+						<td th:text="${ticket.idTicket}"></td>
+						<td th:text="${ticket.titulo}"></td>
+						<td th:text="${ticket.descripcion}"></td>
+						<td
+							th:text="${ticket.fechaCreacion != null ? #temporals.format(ticket.fechaCreacion, 'dd-MM-yyyy') : 'N/A'}">
+						</td>
+						<td
+							th:text="${ticket.fechaCierre != null ? #temporals.format(ticket.fechaCierre, 'dd-MM-yyyy') : 'N/A'}">
+						</td>
+						<td th:text="${ticket.usuarioCreador != null ? ticket.usuarioCreador.nombre : 'N/A'}"></td>
+						<td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}"></td>
+						<td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'N/A'}"></td>
+						<td>
+							<button type="button" class="btn btn-primary btn-view-controls"
+								th:onclick="'toggleProcesos(\'' + ${ticket.idTicket} + '\')'">
+								Ver Controles
+							</button>
+						</td>
+					</tr>
+					<tr th:id="'procesos-detail-row-' + ${ticket.idTicket}" class="procesos-detail-row">
+						<td th:colspan="9">
+							<div class="procesos-content-wrapper">
+								<h4>Controles del Ticket #<span th:text="${ticket.idTicket}"></span></h4>
+								<div th:if="${ticket.procesos != null and !ticket.procesos.isEmpty()}">
+									<ul>
+										<li th:each="proceso : ${ticket.procesos}">
+											<div>
+												<span class="detail-label">Fecha:</span>
+												<span class="detail-value"
+													th:text="${#temporals.format(proceso.fechaEntrada, 'dd-MM-yyyy HH:mm')}"></span>
+											</div>
+											<div>
+												<span class="detail-label">Acción Realizada:</span>
+												<span class="detail-value accion" th:text="${proceso.accion}"></span>
+											</div>
+											<div th:if="${proceso.empleado != null}">
+												<span class="detail-label">Realizado por:</span>
+												<span class="detail-value"
+													th:text="${proceso.empleado.nombre != null ? proceso.empleado.nombre : 'N/A'}"></span>
+											</div>
+											<div th:if="${proceso.finalizado}" class="finalizado-badge">Finalizado</div>
+										</li>
+									</ul>
+								</div>
+								<div th:unless="${ticket.procesos != null and !ticket.procesos.isEmpty()}">
+									<p class="no-procesos-message">No hay procesos registrados para este ticket.</p>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
+	<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

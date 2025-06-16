@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Crear Ticket</title>
+	<title>Crear Ticket</title>
 </head>
+
 <body>
-    <h1>Nuevo Ticket</h1>
-    <form th:action="@{/tickets/crear}" th:object="${ticket}" method="post">
-        <label>Título:</label>
-        <input type="text" th:field="*{titulo}" /><br/>
+	<h1>Nuevo Ticket</h1>
+	<form th:action="@{/tickets/crear}" th:object="${ticket}" method="post">
+		<label>Título:</label>
+		<input type="text" th:field="*{titulo}" /><br />
 
-        <label>Descripción:</label>
-        <textarea th:field="*{descripcion}"></textarea><br/>
+		<label>Descripción:</label>
+		<textarea th:field="*{descripcion}"></textarea><br />
 
-        <label>ID del Usuario Creador:</label>
-        <input type="number" th:field="*{usuarioCreador.idUsuario}" /><br/>
+		<label>ID del Usuario Creador:</label>
+		<input type="number" th:field="*{usuarioCreador.idUsuario}" /><br />
 
-        <button type="submit">Crear Ticket</button>
-    </form>
+		<button type="submit">Crear Ticket</button>
+	</form>
 </body>
+
 </html>

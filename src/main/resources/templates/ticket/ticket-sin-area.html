@@ -1,257 +1,600 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tickets sin Área Asignada</title>
-    <link rel="stylesheet" href="/css/style.css"> </head>
-	<style>
-	        /* General Body Styles */
-	        body {
-	            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	            line-height: 1.6;
-	            color: #333;
-	            background-color: #f0f2f5; /* Soft background */
-	            margin: 0;
-	            padding: 0;
-	            display: flex;
-	            flex-direction: column;
-	            min-height: 100vh;
-	        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tickets sin Área Asignada</title>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<style>
+	/* General Body Styles */
+	body {
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		line-height: 1.6;
+		color: #333;
+		background-color: #f0f2f5;
+		/* Soft background */
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+	}
 
-	        /* Header Styles */
-	        header {
-	            background-color: #2c3e50; /* Dark blue-gray */
-	            color: #ffffff;
-	            padding: 15px 30px;
-	            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-	            display: flex;
-	            justify-content: space-between;
-	            align-items: center;
-	        }
+	/* Header Styles */
+	header {
+		background-color: #2c3e50;
+		/* Dark blue-gray */
+		color: #ffffff;
+		padding: 15px 30px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
 
-	        header h1 {
-	            margin: 0;
-	            font-size: 1.8em;
-	            color: #ecf0f1; /* Lighter color for header text */
-	        }
+	header h1 {
+		margin: 0;
+		font-size: 1.8em;
+		color: #ecf0f1;
+		/* Lighter color for header text */
+	}
 
-	        header nav ul {
-	            list-style: none;
-	            margin: 0;
-	            padding: 0;
-	            display: flex;
-	        }
+	header nav ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+	}
 
-	        header nav ul li {
-	            margin-left: 25px;
-	        }
+	header nav ul li {
+		margin-left: 25px;
+	}
 
-	        header nav ul li a {
-	            color: #ffffff;
-	            text-decoration: none;
-	            font-weight: bold;
-	            padding: 5px 0;
-	            transition: color 0.3s ease;
-	        }
+	header nav ul li a {
+		color: #ffffff;
+		text-decoration: none;
+		font-weight: bold;
+		padding: 5px 0;
+		transition: color 0.3s ease;
+	}
 
-	        header nav ul li a:hover {
-	            color: #3498db; /* Blue accent on hover */
-	        }
+	header nav ul li a:hover {
+		color: #3498db;
+		/* Blue accent on hover */
+	}
 
-	        /* Main Content Area */
-	        main {
-	            flex: 1; /* Allows main content to grow and fill available space */
-	            max-width: 1200px;
-	            margin: 30px auto;
-	            background: #fff;
-	            padding: 100px;
-	            border-radius: 8px;
-	            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-	        }
+	/* Main Content Area */
+	main {
+		flex: 1;
+		/* Allows main content to grow and fill available space */
+		max-width: 1200px;
+		margin: 30px auto;
+		background: #fff;
+		padding: 100px;
+		border-radius: 8px;
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	}
 
-	        /* Alert Messages */
-	        .alert {
-	            padding: 15px;
-	            margin-bottom: 20px;
-	            border-radius: 5px;
-	            font-size: 1em;
-	            border: 1px solid transparent;
-	        }
+	/* Alert Messages */
+	.alert {
+		padding: 15px;
+		margin-bottom: 20px;
+		border-radius: 5px;
+		font-size: 1em;
+		border: 1px solid transparent;
+	}
 
-	        .alert-danger {
-	            background-color: #f8d7da;
-	            color: #721c24;
-	            border-color: #f5c6cb;
-	        }
+	.alert-danger {
+		background-color: #f8d7da;
+		color: #721c24;
+		border-color: #f5c6cb;
+	}
 
-	        .alert-success {
-	            background-color: #d4edda;
-	            color: #155724;
-	            border-color: #c3e6cb;
-	        }
+	.alert-success {
+		background-color: #d4edda;
+		color: #155724;
+		border-color: #c3e6cb;
+	}
 
-	        .alert-info {
-	            background-color: #d1ecf1;
-	            color: #0c5460;
-	            border-color: #bee5eb;
-	        }
+	.alert-info {
+		background-color: #d1ecf1;
+		color: #0c5460;
+		border-color: #bee5eb;
+	}
 
-	        /* Table Styling */
-	        table {
-	            width: 100%;
-	            border-collapse: collapse;
-	            margin-top: 25px;
-	            box-shadow: 0 1px 5px rgba(0,0,0,0.08);
-	            border-radius: 8px;
-	            overflow: hidden; /* Ensures rounded corners are applied */
-	        }
+	/* Table Styling */
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		margin-top: 25px;
+		box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+		border-radius: 8px;
+		overflow: hidden;
+		/* Ensures rounded corners are applied */
+	}
 
-	        th, td {
-	            padding: 14px 18px;
-	            text-align: left;
-	            border-bottom: 1px solid #e0e0e0;
-	        }
+	th,
+	td {
+		padding: 14px 18px;
+		text-align: left;
+		border-bottom: 1px solid #e0e0e0;
+	}
 
-	        th {
-	            background-color: #3498db; /* Blue header */
-	            color: white;
-	            font-weight: 600;
-	            text-transform: uppercase;
-	            font-size: 0.9em;
-	        }
+	th {
+		background-color: #3498db;
+		/* Blue header */
+		color: white;
+		font-weight: 600;
+		text-transform: uppercase;
+		font-size: 0.9em;
+	}
 
-	        tbody tr:nth-child(even) { /* Zebra striping */
-	            background-color: #f9f9f9;
-	        }
+	tbody tr:nth-child(even) {
+		/* Zebra striping */
+		background-color: #f9f9f9;
+	}
 
-	        tbody tr:hover {
-	            background-color: #e9f7fe; /* Light blue on hover */
-	        }
+	tbody tr:hover {
+		background-color: #e9f7fe;
+		/* Light blue on hover */
+	}
 
-	        /* Form within Table Cell */
-	        table td form {
-	            display: flex;
-	            align-items: center;
-	            gap: 10px; /* Space between select and button */
-	            margin: 0; /* Remove default form margin */
-	        }
+	.action-cell {
+		position: relative;
+		/* Crucial for positioning the dropdown */
+		text-align: center;
+		/* Center the buttons in the cell */
+	}
 
-	        table td select {
-	            padding: 8px 12px;
-	            border: 1px solid #ccc;
-	            border-radius: 4px;
-	            font-size: 0.9em;
-	            background-color: #fff;
-	            appearance: none; /* Remove default system arrow */
-	            -webkit-appearance: none;
-	            -moz-appearance: none;
-	            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2069.2c-3.6-3.6-7.9-5.4-12.8-5.4H18.3c-4.9%200-9.2%201.8-12.8%205.4-3.6%203.6-5.4%207.9-5.4%2012.8s1.8%209.2%205.4%2012.8L130.3%20228.6c3.6%203.6%207.9%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4l119.9-119.9c3.6-3.6%205.4-7.9%205.4-12.8s-1.8-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E'); /* Custom arrow */
-	            background-repeat: no-repeat;
-	            background-position: right 8px top 50%;
-	            background-size: 12px auto;
-	            cursor: pointer;
-	        }
+	.btn-group {
+		display: inline-flex;
+		/* Use inline-flex for horizontal grouping */
+		gap: 8px;
+		/* Space between buttons */
+		align-items: center;
+	}
 
-	        table td select:focus {
-	            border-color: #3498db;
-	            outline: none;
-	            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
-	        }
+	.btn-action {
+		padding: 8px 14px;
+		border: none;
+		border-radius: 6px;
+		cursor: pointer;
+		font-weight: 600;
+		font-size: 0.85em;
+		text-decoration: none;
+		/* For <a> tags used as buttons */
+		transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		color: white;
+		display: inline-flex;
+		/* Align icon and text */
+		align-items: center;
+		gap: 5px;
+		/* Space between icon and text */
+	}
 
-	        table td button {
-	            padding: 8px 15px;
-	            background-color: #28a745; /* Green assign button */
-	            color: white;
-	            border: none;
-	            border-radius: 4px;
-	            cursor: pointer;
-	            font-weight: bold;
-	            transition: background-color 0.2s ease;
-	        }
+	.btn-action:hover {
+		transform: translateY(-1px);
+		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+	}
 
-	        table td button:hover {
-	            background-color: #218838;
-	        }
+	.btn-action:active {
+		transform: translateY(0);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	}
 
-	        /* Back to List Link */
-	        main > p > a {
-	            display: inline-block;
-	            margin-top: 30px;
-	            padding: 10px 15px;
-	            background-color: #6c757d; /* Gray for navigation */
-	            color: white;
-	            text-decoration: none;
-	            border-radius: 5px;
-	            transition: background-color 0.3s ease;
-	        }
+	/* Specific button colors */
+	.btn-details {
+		background-color: #007bff;
+		/* Primary Blue for Details */
+	}
 
-	        main > p > a:hover {
-	            background-color: #5a6268;
-	        }
-	    </style>
+	.btn-options {
+		background-color: #6c757d;
+		/* Gray for Options */
+	}
+
+	/* Dropdown content (hidden by default) */
+	.dropdown-content {
+		display: none;
+		position: absolute;
+		background-color: #ffffff;
+		min-width: 220px;
+		/* Adjust width as needed */
+		box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+		z-index: 10;
+		/* Ensure it's above other content */
+		border-radius: 8px;
+		overflow: hidden;
+		top: 100%;
+		/* Position below the "Opciones" button */
+		left: 50%;
+		/* Center relative to the button */
+		transform: translateX(-50%);
+		/* Adjust for perfect centering */
+		margin-top: 5px;
+		/* Small gap from button */
+		padding: 10px;
+		border: 1px solid #e0e0e0;
+	}
+
+	.dropdown-content form {
+		display: flex;
+		flex-direction: column;
+		/* Stack elements vertically in dropdown */
+		gap: 8px;
+		margin-bottom: 10px;
+		/* Space between forms */
+		padding-bottom: 8px;
+		border-bottom: 1px solid #f0f0f0;
+		/* Separator for forms */
+	}
+
+	.dropdown-content form:last-child {
+		margin-bottom: 0;
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+
+	.dropdown-content label {
+		font-size: 0.8em;
+		color: #555;
+		margin-bottom: -4px;
+		/* Pull label closer to select */
+		font-weight: 600;
+	}
+
+	.dropdown-content select {
+		padding: 8px 12px;
+		border: 1px solid #ced4da;
+		border-radius: 6px;
+		font-size: 0.85em;
+		background-color: #ffffff;
+		color: #495057;
+		appearance: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%236c757d%22%20d%3D%22M287%2069.2c-3.6-3.6-7.9-5.4-12.8-5.4H18.3c-4.9%200-9.2%201.8-12.8%205.4-3.6%203.6-5.4%207.9-5.4%2012.8s1.8%209.2%205.4%2012.8L130.3%20228.6c3.6%203.6%207.9%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4l119.9-119.9c3.6-3.6%205.4-7.9%205.4-12.8s-1.8-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E');
+		background-repeat: no-repeat;
+		background-position: right 10px center;
+		background-size: 9px auto;
+		cursor: pointer;
+		box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+		width: 100%;
+		/* Full width within dropdown form */
+		transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	}
+
+	.dropdown-content select:focus {
+		border-color: #80bdff;
+		outline: none;
+		box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+	}
+
+	.dropdown-content button[type="submit"] {
+		padding: 8px 12px;
+		background-color: #28a745;
+		/* Success green for submit */
+		color: white;
+		border: none;
+		border-radius: 6px;
+		cursor: pointer;
+		font-weight: 600;
+		font-size: 0.8em;
+		text-transform: uppercase;
+		letter-spacing: 0.3px;
+		transition: background-color 0.2s ease, box-shadow 0.2s ease;
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		width: 100%;
+		/* Full width within dropdown form */
+	}
+
+	.dropdown-content button[type="submit"]:hover {
+		background-color: #218838;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+	}
+
+	/* --- Back to List Link (if you have one) --- */
+	main>p>a {
+		display: inline-block;
+		margin-top: 30px;
+		padding: 10px 20px;
+		background-color: #6c757d;
+		color: white;
+		text-decoration: none;
+		border-radius: 6px;
+		transition: background-color 0.3s ease, box-shadow 0.3s ease;
+		font-size: 0.95em;
+		font-weight: 500;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	}
+
+	main>p>a:hover {
+		background-color: #5a6268;
+		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+	}
+
+	/* --- Responsive Design --- */
+	@media (max-width: 1024px) {
+		main {
+			margin: 30px 20px;
+			padding: 25px;
+		}
+
+		table {
+			font-size: 0.85em;
+			min-width: 900px;
+		}
+
+		th,
+		td {
+			padding: 10px 15px;
+		}
+
+		header {
+			padding: 15px 20px;
+		}
+
+		header nav ul li {
+			margin-left: 20px;
+		}
+	}
+
+	@media (max-width: 768px) {
+		header {
+			flex-direction: column;
+			align-items: flex-start;
+			padding: 15px;
+		}
+
+		header h1 {
+			font-size: 1.6em;
+			margin-bottom: 10px;
+		}
+
+		header nav ul {
+			flex-wrap: wrap;
+			width: 100%;
+		}
+
+		header nav ul li {
+			margin-left: 0;
+			margin-right: 15px;
+			margin-bottom: 5px;
+		}
+
+		main {
+			margin: 20px 15px;
+			padding: 20px;
+		}
+
+		table {
+			font-size: 0.8em;
+			min-width: unset;
+		}
+
+		th,
+		td {
+			padding: 8px 10px;
+			white-space: normal;
+		}
+
+		.btn-group {
+			flex-direction: column;
+			/* Stack buttons vertically */
+			align-items: flex-start;
+			width: 100%;
+			/* Allow group to take full width */
+		}
+
+		.btn-group .btn-action {
+			width: 100%;
+			/* Make buttons full width */
+		}
+
+		.dropdown-content {
+			width: 90%;
+			/* Larger dropdown on small screens */
+			left: 5%;
+			/* Adjust positioning for full width */
+			transform: translateX(0);
+			right: 5%;
+			margin-top: 10px;
+			max-height: 80vh;
+			/* Limit height for scrollability */
+			overflow-y: auto;
+		}
+
+		.dropdown-content select {
+			background-position: right 8px center;
+		}
+	}
+
+	@media (max-width: 480px) {
+		main {
+			margin: 15px 10px;
+			padding: 15px;
+		}
+
+		.alert {
+			padding: 10px 15px;
+			font-size: 0.9em;
+		}
+
+		header h1 {
+			font-size: 1.4em;
+		}
+	}
+</style>
+
 <body>
-    <header>
-        <h1>Tickets sin Área Asignada</h1>
-        <nav>
-            <ul>
-                <li><a th:href="@{/panel}">Panel de Control</a></li>
-                <li><a th:href="@{/ticket/lista}">Todos los Tickets</a></li>
-                <li><a th:href="@{/logout}">Cerrar Sesión</a></li>
-            </ul>
-        </nav>
-    </header>
+	<header>
+		<h1>Tickets sin Área Asignada</h1>
+		<nav>
+			<ul>
+				<li><a th:href="@{/panel}">Panel de Control</a></li>
+				<li><a th:href="@{/ticket/lista}">Todos los Tickets</a></li>
+				<li><a th:href="@{/logout}">Cerrar Sesión</a></li>
+			</ul>
+		</nav>
+	</header>
 
-    <main>
-        <div th:if="${successMessage}" class="alert alert-success">
-            <p th:text="${successMessage}"></p>
-        </div>
-        <div th:if="${errorMessage}" class="alert alert-danger">
-            <p th:text="${errorMessage}"></p>
-        </div>
+	<main>
+		<div th:if="${successMessage}" class="alert alert-success">
+			<p th:text="${successMessage}"></p>
+		</div>
+		<div th:if="${errorMessage}" class="alert alert-danger">
+			<p th:text="${errorMessage}"></p>
+		</div>
 
-        <div th:if="${#lists.isEmpty(tickets)}" class="alert alert-info">
-            <p>No hay tickets sin área asignada en este momento.</p>
-        </div>
+		<div th:if="${#lists.isEmpty(tickets)}" class="alert alert-info">
+			<p>No hay tickets sin área asignada en este momento.</p>
+		</div>
 
-        <div th:unless="${#lists.isEmpty(tickets)}">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Título</th>
-                        <th>Descripción</th>
-                        <th>Estado</th>
-                        <th>Prioridad</th>
-                        <th>Fecha Creación</th>
+		<div th:unless="${#lists.isEmpty(tickets)}">
+			<table>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Título</th>
+						<th>Descripción</th>
+						<th>Estado</th>
+						<th>Prioridad</th>
+						<th>Fecha Creación</th>
 						<th>Area Asignada</th>
-                        <th>Asignar Área</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="ticket : ${tickets}">
-                        <td th:text="${ticket.idTicket}"></td>
-                        <td th:text="${ticket.titulo}"></td>
-                        <td th:text="${ticket.descripcion}"></td>
-                        <td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}"></td>
-                        <td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'N/A'}"></td>
-                        <td th:text="${ticket.fechaCreacion}"></td>
+						<th>Asignar Área</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="ticket : ${tickets}">
+						<td th:text="${ticket.idTicket}"></td>
+						<td th:text="${ticket.titulo}"></td>
+						<td th:text="${ticket.descripcion}"></td>
+						<td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}"></td>
+						<td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'N/A'}"></td>
+						<td th:text="${ticket.fechaCreacion}"></td>
 						<td th:text="${ticket.area != null ? ticket.area.name() : 'N/A'}"></td>
-                        <td>
-                            <form th:action="@{/ticket/{idTicket}/asignarArea(idTicket=${ticket.idTicket})}" method="post">
-                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                <select name="area" required>
-                                    <option value="">Seleccione un área</option>
-                                    <option th:each="area : ${areas}" th:value="${area}" th:text="${area.name()}"></option>
-                                </select>
-                                <button type="submit">Asignar</button>
-                            </form>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </main>
+						<td class="action-cell">
+							<div class="btn-group">
+								<a th:href="@{/ticket/{idTicket}/detail(idTicket=${ticket.idTicket})}"
+									class="btn-action btn-details">
+									<i class="fas fa-info-circle"></i> Detalles
+								</a>
+
+								<button type="button" class="btn-action btn-options"
+									th:onclick="|toggleDropdown(this, '${ticket.idTicket}', '${ticket.area != null ? ticket.area.name() : ''}', '${ticket.estado != null ? ticket.estado.name() : ''}', '${ticket.prioridad != null ? ticket.prioridad.name() : ''}')|">
+									Opciones <i class="fas fa-caret-down"></i>
+								</button>
+
+								<div th:id="${'optionsDropdown-' + ticket.idTicket}" class="dropdown-content">
+									<form th:action="@{/ticket/{idTicket}/asignarArea(idTicket=${ticket.idTicket})}"
+										method="post">
+										<input type="hidden" th:name="${_csrf.parameterName}"
+											th:value="${_csrf.token}" />
+										<label for="areaSelect-[[${ticket.idTicket}]]">Área:</label>
+										<select th:id="${'areaSelect-' + ticket.idTicket}" name="area" required>
+											<option value="">Seleccionar área</option>
+											<option th:each="area : ${areas}" th:value="${area}"
+												th:text="${area.name()}"
+												th:selected="${ticket.area != null && ticket.area.name() == area.name()}">
+											</option>
+										</select>
+										<button type="submit">Asignar Área</button>
+									</form>
+
+									<form th:action="@{/ticket/{idTicket}/cambiarEstado(idTicket=${ticket.idTicket})}"
+										method="post">
+										<input type="hidden" th:name="${_csrf.parameterName}"
+											th:value="${_csrf.token}" />
+										<label for="estadoSelect-[[${ticket.idTicket}]]">Estado:</label>
+										<select th:id="${'estadoSelect-' + ticket.idTicket}" name="estado" required>
+											<option value="">Seleccionar estado</option>
+											<option th:each="estado : ${estados}" th:value="${estado}"
+												th:text="${estado.name()}"
+												th:selected="${ticket.estado != null && ticket.estado.name() == estado.name()}">
+											</option>
+										</select>
+										<button type="submit">Cambiar Estado</button>
+									</form>
+
+									<form
+										th:action="@{/ticket/{idTicket}/cambiarPrioridad(idTicket=${ticket.idTicket})}"
+										method="post">
+										<input type="hidden" th:name="${_csrf.parameterName}"
+											th:value="${_csrf.token}" />
+										<label for="prioridadSelect-[[${ticket.idTicket}]]">Prioridad:</label>
+										<select th:id="${'prioridadSelect-' + ticket.idTicket}" name="prioridad"
+											required>
+											<option value="">Seleccionar prioridad</option>
+											<option th:each="prioridad : ${prioridades}" th:value="${prioridad}"
+												th:text="${prioridad.name()}"
+												th:selected="${ticket.prioridad != null && ticket.prioridad.name() == prioridad.name()}">
+											</option>
+										</select>
+										<button type="submit">Cambiar Prioridad</button>
+									</form>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</main>
+	<script>
+		let currentOpenDropdown = null; // To keep track of the currently open dropdown
+
+		function toggleDropdown(button, ticketId, currentArea, currentEstado, currentPrioridad) {
+			const dropdownId = 'optionsDropdown-' + ticketId;
+			const dropdown = document.getElementById(dropdownId);
+
+			// Close any other open dropdown before opening a new one
+			if (currentOpenDropdown && currentOpenDropdown !== dropdown) {
+				currentOpenDropdown.style.display = 'none';
+				// Remove active class from its button
+				const prevButton = currentOpenDropdown.previousElementSibling;
+				if (prevButton) prevButton.classList.remove('active');
+			}
+
+			// Toggle display of the clicked dropdown
+			if (dropdown.style.display === 'block') {
+				dropdown.style.display = 'none';
+				button.classList.remove('active');
+				currentOpenDropdown = null;
+			} else {
+				dropdown.style.display = 'block';
+				button.classList.add('active'); // Add active class to the button
+				currentOpenDropdown = dropdown;
+
+				// Pre-select current values in the dropdown forms
+				// Note: IDs are unique with ticket ID, so we target them specifically
+				const areaSelect = document.getElementById('areaSelect-' + ticketId);
+				if (areaSelect) areaSelect.value = currentArea;
+
+				const estadoSelect = document.getElementById('estadoSelect-' + ticketId);
+				if (estadoSelect) estadoSelect.value = currentEstado;
+
+				const prioridadSelect = document.getElementById('prioridadSelect-' + ticketId);
+				if (prioridadSelect) prioridadSelect.value = currentPrioridad;
+			}
+		}
+
+		// Close the dropdown if the user clicks outside of it
+		window.onclick = function (event) {
+			// Check if the click was outside any dropdown button and outside any dropdown content
+			if (!event.target.matches('.btn-options') && !event.target.closest('.dropdown-content')) {
+				if (currentOpenDropdown) {
+					currentOpenDropdown.style.display = 'none';
+					// Remove active class from its button
+					const prevButton = currentOpenDropdown.previousElementSibling;
+					if (prevButton) prevButton.classList.remove('active');
+					currentOpenDropdown = null;
+				}
+			}
+		};
+	</script>
 </body>
+
 </html>

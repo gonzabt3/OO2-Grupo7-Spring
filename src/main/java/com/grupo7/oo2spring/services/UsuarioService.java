@@ -1,6 +1,5 @@
 package com.grupo7.oo2spring.services;
 
-import com.grupo7.oo2spring.models.Cliente;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Ticket;
@@ -30,7 +29,7 @@ public class UsuarioService {
     private EntityManager entityManager;
     
     
-    public Cliente guardarUsuario(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) {
+    /*public Cliente guardarUsuario(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) {
         Cliente nuevoUsuario = new Cliente();
         nuevoUsuario.setNombreUsuario(nombreUsuario);
         nuevoUsuario.setNombre(nombre);
@@ -39,7 +38,7 @@ public class UsuarioService {
         nuevoUsuario.setEmail(email);
         nuevoUsuario.setContraseña(passwordEncoder.encode(contraseña));
         return usuarioRepository.save(nuevoUsuario);
-    }
+    }*/
     
     @Transactional
     public Empleado convertirAEmpleado(int idUsuario, Empleado datosEmpleado) throws Exception {

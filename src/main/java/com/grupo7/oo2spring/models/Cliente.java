@@ -1,4 +1,4 @@
-package com.grupo7.oo2spring.models;
+/*package com.grupo7.oo2spring.models;
 
 import java.util.Objects;
 
@@ -54,4 +54,4 @@ public class Cliente extends Usuario {
 	
     
     
-}
+}*/
