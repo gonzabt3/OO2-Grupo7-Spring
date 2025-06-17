@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+<<<<<<< HEAD
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Control - Sistema de Tickets</title>
@@ -10,9 +11,15 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+=======
+    <title>Panel de Control</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+>>>>>>> refs/remotes/origin/pauche
     <style>
         /* --- General Body & Layout --- */
         body {
+<<<<<<< HEAD
             font-family: 'Open Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más elegante */
             background-color: #f5f8fa; /* Fondo muy claro y suave */
             color: #3f51b5; /* Azul oscuro principal para el texto base */
@@ -23,6 +30,12 @@
             padding: 30px; /* Padding general para el cuerpo */
             margin: 0;
             line-height: 1.6;
+=======
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+>>>>>>> refs/remotes/origin/pauche
         }
 
         /* --- Panel Container --- */
@@ -38,6 +51,7 @@
             border: 1px solid #e0e0e0; /* Borde sutil */
         }
 
+<<<<<<< HEAD
         /* --- Welcome Section --- */
         .welcome-section h1 {
             font-size: 2.8rem; /* Título más grande */
@@ -55,6 +69,15 @@
 
         /* --- Role Badge --- */
         .role-display {
+=======
+        .role-badge {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            padding: 5px 12px;
+            border-radius: 20px;
+>>>>>>> refs/remotes/origin/pauche
             display: inline-block;
             background-color: #e8f5e9; /* Verde claro para el rol */
             color: #388e3c; /* Verde oscuro para el texto del rol */
@@ -66,6 +89,113 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Sombra sutil */
             letter-spacing: 0.5px;
             text-transform: uppercase; /* Mayúsculas para el rol */
+        }
+        
+        .btn-lg {
+            min-width: 220px;
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-transform: capitalize; /* o uppercase si preferís todo mayúsculas */
+            letter-spacing: 0.05em;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            border: none;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #117a8b;
+            box-shadow: 0 4px 12px rgba(23, 162, 184, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border: none;
+            color: #212529;
+        }
+
+        .btn-warning:hover {
+            background-color: #d39e00;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-dark {
+            border: 2px solid #343a40;
+            background-color: transparent;
+            color: #343a40;
+            font-weight: 600;
+        }
+
+        .btn-outline-dark:hover {
+            background-color: #343a40;
+            color: white;
+            box-shadow: 0 4px 12px rgba(52, 58, 64, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .btn-emp-area {
+            background-color: #17a2b8; /* color cyan/azul claro */
+            border-color: #17a2b8;
+        }
+
+        .btn-emp-area:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+
+        .btn-emp-asignar {
+            background-color: #28a745; /* verde */
+            border-color: #28a745;
+        }
+
+        .btn-emp-asignar:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+        .btn-emp-todos {
+            background-color: #ffc107; /* amarillo */
+            border-color: #ffc107;
+            color: #212529;
+        }
+
+        .btn-emp-todos:hover {
+            background-color: #e0a800;
+            border-color: #d39e00;
+            color: #212529;
         }
 
         /* --- Action Buttons Grid --- */
@@ -96,6 +226,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Sombra sutil */
         }
 
+<<<<<<< HEAD
         .btn-action:hover {
             background-color: #eef2f6; /* Cambio de fondo sutil al pasar el ratón */
             border-color: #4a69bd; /* Borde más pronunciado al pasar el ratón */
@@ -163,12 +294,28 @@
 
 
         /* --- Responsive Adjustments --- */
+=======
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        footer a {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+>>>>>>> refs/remotes/origin/pauche
         @media (max-width: 768px) {
             .dashboard-panel {
                 padding: 30px;
                 border-radius: 15px;
                 box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             }
+<<<<<<< HEAD
             .welcome-section h1 {
                 font-size: 2.2rem;
             }
@@ -220,7 +367,13 @@
             }
             .btn-action i, .btn-action-logout button i {
                 font-size: 1.8rem;
+=======
+>>>>>>> refs/remotes/origin/pauche
             }
+
+        
+        .footer a:hover {
+            color: #ccc;
         }
     </style>
 </head>
@@ -232,10 +385,18 @@
 			<p class="lead">Gestiona tus tickets y operaciones del sistema de manera eficiente.</p>
 		</div>
 
+<<<<<<< HEAD
 		<div class="role-display">
 			<span th:text="'ROL ACTUAL: ' + ${rol}">ROL ACTUAL: [ROL]</span>
 		</div>
+=======
+        <div class="d-flex justify-content-center flex-wrap mt-4">
+            <a href="/ticket/formulario_simple" class="btn btn-primary btn-lg mx-2 my-2">
+                Crear Ticket
+            </a>
+>>>>>>> refs/remotes/origin/pauche
 
+<<<<<<< HEAD
 		<div class="actions-grid">
 			<a href="/ticket/formulario_simple" class="btn-action btn-create-ticket">
 				<i class="fas fa-plus-circle"></i> Crear Ticket
@@ -244,19 +405,52 @@
 			<a href="/ticket/tickets" class="btn-action btn-my-tickets" th:if="${rol == 'USER'}">
 				<i class="fas fa-ticket-alt"></i> Mis Tickets
 			</a>
+=======
+            <a href="/ticket/listaArea" class="btn btn-info btn-lg mx-2 my-2 btn-emp-area"
+               th:if="${rol == 'EMPLEADO'}">
+                Ver Tickets Dentro del Area
+            </a>
+>>>>>>> refs/remotes/origin/pauche
 			
 			<a href="/usuario/misDatos" class="btn-action btn-user-data" th:if="${rol == 'EMPLEADO' or rol == 'MANAGER'}">
 				<i class="fas fa-user-circle"></i> Mis Datos
 			</a>
 
+<<<<<<< HEAD
 			<a href="/ticket/listaArea" class="btn-action btn-area-tickets" th:if="${rol == 'EMPLEADO'}">
 				<i class="fas fa-boxes"></i> Tickets de mi Área
 			</a>
+=======
+            <a href="/ticket/sinasignar" class="btn btn-info btn-lg mx-2 my-2 btn-emp-asignar"
+               th:if="${rol == 'EMPLEADO'}">
+                Asignar un Ticket a un Area
+            </a>
+            
+            <!-- Solo para clientes -->
+                       <a href="/ticket/tickets" class="btn btn-secondary btn-lg mx-2 my-2"
+                          th:if="${rol == 'USER'}">
+                           Mis Tickets
+                       </a>
+>>>>>>> refs/remotes/origin/pauche
 
+<<<<<<< HEAD
 			<a href="/ticket/sinasignar" class="btn-action btn-assign-ticket" th:if="${rol == 'EMPLEADO'}">
 				<i class="fas fa-clipboard-list"></i> Asignar Ticket
 			</a>
+=======
+            <!-- Solo para managers -->
+            <a href="/ticket/lista" class="btn btn-info btn-lg mx-2 my-2 btn-emp-todos"
+               th:if="${rol == 'EMPLEADO'}">
+                Ver Todos Los Tickets
+            </a>
 
+            <a href="/manager/listar" class="btn btn-warning btn-lg mx-2 my-2"
+               th:if="${rol == 'MANAGER'}">
+                Usuarios / Asignar Empleado
+            </a>
+>>>>>>> refs/remotes/origin/pauche
+
+<<<<<<< HEAD
 			<a href="/ticket/lista" class="btn-action btn-all-tickets" th:if="${rol == 'EMPLEADO'}">
 				<i class="fas fa-list-alt"></i> Todos los Tickets
 			</a>
@@ -276,5 +470,26 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 			integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 			crossorigin="anonymous"></script>
+=======
+
+            <form th:action="@{/logout}" method="post" class="mx-2 my-2">
+                <button type="submit" class="btn btn-danger btn-lg">
+                    Cerrar Sesión
+                </button>
+            </form>
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="/contacto/formulario-contacto" class="btn btn-outline-dark btn-lg">
+                Contactar Soporte
+            </a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="/js/bootstrap.bundle.min.js"></script>
+>>>>>>> refs/remotes/origin/pauche
 </body>
 </html>

@@ -26,12 +26,24 @@ spring:
        auth: true
        starttls.enable: true
        starttls.required: true
+<<<<<<< HEAD
 emails.sender_email: ${EMAIL_TEST}
 
+=======
+       emails.sender_email: ${EMAIL_TEST}
+  devtools:
+    restart:
+      enabled: false
+server:
+  error:
+    whitelabel:
+      enabled: false
+>>>>>>> refs/remotes/origin/pauche
 logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+<<<<<<< HEAD
     org.springframework.security: DEBUG
 
 #   host: smtp.gmail.com            # Servidor SMTP de Gmail
@@ -44,3 +56,6 @@ logging:
 #      mail.smtp.starttls.required: true # Forzar STARTTLS
 #      mail.smtp.ssl.trust: smtp.gmail.com
     
+=======
+    org.springframework.security: DEBUG
+>>>>>>> refs/remotes/origin/pauche

@@ -11,6 +11,7 @@ import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.dto.ControlDTO;
+import com.grupo7.oo2spring.dto.EmpleadoDTO;
 import com.grupo7.oo2spring.dto.TicketDTO;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
@@ -26,6 +27,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.management.RuntimeErrorException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Query;
@@ -55,7 +57,7 @@ public class TicketService {
 	public List<Ticket> findByUsuario(Usuario usuario) {
 		return ticketRepository.findByUsuarioCreador(usuario);
 	}
-	
+
 	@Transactional(readOnly = true)
 	public List<Ticket> findByArea(Area area) {
 		return ticketRepository.findByArea(area);
@@ -64,6 +66,7 @@ public class TicketService {
 	@Transactional
 	public Ticket crearTicket(TicketDTO ticket, Usuario usuarioCreador) {
 	    System.out.println("SERVICIO: Creando ticket con DTO: " + ticket);
+
 	    Ticket nuevoTicket = new Ticket(ticket.getTitulo(), ticket.getDescripcion(),  usuarioCreador);
 	    Ticket guardado = ticketRepository.save(nuevoTicket);
 	    System.out.println("SERVICIO: Ticket guardado con ID: " + guardado.getIdTicket());
@@ -72,19 +75,8 @@ public class TicketService {
 
 	@PreAuthorize("hasRole('EMPLEADO')")
 	@Transactional
-	public void tomarTicketConControlInicial(int idTicket, Usuario usuarioCreador, ControlDTO control)
+	public void tomarTicketConControlInicial(int idTicket, Empleado empleadoLogueado, ControlDTO control)
 			throws Exception {
-		Empleado empleadoLogueado = new Empleado();
-		///TUVE QUE CREAR UN EMPLEADO Y SETEAR LOS DATOS POR LOS DEL USUARIO
-		///SIN ESTE PASO NO ME GUARDABA LOS DATOS DEL EMPLEADO QUE HIZO EL CONTROL
-		empleadoLogueado.setIdUsuario(usuarioCreador.getIdUsuario());
-		empleadoLogueado.setNombre(usuarioCreador.getNombre());
-		empleadoLogueado.setApellido(usuarioCreador.getApellido());
-		empleadoLogueado.setDni(usuarioCreador.getDni());
-		empleadoLogueado.setEmail(usuarioCreador.getEmail());
-		empleadoLogueado.setNombreUsuario(usuarioCreador.getNombreUsuario());
-		empleadoLogueado.setContraseña(usuarioCreador.getContraseña());
-		empleadoLogueado.setRol(usuarioCreador.getRol());
 		
 		Ticket ticket = ticketRepository.getByIdTicket(idTicket);
 
@@ -94,6 +86,7 @@ public class TicketService {
 		controlInicial.setFechaEntrada(LocalDate.now());
 		controlInicial.setFinalizado(false); // No está finalizado al tomarlo
 		controlInicial.setFechaSalida(null);
+		controlInicial.setFuncion(control.getFuncion());
 		
 		controlInicial.setEmpleado(empleadoLogueado);
 		ticket.setEstado(Estado.ABIERTO);
@@ -102,30 +95,69 @@ public class TicketService {
 
 		controlRepository.save(controlInicial);
 		ticketRepository.save(ticket);
-		System.out.println("Ticket #" + idTicket + " tomado exitosamente por " + usuarioCreador.getNombre() + " "
-				+ usuarioCreador.getApellido());
+		System.out.println("Ticket #" + idTicket + " tomado exitosamente por " + empleadoLogueado.getNombre() + " "
+				+ empleadoLogueado.getApellido());
 	}
-
+	
 	 public Ticket buscarTicketPorId(int idTicket) throws TicketNoEncontradoException {
 	        return ticketRepository.findById(idTicket)
 	            .orElseThrow(() -> new TicketNoEncontradoException("Ticket con ID " + idTicket + " no encontrado"));
 	    }
 	
-	@Transactional
-	public void asignarAreaTicket(int idTicket, Area area) {
-		Ticket ticket = ticketRepository.getByIdTicket(idTicket);
-		
-		if(area == null) {
-			throw new RuntimeException("El area a asignar no puede ser");
-		}
-		
-		ticket.setArea(area);
-		ticketRepository.save(ticket);
-		
-		System.out.println("Área '" + area.name() + "' asignada exitosamente al ticket #" + idTicket);
-		
-	}
+	 @Transactional
+	 public void asignarAreaTicket(int idTicket, Area area) throws TicketNoEncontradoException {
+	     Ticket ticket = ticketRepository.getByIdTicket(idTicket);
+
+	     if (ticket == null) {
+	         throw new TicketNoEncontradoException("No se encontró el ticket con ID " + idTicket);
+	     }
+
+	     if (area == null) {
+	         throw new RuntimeException("El área a asignar no puede ser null.");
+	     }
+
+	     ticket.setArea(area);
+	     ticketRepository.save(ticket);
+
+	     System.out.println("Área '" + area.name() + "' asignada exitosamente al ticket #" + idTicket);
+	 }
 	
+//	@Transactional(readOnly = true) // La transacción asegura que las relaciones lazy se carguen aquí
+//    public TicketDTO getTicketDetailForView(int idTicket) {
+//
+//        Ticket ticket = ticketRepository.findById(idTicket) // Usa findById o el método con fetch
+//                .orElseThrow(() -> new RuntimeException("Ticket no encontrado con ID: " + idTicket));
+//
+//        TicketDTO ticketDetailDTO = new TicketDTO();
+//        ticketDetailDTO.setIdTicket(ticket.getIdTicket());
+//        ticketDetailDTO.setTitulo(ticket.getTitulo());
+//        ticketDetailDTO.setDescripcion(ticket.getDescripcion());
+//        ticketDetailDTO.setFechaCreacion(ticket.getFechaCreacion());
+//        ticketDetailDTO.setFechaCierre(ticket.getFechaCierre());
+//        ticketDetailDTO.setEstado(ticket.getEstado());
+//        ticketDetailDTO.setPrioridad(ticket.getPrioridad());
+//        ticketDetailDTO.setArea(ticket.getArea());
+//        ticketDetailDTO.setUsuarioCreador(ticket.getUsuarioCreador());
+//
+//        // Mapea la lista de entidades Control a ControlDTOs
+//        ticketDetailDTO.setProcesos(ticket.getProcesos().stream().map(this::mapeoControlDTO).collect(Collectors.toList()));
+//
+//        return ticketDetailDTO;
+//    }
+//	private ControlDTO mapeoControlDTO(Control control) {
+//        ControlDTO controlDTO = new ControlDTO();
+//        controlDTO.setIdControl(control.getIdControl());
+//        controlDTO.setFechaEntrada(control.getFechaEntrada());
+//        controlDTO.setFechaSalida(control.getFechaSalida());
+//        controlDTO.setAccion(control.getAccion());
+//        controlDTO.setFinalizado(control.isFinalizado());
+//        controlDTO.setEmpleado(control.getEmpleado());
+//        controlDTO.setFuncion(control.getFuncion());
+//        
+//        return controlDTO;
+//    }
+//
+//>>>>>>> refs/remotes/origin/pauche
 	public List<Ticket> getTicketsByUsuario(int usuarioIdCreador) {
 		return ticketRepository.findByUsuarioCreadorIdUsuario(usuarioIdCreador);
 	}

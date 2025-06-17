@@ -1,4 +1,4 @@
-package com.grupo7.oo2spring.controllers;
+/*package com.grupo7.oo2spring.controllers;
 
 import java.util.List;
 
@@ -40,4 +40,4 @@ public class ClienteController {
         model.addAttribute("tickets", tickets);
         return "cliente-tickets"; 
     }
-}
+}*/

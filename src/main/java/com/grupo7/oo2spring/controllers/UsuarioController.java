@@ -46,8 +46,7 @@ public class UsuarioController {
     @GetMapping("/misDatos")
     public String verificarUsuario(Model model, @AuthenticationPrincipal UserDetails usuariolog) {
     	String nombre = usuariolog.getUsername();
-        Optional<Usuario> usuarioOptional = usuarioRepository.findByNombreUsuario(nombre);
-        Usuario usuariologueado = usuarioOptional.get();
+        Usuario usuariologueado = usuarioRepository.findByNombreUsuario(nombre);
         model.addAttribute("usuariologueado", usuariologueado);
         return "usuario/datos_usuario";
     }

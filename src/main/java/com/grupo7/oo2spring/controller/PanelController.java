@@ -1,18 +1,15 @@
-package com.grupo7.oo2spring.controllers;
+package com.grupo7.oo2spring.controller;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.security.UsuarioDetails;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class PanelController {
@@ -23,10 +20,10 @@ public class PanelController {
 
 	    if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
 	        UsuarioDetails usuarioDetails = (UsuarioDetails) auth.getPrincipal();
-	        Usuario usuario = usuarioDetails.getUsuario();
+	        UsuarioBase usuario = usuarioDetails.getUsuario();
 	        model.addAttribute("usuario", usuario);
 
-	        String rolStr = (usuario.getRol() != null) ? usuario.getRol().toString() : "CLIENTE";
+	        String rolStr = (usuario.getRol() != null) ? usuario.getRol().toString() : "USER";
 	        model.addAttribute("rol", rolStr);
 	    }
 

@@ -20,7 +20,7 @@ public class Ticket {
     private String descripcion;
 
     private LocalDate fechaCreacion;
-
+    
     private LocalDate fechaCierre;
 
     @ManyToOne
@@ -35,6 +35,8 @@ public class Ticket {
     
     @Enumerated(EnumType.STRING)
     private Area area;
+    
+
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Control> procesos;
@@ -51,8 +53,8 @@ public class Ticket {
     		this.titulo = titulo;
     		this.descripcion = descripcion;
     		this.fechaCreacion = LocalDate.now();
-    		this.fechaCierre = null;
     		this.usuarioCreador = usuarioCreador;
+    		this.setFechaCierre(null);
     		this.estado = Estado.PENDIENTE;
     		this.prioridad = Prioridad.SIN_ASIGNAR;
     		this.area = Area.SIN_ASIGNAR;
@@ -94,15 +96,6 @@ public class Ticket {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public LocalDate getFechaCierre() {
-        return fechaCierre;
-    }
-
-    public void setFechaCierre(LocalDate fechaCierre) {
-        this.fechaCierre = fechaCierre;
-    }
-    
-
     public Usuario getUsuarioCreador() {
 		return usuarioCreador;
 	}
@@ -141,6 +134,14 @@ public class Ticket {
 
 	public void setArea(Area area) {
 		this.area = area;
+	}
+
+	public LocalDate getFechaCierre() {
+		return fechaCierre;
+	}
+
+	public void setFechaCierre(LocalDate fechaCierre) {
+		this.fechaCierre = fechaCierre;
 	}
 
 }

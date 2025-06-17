@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Esto solo si querés meter cosas comunes como estilos -->
+</head>
+<body>
+
+<!-- HEADER -->
+<div th:fragment="header">
+    <header style="background-color: #1e3c72; padding: 20px; color: white;">
+        <h1 style="margin: 0;">Sistema de Tickets</h1>
+        <nav>
+            <a href="/" style="color: white; margin-right: 15px;">Inicio</a>
+            <a href="/usuario/login" style="color: white; margin-right: 15px;">Login</a>
+            <a href="/usuario/registro" style="color: white;">Registro</a>
+        </nav>
+    </header>
+</div>
+
+<!-- FOOTER -->
+<div th:fragment="footer">
+    <footer style="background-color: #2a5298; padding: 20px; text-align: center; color: white;">
+        <p>&copy; 2025 Grupo 7 - UNLa</p>
+        <div>
+            <a href="#" style="color: white; margin: 0 10px;">Instagram</a>
+            <a href="#" style="color: white; margin: 0 10px;">LinkedIn</a>
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>

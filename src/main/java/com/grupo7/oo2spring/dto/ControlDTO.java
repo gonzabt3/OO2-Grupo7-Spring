@@ -3,9 +3,14 @@ package com.grupo7.oo2spring.dto;
 import java.time.LocalDate;
 
 import com.grupo7.oo2spring.models.Empleado;
+import com.grupo7.oo2spring.models.Funcion;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @NoArgsConstructor
 public class ControlDTO {
 
@@ -16,16 +21,17 @@ public class ControlDTO {
     private LocalDate fechaSalida;
     private String accion;
     private boolean finalizado;
+    private Funcion funcion;
 
     public ControlDTO(TicketDTO ticket, Empleado empleado, LocalDate fechaEntrada,
-			LocalDate fechaSalida, String accion, boolean finalizado) {
-		super();
+			LocalDate fechaSalida, String accion, boolean finalizado, Funcion funcion) {
 		this.ticket = ticket;
 		this.empleado = empleado;
 		this.fechaEntrada = fechaEntrada;
 		this.fechaSalida = fechaSalida;
 		this.accion = accion;
 		this.finalizado = finalizado;
+		this.funcion = funcion;
 	}
     
     // Getters y setters

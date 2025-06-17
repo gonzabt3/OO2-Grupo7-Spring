@@ -18,21 +18,48 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-//@RequiredArgsConstructor
-//@Service
-//public class CustomUserDetailsService implements UserDetailsService {
+import java.util.List;
+import java.util.Optional;
 
-    //private final IUsuarioRepository usuarioRepository;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-  //  @Override
-   // public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    //    Usuario usuario = usuarioRepository.findByNombreUsuario(username)
-     //       .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
-//
-  //      return new User(
-   //         usuario.getNombreUsuario(),                 
-    //        usuario.getContraseña(),                    
-     //       List.of(new SimpleGrantedAuthority(usuario.getRol().toString())) // roles (authorities)
-      //  );
-   // }
-//}
+import com.grupo7.oo2spring.models.Empleado;
+import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.models.UsuarioBase;
+import com.grupo7.oo2spring.repositories.IEmpleadoRepository;
+import com.grupo7.oo2spring.repositories.IUsuarioRepository;
+import com.grupo7.oo2spring.security.UsuarioDetails;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Service
+public class CustomUserDetailsService implements UserDetailsService {
+
+    private final IUsuarioRepository usuarioRepository;
+    private final IEmpleadoRepository empleadoRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByNombreUsuario(username);
+        if (usuario != null) {
+            System.out.println("Cargando usuario: " + usuario.getNombreUsuario() + " rol: " + usuario.getRol());
+            return new UsuarioDetails(usuario);
+        }
+
+        Empleado empleado = empleadoRepository.findEmpleadoAllByNombreUsuario(username);
+        if (empleado != null) {
+            System.out.println("Cargando empleado: " + empleado.getNombreUsuario() + " rol: " + empleado.getRol());
+            return new UsuarioDetails(empleado);
+        }
+
+        System.out.println("No se encontró usuario o empleado con username: " + username);
+        throw new UsernameNotFoundException("No se encontró usuario: " + username);
+    }
+    
+    
+}

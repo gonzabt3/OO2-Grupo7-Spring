@@ -31,7 +31,7 @@ public class ManagerService {
 	    }
 	    Usuario usuario = usuarioOpt.get();
 	    Empleado empleado = new Empleado();
-	    empleado.setIdUsuario(usuario.getIdUsuario());
+	    empleado.setIdEmpleado(usuario.getIdUsuario());
 	    empleado.setNombre(usuario.getNombre());
 	    empleado.setApellido(usuario.getApellido());
 	    empleado.setDni(usuario.getDni());
@@ -65,11 +65,18 @@ public class ManagerService {
 	        empleado.setArea(datosEmpleado.getArea());
 	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
 	    } else {
-	    	entityManager.createNativeQuery("INSERT INTO empleado (id_usuario, area, disponibilidad) VALUES (?, ?, ?)")
-	        .setParameter(1, usuario.getIdUsuario())
-	        .setParameter(2, datosEmpleado.getArea().name())
-	        .setParameter(3, datosEmpleado.isDisponibilidad())
-	        .executeUpdate();
+//<<<<<<< HEAD
+//	    	entityManager.createNativeQuery("INSERT INTO empleado (id_usuario, area, disponibilidad) VALUES (?, ?, ?)")
+//	        .setParameter(1, usuario.getIdUsuario())
+//	        .setParameter(2, datosEmpleado.getArea().name())
+//	        .setParameter(3, datosEmpleado.isDisponibilidad())
+//	        .executeUpdate();
+//=======
+	        // Si no existe, crear una nueva
+	        empleado = new Empleado();
+	        empleado.setIdEmpleado(idUsuario); // hereda de Usuario
+	        empleado.setArea(datosEmpleado.getArea());
+	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
 	    }
 
 	    // Guardar el empleado (crea o actualiza)
@@ -87,7 +94,7 @@ public class ManagerService {
 		Empleado empleado = empleadoRepository.findById(idEmpleado)
 	            .orElseThrow(() -> new Exception("Empleado no encontrado"));
 
-	    Usuario usuario = usuarioRepository.findById(empleado.getIdUsuario())
+	    Usuario usuario = usuarioRepository.findById(empleado.getIdEmpleado())
 	            .orElseThrow(() -> new Exception("Usuario no encontrado"));
 
 	    // Cambiar el rol del usuario a CLIENTE
