@@ -9,31 +9,32 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.models.UsuarioBase;
 
 public class UsuarioDetails implements UserDetails {
 
-    private final Usuario usuario;
+    private final UsuarioBase usuario;
 
-    public UsuarioDetails(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
+    public UsuarioDetails(UsuarioBase usuarioBase) {
+        this.usuario = usuarioBase;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-    	if (usuario != null && usuario.getRol() != null) {
-            // Obtiene el nombre del enum (ej. "MANAGER", "CLIENTE")
-            String roleName = usuario.getRol().name();
-            
-            // Construye la autoridad con el prefijo "ROLE_"
-            // y en mayúsculas (aunque .name() ya devuelve en mayúsculas por convención)
-            return List.of(new SimpleGrantedAuthority("ROLE_" + roleName));
+        if (usuario != null && usuario.getRol() != null) {
+            System.out.println("Roles cargados para: " + usuario.getNombreUsuario() + " -> ROLE_" + usuario.getRol().name());
+            return List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRol().name()));
         }
-    	return Collections.emptyList();
-        //return List.of(new SimpleGrantedAuthority("ROLE_USER")); 
+        System.out.println("No hay roles para usuario: " + (usuario != null ? usuario.getNombreUsuario() : "null"));
+        return Collections.emptyList();
+    }
+    
+    public String getEmail() {
+        return usuario.getEmail();
+    }
+    
+    public UsuarioBase getUsuario() {
+        return usuario;
     }
 
     @Override
@@ -47,15 +48,17 @@ public class UsuarioDetails implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() { return true; }
-
-    @Override
-    public boolean isAccountNonLocked() { return true; }
-
-    @Override
-    public boolean isCredentialsNonExpired() { return true; }
-
-    @Override
     public boolean isEnabled() { return true; }
+
+
+@Override
+public boolean isAccountNonExpired() { return true; }
+
+@Override
+public boolean isAccountNonLocked() { return true; }
+
+@Override
+public boolean isCredentialsNonExpired() { return true; }
 }
+
 

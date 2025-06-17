@@ -1,4 +1,4 @@
-package com.grupo7.oo2spring.controllers;
+package com.grupo7.oo2spring.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,21 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.grupo7.oo2spring.models.Cliente;
 import com.grupo7.oo2spring.models.Empleado;
-import com.grupo7.oo2spring.models.Rol;
-import com.grupo7.oo2spring.models.Ticket;
+
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IEmpleadoRepository;
-import com.grupo7.oo2spring.repositories.ITicketRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
-import com.grupo7.oo2spring.services.EmpleadoService;
-import com.grupo7.oo2spring.services.ManagerService;
-import com.grupo7.oo2spring.services.TicketService;
-import com.grupo7.oo2spring.services.UsuarioService;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.grupo7.oo2spring.services.ManagerService;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -35,10 +28,8 @@ import lombok.RequiredArgsConstructor;
 public class ManagerController {
 	
 	private final IUsuarioRepository usuarioRepository;
-    private final EmpleadoService empleadoService;
-    private final UsuarioService usuarioService;
-    private final ITicketRepository ticketRepository;
-    private final IEmpleadoRepository empleadoRepository;
+	private final IEmpleadoRepository empleadoRepository;
+   
     private final ManagerService managerService;
 	
 	@GetMapping("/listar")
@@ -63,17 +54,17 @@ public class ManagerController {
 	@PostMapping("/convertir-a-empleado")
 	public String convertirAEmpleado(@ModelAttribute Empleado empleadoForm, RedirectAttributes attr) {
 		try {
-	        Optional<Usuario> usuarioOpt = usuarioRepository.findById(empleadoForm.getIdUsuario());
-	        if (usuarioOpt.isEmpty()) {
+	        Optional<Empleado> empleadoOpt = empleadoRepository.findById(empleadoForm.getIdEmpleado());
+	        if (empleadoOpt.isEmpty()) {
 	            attr.addFlashAttribute("error", "Usuario no encontrado");
 	            return "redirect:/manager/listar";
 	        }
-
-	        managerService.convertirUsuarioAEmpleado(empleadoForm.getIdUsuario(), empleadoForm);
-
+	
+	        managerService.convertirUsuarioAEmpleado(empleadoForm.getIdEmpleado(), empleadoForm);
+	
 	        attr.addFlashAttribute("success", "Usuario convertido en empleado exitosamente");
 	        return "redirect:/manager/listar";
-
+	
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        attr.addFlashAttribute("error", "Error al convertir usuario en empleado");
@@ -84,7 +75,7 @@ public class ManagerController {
     @PostMapping("/{id}/sacar-permisos")
     public String sacarPermisos(@PathVariable int id) throws Exception {
         // lógica para sacar permisos
-    	 Optional<Empleado> empleado = usuarioRepository.findEmpleadoById(id);
+    	 Optional<Empleado> empleado = empleadoRepository.findById(id);
     	 
     	 if (empleado != null) {
     	        // Convertir empleado a usuario
