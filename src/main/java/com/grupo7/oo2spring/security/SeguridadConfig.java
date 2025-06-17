@@ -6,7 +6,11 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
@@ -22,6 +26,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.grupo7.oo2spring.handlers.CustomAuthenticationFailureHandler;
+import com.grupo7.oo2spring.services.CustomUserDetailsService;
 import com.grupo7.oo2spring.services.UsuarioService;
 
 import jakarta.servlet.FilterChain;
@@ -31,21 +37,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableWebSecurity // Habilita la seguridad web de Spring
+@EnableWebSecurity
 @EnableMethodSecurity 
 @RequiredArgsConstructor
 public class SeguridadConfig {
 	
 	private final UsuarioService usuarioService;
-    
-    
-    @Bean
-    AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) throws Exception {
-        AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-        return authBuilder.build();
-    }
-    
+	private final  CustomAuthenticationFailureHandler failureHandler;
+	private final CustomUserDetailsService customUserDetailsService;
+	private final PasswordEncoder passwordEncoder;
+	
+	@Bean
+	public UserDetailsService userDetailsService() {
+	    return customUserDetailsService;
+	}
+	
     @Bean
     FilterRegistrationBean<OncePerRequestFilter> loggingFilter() {
         FilterRegistrationBean<OncePerRequestFilter> registrationBean = new FilterRegistrationBean<>();
@@ -59,6 +65,7 @@ public class SeguridadConfig {
                                    " | Authenticated: " + (request.getUserPrincipal() != null));
                 filterChain.doFilter(request, response);
             }
+            
         });
 
         registrationBean.addUrlPatterns("/*");
@@ -75,12 +82,13 @@ public class SeguridadConfig {
             return "/error";
         }
     }
-
+    
     
     
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+        .userDetailsService(customUserDetailsService)
         .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/",
@@ -100,10 +108,11 @@ public class SeguridadConfig {
                     "/usuario/confirmacion_exitosa",
                     "/usuario/token_invalido"
                 ).permitAll()
+                .requestMatchers("/panel").hasAnyRole("USER", "EMPLEADO", "MANAGER")
+                .requestMatchers("/manager/**").hasRole("MANAGER")
                 .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/usuario/login")
+            ).formLogin(form -> form
+                .loginPage("/usuario/login")                
                 .loginProcessingUrl("/usuario/login/process")
                 .defaultSuccessUrl("/panel", true)
                 .failureUrl("/usuario/login?error=true")
@@ -118,7 +127,6 @@ public class SeguridadConfig {
 
         return http.build();
     }
-    
     
     
     

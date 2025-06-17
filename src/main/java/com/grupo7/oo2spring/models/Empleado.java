@@ -6,16 +6,20 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@PrimaryKeyJoinColumn(name = "id_usuario")
-public class Empleado extends Usuario {
+public class Empleado extends UsuarioBase {
 		 
+	@Id
+	  @EqualsAndHashCode.Include
+	  @GeneratedValue(strategy = GenerationType.IDENTITY)
+	  private int idEmpleado;
 
 	@Enumerated(EnumType.STRING)
 	private Area area;
@@ -44,6 +48,8 @@ public class Empleado extends Usuario {
 	public void setDisponibilidad(boolean disponibilidad) {
 		this.disponibilidad = disponibilidad;
 	}
+	
+	
 
 	@Override
 	public String toString() {
@@ -65,7 +71,17 @@ public class Empleado extends Usuario {
 			return false;
 		Empleado other = (Empleado) obj;
 		return area == other.area && disponibilidad == other.disponibilidad;
+	}
+
+	public int getIdEmpleado() {
+		return idEmpleado;
+	}
+
+	public void setIdEmpleado(int idEmpleado) {
+		this.idEmpleado = idEmpleado;
 	}	
+	
+	
 
 
 }

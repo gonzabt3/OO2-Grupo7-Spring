@@ -16,17 +16,24 @@ spring:
   thymeleaf:
     cache: false
   mail:
-    host: smtp-relay.sendinblue.com
+    host: smtp-relay.brevo.com
     port: 587
     username: ${EMAIL_USERNAME}
     password: ${EMAIL_APIKEY}
     properties:
       mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-
+      smtp:
+       auth: true
+       starttls.enable: true
+       starttls.required: true
+       emails.sender_email: ${EMAIL_TEST}
+  devtools:
+    restart:
+      enabled: false
+server:
+  error:
+    whitelabel:
+      enabled: false
 logging:
   level:
     org.hibernate.SQL: DEBUG

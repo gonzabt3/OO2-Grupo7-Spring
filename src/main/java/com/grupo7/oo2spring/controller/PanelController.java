@@ -1,4 +1,4 @@
-package com.grupo7.oo2spring.controllers;
+package com.grupo7.oo2spring.controller;
 
 import org.springframework.security.core.Authentication;
 
@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.security.UsuarioDetails;
 
 @Controller
@@ -19,10 +20,10 @@ public class PanelController {
 
 	    if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
 	        UsuarioDetails usuarioDetails = (UsuarioDetails) auth.getPrincipal();
-	        Usuario usuario = usuarioDetails.getUsuario();
+	        UsuarioBase usuario = usuarioDetails.getUsuario();
 	        model.addAttribute("usuario", usuario);
 
-	        String rolStr = (usuario.getRol() != null) ? usuario.getRol().toString() : "CLIENTE";
+	        String rolStr = (usuario.getRol() != null) ? usuario.getRol().toString() : "USER";
 	        model.addAttribute("rol", rolStr);
 	    }
 

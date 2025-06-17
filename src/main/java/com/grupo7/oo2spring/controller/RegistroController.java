@@ -1,4 +1,4 @@
-package com.grupo7.oo2spring.controllers;
+package com.grupo7.oo2spring.controller;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -6,10 +6,9 @@ import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import com.grupo7.oo2spring.models.Cliente;
 import com.grupo7.oo2spring.models.EmailToken;
 import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
@@ -39,8 +38,9 @@ public class RegistroController {
         return "usuario/registro";
     }
 
+    @Transactional
     @PostMapping("/registro")
-    public String registrarUsuario(@ModelAttribute Cliente usuario, Model model, HttpServletRequest request) {
+    public String registrarUsuario(@ModelAttribute Usuario usuario, Model model, HttpServletRequest request) {
       
         
      // Validar si el nombre de usuario ya existe
@@ -59,7 +59,7 @@ public class RegistroController {
         
         usuario.setRol(Rol.USER);
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
-        usuario.setUsuarioActivo(false);
+        usuario.setUsuarioActivo(true);
         
         try {
         usuarioRepository.save(usuario);
@@ -73,7 +73,7 @@ public class RegistroController {
         String asunto = "Confirmá tu cuenta";
         String confirmUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + 
                            "/usuario/confirmar?token=" + token;
-
+        System.out.println("Guardo el token");
         String cuerpo = "<html><body>"
                 + "<h2>¡Gracias por registrarte!</h2>"
                 + "<p>Para confirmar tu cuenta, hacé clic en el siguiente botón:</p>"
@@ -82,9 +82,7 @@ public class RegistroController {
                 + "text-decoration:none;border-radius:5px;'>Confirmar cuenta</a></p>"
                 + "<p>Si no te registraste en nuestro sitio, podés ignorar este mensaje.</p>"
                 + "</body></html>";
-        
         emailService.enviarEmail(usuario.getEmail(), asunto, cuerpo);
-        
         } catch (Exception e) {
             // Si algo sale mal, eliminar el usuario recién guardado
             usuarioRepository.delete(usuario);
@@ -92,7 +90,6 @@ public class RegistroController {
             return "usuario/registro";
         }
 
-        
         System.out.println("Usuario registrado: " + usuario.getNombreUsuario());
         return "redirect:/usuario/registro_exito";
     }

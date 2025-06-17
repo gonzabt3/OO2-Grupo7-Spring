@@ -1,4 +1,4 @@
-package com.grupo7.oo2spring.controllers;
+package com.grupo7.oo2spring.controller;
 
 import java.util.Optional;
 
@@ -37,7 +37,6 @@ public class UsuarioController {
         return "usuario/registro_form";// Nombre del formulario HTML
     }
 
-    //TODO: Duplicado? No lo hace ya RegistroController
     @PostMapping("/registrar")
     public String registrarUsuario(
             @RequestParam("nombre") String nombre,

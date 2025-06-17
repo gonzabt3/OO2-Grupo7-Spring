@@ -1,6 +1,6 @@
 package com.grupo7.oo2spring.services;
 
-import com.grupo7.oo2spring.models.Cliente;
+import com.grupo7.oo2spring.repositories.ITicketRepository;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
 
@@ -17,8 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-
-
 @Service
 @RequiredArgsConstructor
 public class UsuarioService {
@@ -29,8 +27,8 @@ public class UsuarioService {
     private EntityManager entityManager;
     
     
-    public Cliente guardarUsuario(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) {
-        Cliente nuevoUsuario = new Cliente();
+    public Usuario guardarUsuario(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) {
+        Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setNombreUsuario(nombreUsuario);
         nuevoUsuario.setNombre(nombre);
         nuevoUsuario.setApellido(apellido);
@@ -65,8 +63,8 @@ public class UsuarioService {
                  .filter(u -> u.getRol() == Rol.EMPLEADO);
     }
 
-    public Usuario getUsuarioByUsername(String username) {
-        return usuarioRepository.findByNombreUsuario(username).orElse(null);
+    public Usuario getUsuarioByNombreUsuario(String username) {
+        return usuarioRepository.findByNombreUsuario(username);
     }
     
     public Optional<Usuario> buscarPorUsernameYPassword(String username, String password) {

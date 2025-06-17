@@ -3,7 +3,6 @@ package com.grupo7.oo2spring.services;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
@@ -31,7 +30,7 @@ public class ManagerService {
 	    Usuario usuario = usuarioOpt.get();
 
 	    Empleado empleado = new Empleado();
-	    empleado.setIdUsuario(usuario.getIdUsuario());
+	    empleado.setIdEmpleado(usuario.getIdUsuario());
 	    empleado.setNombre(usuario.getNombre());
 	    empleado.setApellido(usuario.getApellido());
 	    empleado.setDni(usuario.getDni());
@@ -69,7 +68,7 @@ public class ManagerService {
 	    } else {
 	        // Si no existe, crear una nueva instancia
 	        empleado = new Empleado();
-	        empleado.setIdUsuario(idUsuario); // hereda de Usuario
+	        empleado.setIdEmpleado(idUsuario); // hereda de Usuario
 	        empleado.setArea(datosEmpleado.getArea());
 	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
 	        empleado.setNombre(usuario.getNombre());
@@ -94,7 +93,7 @@ public class ManagerService {
 		Empleado empleado = empleadoRepository.findById(idEmpleado)
 	            .orElseThrow(() -> new Exception("Empleado no encontrado"));
 
-	    Usuario usuario = usuarioRepository.findById(empleado.getIdUsuario())
+	    Usuario usuario = usuarioRepository.findById(empleado.getIdEmpleado())
 	            .orElseThrow(() -> new Exception("Usuario no encontrado"));
 
 	    // Cambiar el rol del usuario a CLIENTE

@@ -1,10 +1,8 @@
 package com.grupo7.oo2spring.dto;
 
 public enum Rol {
-    ADMIN("Admin"),
     EMPLEADO("Empleado"),
     USER("Usuario"),
-    CLIENTE("Cliente"),
     MANAGER("Manager");
 	
 	
