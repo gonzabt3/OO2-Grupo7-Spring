@@ -48,7 +48,6 @@ public class TicketService {
 	}
 
 	 public List<Ticket> findByAreaIsNull() {
-	        // Call the repository method, passing Area.SIN_ASIGNAR
 	  return ticketRepository.findByArea(Area.SIN_ASIGNAR);
 	 }
 	        
@@ -71,7 +70,7 @@ public class TicketService {
 	    return guardado;
 	}
 
-	// @PreAuthorize("hasRole('EMPLEADO')")
+	@PreAuthorize("hasRole('EMPLEADO')")
 	@Transactional
 	public void tomarTicketConControlInicial(int idTicket, Usuario usuarioCreador, ControlDTO control)
 			throws Exception {
@@ -131,7 +130,7 @@ public class TicketService {
 		return ticketRepository.findByUsuarioCreadorIdUsuario(usuarioIdCreador);
 	}
 	
-	@Transactional // Asegura que la operación sea atómica
+	@Transactional
     public Ticket asignarPrioridad(int ticketId, Prioridad nuevaPrioridad) throws Exception {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new Exception("Error al recuperar datos del Ticket existente"));
@@ -143,18 +142,6 @@ public class TicketService {
 	    public Ticket asignarEstado(int ticketId, Estado nuevoEstado) throws Exception {
 	        Ticket ticket = ticketRepository.findById(ticketId)
 	                .orElseThrow(() -> new Exception("Error al recuperar datos del Ticket existente"));
-
-	        // --- Lógica opcional para validación de transiciones de estado ---
-	        // if (!esTransicionValida(ticket.getEstado(), nuevoEstado)) {
-	        //     throw new InvalidTicketStateException("Transición de estado inválida de " + ticket.getEstado() + " a " + nuevoEstado);
-	        // }
-	        // private boolean esTransicionValida(Estado estadoActual, Estado nuevoEstado) {
-	        //     // Implementa tu lógica de máquina de estados aquí
-	        //     // Por ejemplo:
-	        //     // if (estadoActual == Estado.CERRADO && nuevoEstado != Estado.PENDIENTE) return false;
-	        //     // return true;
-	        // }
-	        // ------------------------------------------------------------------
 
 	        ticket.setEstado(nuevoEstado);
 	        return ticketRepository.save(ticket);

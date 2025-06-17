@@ -1,188 +1,238 @@
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Crear Ticket Simple</title>
-	<style>
-		/* General body styles */
-		body {
-			font-family: 'Roboto', sans-serif;
-			/* Using a common modern font */
-			line-height: 1.6;
-			color: #444;
-			background-color: #f0f2f5;
-			/* Lighter, subtle background */
-			margin: 0;
-			padding: 20px;
-			display: flex;
-			flex-direction: column;
-			/* Align items vertically */
-			justify-content: center;
-			align-items: center;
-			min-height: 100vh;
-			box-sizing: border-box;
-		}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Nuevo Ticket - Sistema de Tickets</title>
 
-		/* Form container */
-		form {
-			background: #ffffff;
-			padding: 40px;
-			border-radius: 12px;
-			/* More rounded corners */
-			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-			/* More pronounced shadow */
-			width: 100%;
-			max-width: 550px;
-			/* Slightly wider form */
-			box-sizing: border-box;
-			border: 1px solid #e0e0e0;
-			/* Subtle border */
-		}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-		h1 {
-			color: #34495e;
-			/* Darker heading color */
-			text-align: center;
-			margin-top: 0;
-			/* Remove top margin from h1 */
-			margin-bottom: 30px;
-			font-size: 2.5em;
-			font-weight: 500;
-			/* Slightly lighter font weight */
-			position: relative;
-			/* For the underline effect */
-			padding-bottom: 15px;
-		}
+    <style>
+        /* --- Base Setup --- */
+        body {
+            font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Nueva fuente más moderna */
+            background-color: #eef2f6; /* Fondo gris azulado muy claro */
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            margin: 0;
+            line-height: 1.6;
+        }
 
-		/* Underline effect for H1 */
-		h1::after {
-			content: '';
-			position: absolute;
-			left: 50%;
-			bottom: 0;
-			transform: translateX(-50%);
-			width: 80px;
-			/* Short underline */
-			height: 3px;
-			background-color: #5d9cec;
-			/* Accent color */
-			border-radius: 2px;
-		}
+        /* --- Form Wrapper --- */
+        .ticket-form-wrapper {
+            background-color: #ffffff;
+            border-radius: 12px; /* Bordes suaves */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Sombra sutil */
+            padding: 40px;
+            max-width: 650px; /* Ancho cómodo para el formulario */
+            width: 100%;
+            position: relative;
+            border: 1px solid #e0e0e0; /* Borde delicado */
+        }
 
-		/* Styling for each form group */
-		form div {
-			margin-bottom: 25px;
-			/* More space between fields */
-		}
+        /* --- Header & Back Button --- */
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
 
-		label {
-			display: block;
-			margin-bottom: 10px;
-			color: #555;
-			font-weight: 600;
-			/* Bolder label text */
-			font-size: 1.05em;
-		}
+        .form-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2c3e50; /* Azul oscuro */
+            margin-bottom: 10px;
+        }
 
-		input[type="text"],
-		textarea {
-			width: 100%;
-			padding: 14px 15px;
-			border: 1px solid #dcdcdc;
-			/* Lighter border */
-			border-radius: 8px;
-			/* Slightly more rounded inputs */
-			font-size: 1.0em;
-			color: #333;
-			background-color: #fdfdfd;
-			box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
-			/* Inner shadow for depth */
-			transition: border-color 0.3s ease, box-shadow 0.3s ease;
-			box-sizing: border-box;
-		}
+        .form-header p.subtitle {
+            font-size: 1rem;
+            color: #7f8c8d; /* Gris para subtítulo */
+            max-width: 80%;
+            margin: 0 auto;
+        }
 
-		input[type="text"]:focus,
-		textarea:focus {
-			border-color: #5d9cec;
-			/* Accent color on focus */
-			box-shadow: 0 0 0 3px rgba(93, 156, 236, 0.25);
-			/* Glow effect on focus */
-			outline: none;
-			background-color: #fff;
-		}
+        .btn-back-minimal {
+            position: absolute;
+            top: 25px;
+            left: 30px;
+            background: none;
+            border: none;
+            color: #6a82fb; /* Azul vibrante */
+            font-size: 1rem;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-		textarea {
-			resize: vertical;
-			min-height: 120px;
-			/* Taller text area */
-		}
+        .btn-back-minimal i {
+            font-size: 1.1rem;
+        }
 
-		/* Submit button styling */
-		button[type="submit"] {
-			display: block;
-			width: 100%;
-			padding: 15px 25px;
-			background-color: #5d9cec;
-			/* Vibrant blue accent color */
-			color: white;
-			border: none;
-			border-radius: 8px;
-			/* Rounded button */
-			font-size: 1.2em;
-			font-weight: bold;
-			cursor: pointer;
-			letter-spacing: 0.5px;
-			transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
-			box-shadow: 0 4px 10px rgba(93, 156, 236, 0.3);
-			/* Button shadow */
-		}
+        .btn-back-minimal:hover {
+            background-color: rgba(106, 130, 251, 0.1); /* Fondo muy suave al pasar el ratón */
+            color: #4f69e6; /* Color un poco más oscuro */
+        }
 
-		button[type="submit"]:hover {
-			background-color: #4a8ad8;
-			/* Darker blue on hover */
-			transform: translateY(-2px);
-			/* Lift effect */
-			box-shadow: 0 6px 15px rgba(93, 156, 236, 0.4);
-		}
+        /* --- Form Fields --- */
+        .form-field {
+            margin-bottom: 28px; /* Espacio entre los campos */
+        }
 
-		button[type="submit"]:active {
-			background-color: #3a7bc0;
-			/* Even darker on click */
-			transform: translateY(0);
-			box-shadow: 0 2px 5px rgba(93, 156, 236, 0.2);
-		}
-	</style>
+        .form-field label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            text-align: left; /* Alinea la etiqueta a la izquierda */
+        }
 
+        .form-field input[type="text"],
+        .form-field textarea {
+            width: 100%;
+            padding: 14px 18px; /* Mayor padding */
+            border: 1px solid #dcdcdc; /* Borde muy fino y discreto */
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #333;
+            background-color: #fcfdfe; /* Fondo casi blanco */
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); /* Sombra interna sutil */
+        }
+
+        .form-field input[type="text"]:focus,
+        .form-field textarea:focus {
+            border-color: #6a82fb; /* Azul vibrante al enfocar */
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(106, 130, 251, 0.2); /* Sombra de enfoque suave */
+            background-color: #ffffff;
+        }
+
+        .form-field textarea {
+            min-height: 120px; /* Altura mínima para el textarea */
+            resize: vertical; /* Solo permite redimensionar verticalmente */
+        }
+
+        /* --- Submit Button --- */
+        .btn-submit-custom {
+            background-color: #6a82fb; /* Azul vibrante */
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(106, 130, 251, 0.3); /* Sombra con el color del botón */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase; /* Texto en mayúsculas */
+        }
+
+        .btn-submit-custom:hover {
+            background-color: #4f69e6; /* Azul más oscuro al pasar el ratón */
+            transform: translateY(-2px); /* Ligera elevación */
+            box-shadow: 0 8px 20px rgba(106, 130, 251, 0.4); /* Sombra más pronunciada */
+        }
+
+        .btn-submit-custom i {
+            font-size: 1.1rem;
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 768px) {
+            .ticket-form-wrapper {
+                padding: 30px;
+            }
+            .form-header h1 {
+                font-size: 2rem;
+            }
+            .form-header p.subtitle {
+                font-size: 0.9rem;
+            }
+            .btn-back-minimal {
+                top: 20px;
+                left: 20px;
+                font-size: 0.9rem;
+            }
+            .form-field input, .form-field textarea {
+                padding: 12px 15px;
+            }
+            .btn-submit-custom {
+                padding: 14px 25px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .ticket-form-wrapper {
+                padding: 25px;
+                border-radius: 10px;
+            }
+            .form-header h1 {
+                font-size: 1.8rem;
+            }
+            .form-header p.subtitle {
+                max-width: 90%;
+            }
+            .btn-back-minimal {
+                top: 15px;
+                left: 15px;
+            }
+            .form-field label {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
 <body>
-	<div class="container">
-		<!-- Botón de volver -->
-		<div class="btn-back">
-			<a href="/panel" class="btn btn-outline-primary">
-				<i class="bi bi-arrow-left"></i> Volver al Panel
-			</a>
-		</div>
 
-		<h1>Crear Nuevo Ticket</h1>
+	<div class="ticket-form-wrapper">
+        <a href="/panel" class="btn-back-minimal">
+            <i class="fas fa-arrow-left"></i> Volver
+        </a>
+
+		<div class="form-header">
+			<h1>Crear Nuevo Ticket</h1>
+			<p class="subtitle">Completa los campos a continuación para enviar tu solicitud al equipo de soporte.</p>
+		</div>
 
 		<form th:action="@{/ticket/crear}" method="post">
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-			<div class="mb-3">
-				<label for="titulo" class="form-label">Título:</label>
-				<input type="text" id="titulo" name="titulo" class="form-control" required />
+			<div class="form-field">
+				<label for="titulo">Título del Ticket:</label>
+				<input type="text" id="titulo" name="titulo" class="form-control-custom" placeholder="Ej: Problema con el login" required />
 			</div>
 
-			<div class="mb-3">
-				<label for="descripcion" class="form-label">Descripción:</label>
-				<textarea id="descripcion" name="descripcion" class="form-control" rows="5" required></textarea>
+			<div class="form-field">
+				<label for="descripcion">Descripción Detallada:</label>
+				<textarea id="descripcion" name="descripcion" class="form-control-custom" rows="6" placeholder="Describe tu problema o solicitud con el mayor detalle posible." required></textarea>
 			</div>
 
-			<button type="submit" class="btn btn-primary w-100">Aceptar</button>
+			<button type="submit" class="btn-submit-custom">
+                <i class="fas fa-paper-plane"></i> Enviar Ticket
+            </button>
 		</form>
 	</div>
 
-	<!-- Bootstrap JS -->
-	<script src="/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+			crossorigin="anonymous"></script>
 </body>
+</html>

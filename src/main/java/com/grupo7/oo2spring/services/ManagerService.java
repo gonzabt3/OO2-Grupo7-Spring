@@ -29,9 +29,7 @@ public class ManagerService {
 	    if (usuarioOpt.isEmpty()) {
 	        throw new UsuarioNoEncontradoException("El Usuario no se encuentra en el sistema");
 	    }
-
 	    Usuario usuario = usuarioOpt.get();
-
 	    Empleado empleado = new Empleado();
 	    empleado.setIdUsuario(usuario.getIdUsuario());
 	    empleado.setNombre(usuario.getNombre());
@@ -40,7 +38,6 @@ public class ManagerService {
 	    empleado.setEmail(usuario.getEmail());
 	    empleado.setNombreUsuario(usuario.getNombreUsuario());
 	    empleado.setContraseña(usuario.getContraseña());
-
 	    // NO guarda nada aún
 	    return empleado;
 	}
@@ -68,18 +65,9 @@ public class ManagerService {
 	        empleado.setArea(datosEmpleado.getArea());
 	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
 	    } else {
-	        // Si no existe, crear una nueva
-//	        empleado = new Empleado();
-//	        empleado.setIdUsuario(idUsuario); // o setId(idUsuario) si no tenés relación directa
-//	        empleado.setArea(datosEmpleado.getArea());
-//	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
-//	        entityManager.persist(empleado);
-//
-//            // Opcional: flush si necesitas que los cambios se reflejen en la DB inmediatamente.
-//            entityManager.flush();
 	    	entityManager.createNativeQuery("INSERT INTO empleado (id_usuario, area, disponibilidad) VALUES (?, ?, ?)")
 	        .setParameter(1, usuario.getIdUsuario())
-	        .setParameter(2, datosEmpleado.getArea().name())  // Ajusta según tipo de campo
+	        .setParameter(2, datosEmpleado.getArea().name())
 	        .setParameter(3, datosEmpleado.isDisponibilidad())
 	        .executeUpdate();
 	    }
@@ -111,6 +99,4 @@ public class ManagerService {
 
 	}
 
-
-	}
-
+}

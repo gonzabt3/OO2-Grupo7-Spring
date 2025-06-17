@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,47 +42,14 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     
     private final TicketService ticketService;
-
-   /* @GetMapping("/registrar")
-    public String mostrarFormularioRegistro() {
-        return "usuario/registro_form";// Nombre del formulario HTML
+    
+    @GetMapping("/misDatos")
+    public String verificarUsuario(Model model, @AuthenticationPrincipal UserDetails usuariolog) {
+    	String nombre = usuariolog.getUsername();
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByNombreUsuario(nombre);
+        Usuario usuariologueado = usuarioOptional.get();
+        model.addAttribute("usuariologueado", usuariologueado);
+        return "usuario/datos_usuario";
     }
-
-    //TODO: Duplicado? No lo hace ya RegistroController
-    @PostMapping("/registrar")
-    public String registrarUsuario(
-            @RequestParam("nombre") String nombre,
-            @RequestParam("apellido") String apellido,
-            @RequestParam("dni") String dni,
-            @RequestParam("email") String email,
-            @RequestParam("nombreUsuario") String nombreUsuario,
-            @RequestParam("contraseña") String contraseña,
-            Model model) {
-        Usuario usuarioGuardado = usuarioService.guardarUsuario(nombre, apellido, dni, email, nombreUsuario, contraseña);
-        model.addAttribute("mensaje", "Usuario registrado exitosamente con ID: " + usuarioGuardado.getIdUsuario());
-        return "usuario/registro_exito";
-    }*/
-    
-    @GetMapping("/verificar/{id}")
-    public String verificarUsuario(@PathVariable int id, Model model) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
-        if (usuarioOptional.isPresent()) {
-            Usuario usuario = usuarioOptional.get();
-            model.addAttribute("existeUsuario", true);
-            model.addAttribute("nombreUsuario", usuario.getNombre() + " " + usuario.getApellido());
-            model.addAttribute("idUsuario", usuario.getIdUsuario());
-        } else {
-            model.addAttribute("existeUsuario", false);
-            model.addAttribute("idUsuario", id);
-        }
-        return "usuario/verificacion";
-    }
-    
-    
-    
-    
-    
-
-
-
+   
 }
