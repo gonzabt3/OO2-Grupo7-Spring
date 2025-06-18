@@ -41,9 +41,6 @@ public abstract class UsuarioBase {
 		this.dni = dni;
 		this.email = email;
 	}
-    
-    
- 
 
     public static void validarNombreApellido(String nombre, String apellido) throws Exception {
         if (nombre == null || nombre.trim().isEmpty()) {
@@ -111,9 +108,16 @@ public abstract class UsuarioBase {
         this.apellido = apellido;
       }
     
-    
-
-	
-    
-    
+      public String getNombre() {
+    	  return this.nombre;
+      }
+      public void setNombre(String nombre) {
+    	  this.nombre=nombre;
+      }
+      public String getDni() {
+    	  return this.dni;
+      }
+      public void setDni(String dni) {
+    	  this.dni=dni;
+      }
 }

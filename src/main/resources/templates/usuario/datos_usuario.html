@@ -1,227 +1,99 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Datos - Gestión de Tickets</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
+    <title>Mis Datos - Sistema de Tickets</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <link href="/css/style.css" rel="stylesheet"> 
-
     <style>
-        /* Estilos generales del body para una apariencia limpia */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5; /* Un gris muy claro para el fondo */
-            color: #333;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column; /* Para que la navbar esté arriba y el contenido principal abajo */
-            padding: 0; /* Elimina padding general del body para que la navbar ocupe todo el ancho */
-            margin: 0;
-        }
-
-        /* Estilo para el contenedor principal de los datos */
-        .data-card-container {
-            background-color: #ffffff;
-            border-radius: 12px; /* Bordes más suaves */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada para efecto "flotante" */
-            padding: 40px; /* Más padding interno */
-            max-width: 700px; /* Ancho máximo para la tarjeta */
-            width: 100%; /* Ocupa todo el ancho disponible hasta el max-width */
-            margin: 50px auto; /* Margen superior/inferior para separarlo de la navbar y el footer (si existiera) */
-            flex-grow: 1; /* Permite que el contenedor crezca y ocupe el espacio disponible */
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Centra el contenido de la tarjeta verticalmente si hay espacio */
-        }
-
-        /* Estilo para el título de la sección */
-        .data-card-container h2 {
-            color: #2c3e50; /* Un azul oscuro corporativo */
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: 600;
-            position: relative;
-            padding-bottom: 15px; /* Espacio para el subrayado */
-        }
-
-        .data-card-container h2::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            bottom: 0;
-            transform: translateX(-50%);
-            width: 60px; /* Longitud del subrayado */
-            height: 3px;
-            background-color: #007bff; /* Color primario de Bootstrap */
-            border-radius: 2px;
-        }
-
-        /* Estilo para el grupo de la lista de definición (dl) */
-        .data-list {
-            font-size: 1.05em; /* Un poco más grande para mejor legibilidad */
-        }
-
-        /* Estilo para los términos (dt - las etiquetas como "Nombre:") */
-        .data-list dt {
-            font-weight: 700; /* Más negrita */
-            color: #555;
-            padding-top: 10px;
-            padding-bottom: 5px;
-        }
-
-        /* Estilo para las descripciones (dd - los valores como "Juan Pérez") */
-        .data-list dd {
-            color: #333;
-            padding-top: 10px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid #eee; /* Línea separadora sutil entre cada par */
-        }
-
-        /* Eliminar el borde inferior del último elemento */
-        .data-list dd:last-of-type {
-            border-bottom: none;
-        }
-
-        /* Contenedor del botón de volver */
-        .back-button-container {
-            text-align: left; /* Alinea el botón a la izquierda */
-            margin-bottom: 20px; /* Espacio debajo del botón antes de la tarjeta */
-            position: absolute; /* Permite posicionar el botón */
-            bottom: 50px; /* Ajusta la distancia desde arriba, debajo de la navbar */
-            left: 50%; /* Centra horizontalmente */
-            transform: translateX(-50%); /* Ajusta el centrado */
-            width: 100%; /* Ocupa el ancho completo del padre */
-            max-width: 700px; /* Mismo ancho que la tarjeta para alinear */
-            padding-left: 40px; /* Alinea con el padding de la tarjeta */
-            box-sizing: border-box; /* Incluye el padding en el ancho */
-        }
-        
-        @media (max-width: 768px) {
-            .back-button-container {
-                padding-left: 25px; /* Ajusta padding para móviles */
-            }
-        }
-        @media (max-width: 480px) {
-            .back-button-container {
-                padding-left: 15px; /* Ajusta padding para móviles más pequeños */
-            }
-        }
-
-        .btn-outline-primary {
-            border-color: #007bff;
-            color: #007bff;
-            background-color: transparent;
-            padding: 10px 25px;
-            font-size: 1em;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-outline-primary:hover {
-            background-color: #007bff;
-            color: white;
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .data-card-container {
-                padding: 25px;
-                margin-top: 30px; /* Ajuste el margen superior en pantallas más pequeñas */
-            }
-            .data-card-container h2 {
-                font-size: 1.8em;
-                margin-bottom: 20px;
-            }
-            .data-list dt, .data-list dd {
-                padding-top: 8px;
-                padding-bottom: 3px;
-            }
-            .data-list.row dt, .data-list.row dd {
-                flex: 0 0 100%; /* Ocupan todo el ancho */
-                max-width: 100%;
-                text-align: left; /* Alineamos al inicio */
-            }
-        }
-
-        @media (max-width: 480px) {
-            .data-card-container {
-                padding: 15px;
-                border-radius: 8px;
-            }
-            .data-card-container h2 {
-                font-size: 1.5em;
-            }
-            .btn-outline-primary {
-                padding: 8px 20px;
-                font-size: 0.9em;
-            }
-        }
+        body { font-family: sans-serif; background-color: #f8f9fa; padding: 20px; }
+        .container { max-width: 800px; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+        h1 { color: #343a40; margin-bottom: 30px; text-align: center; }
+        .card { margin-bottom: 20px; }
+        .card-header { background-color: #e9ecef; font-weight: bold; }
+        .card-body p { margin-bottom: 8px; }
+        .card-body strong { display: inline-block; width: 150px; } /* Para alinear etiquetas */
+        .alert-danger { margin-bottom: 20px; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="/panel">
-                            <i class="bi bi-house-door-fill"></i> Inicio
-                        </a>
-                    </li>
-                    </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="@{/logout}">
-                            <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
-                        </a>
-                    </li>
-                </ul>
+    <div class="container">
+        <h1>Datos del Perfil</h1>
+
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <i class="fas fa-exclamation-triangle"></i> <span th:text="${error}"></span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Información Personal
+            </div>
+            <div class="card-body">
+                <p><strong>Tipo de Perfil:</strong>
+                    <span th:text="${tipoEntidad == 'empleado' ? 'Empleado del Sistema' : 'Usuario Registrado'}"></span>
+                </p>
+                <p><strong>Nombre Completo:</strong>
+                    <span th:text="${usuariologueado.nombre + ' ' + usuariologueado.apellido}"></span>
+                </p>
+                <p><strong>Nombre de Usuario:</strong>
+                    <span th:text="${usuariologueado.nombreUsuario}"></span>
+                </p>
+                <p><strong>Email:</strong>
+                    <span th:text="${usuariologueado.email}"></span>
+                </p>
+                <p th:if="${usuariologueado.rol != null}"><strong>Rol en el Sistema:</strong>
+                    <span th:text="${usuariologueado.rol.name()}"></span> </p>
+                <p><strong>DNI:</strong>
+                    <span th:text="${usuariologueado.dni}"></span>
+                </p>
             </div>
         </div>
-    </nav>
 
-    <div class="container d-flex flex-column align-items-center justify-content-center flex-grow-1 position-relative">
-        <div class="data-card-container">
-            <h2>Mis Datos Personales</h2>
-            <dl class="row data-list">
-                <dt class="col-sm-4">Nombre:</dt>
-                <dd class="col-sm-8" th:text="${usuariologueado.nombre}"></dd>
-
-                <dt class="col-sm-4">Apellido:</dt>
-                <dd class="col-sm-8" th:text="${usuariologueado.apellido}"></dd>
-
-                <dt class="col-sm-4">DNI:</dt>
-                <dd class="col-sm-8" th:text="${usuariologueado.dni}"></dd>
-
-                <dt class="col-sm-4">Nombre de Usuario:</dt>
-                <dd class="col-sm-8" th:text="${usuariologueado.nombreUsuario}"></dd>
-
-                <dt class="col-sm-4">Email:</dt>
-                <dd class="col-sm-8" th:text="${usuariologueado.email}"></dd>
-
-                <dt class="col-sm-4">Rol:</dt>
-                <dd class="col-sm-8" th:text="${usuariologueado.rol}"></dd>
-            </dl>
+        <div th:if="${tipoEntidad == 'empleado'}" class="card border-primary">
+            <div class="card-header bg-primary text-white">
+                Detalles de Empleado
+            </div>
+            <div class="card-body">
+                <p><strong>ID de Empleado:</strong>
+                    <span th:text="${empleadoData.idEmpleado}"></span>
+                </p>
+                <p><strong>Área de Trabajo:</strong>
+                    <span th:text="${empleadoData.area}"></span>
+                </p>
+                <p><strong>Disponibilidad:</strong>
+                    <span th:text="${empleadoData.disponibilidad ? 'Disponible' : 'No Disponible'}"></span>
+                </p>
+<!--                <div th:if="${empleadoData.rol != null and empleadoData.rol.name() == 'MANAGER'}">-->
+<!--                    <hr>-->
+<!--                    <p class="text-muted">¡Eres un Manager! Tienes acceso a herramientas de gestión.</p>-->
+<!--                    <a href="/manager/dashboard" class="btn btn-info btn-sm">-->
+<!--                        <i class="fas fa-tools"></i> Ir al Panel de Manager-->
+<!--                    </a>-->
+<!--                </div>-->
+            </div>
         </div>
 
-		<div class="back-button-container">
-		    <a href="/panel" class="btn btn-outline-primary">
-		        <i class="bi bi-arrow-left"></i> Atras
-		    </a>
-		</div>
+        <div th:if="${tipoEntidad == 'usuario'}" class="card border-secondary">
+            <div class="card-header bg-secondary text-white">
+                Detalles de Usuario Registrado
+            </div>
+            <div class="card-body">
+                <p><strong>ID de Usuario:</strong>
+                    <span th:text="${usuarioData.idUsuario}"></span>
+                </p>
+                <p><strong>Cuenta Activa:</strong>
+                    <span th:text="${usuarioData.usuarioActivo ? 'Sí' : 'No'}"></span>
+                </p>
+                <p class="text-muted">Acceso a funcionalidades básicas de la plataforma.</p>
+            </div>
+        </div>
+
+        <div class="mt-4 text-center">
+            <a href="/panel" class="btn btn-primary"><i class="fas fa-home"></i> Volver</a>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

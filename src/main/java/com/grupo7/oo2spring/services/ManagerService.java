@@ -24,7 +24,7 @@ public class ManagerService {
 	private final IEmpleadoRepository empleadoRepository;
 	private final EntityManager entityManager;
 	
-	public Empleado prepararEmpleadoDesdeUsuario(int idUsuario) throws Exception {
+	public Empleado prepararEmpleadoDesdeUsuario(int idUsuario) throws UsuarioNoEncontradoException {
 	    Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
 	    if (usuarioOpt.isEmpty()) {
 	        throw new UsuarioNoEncontradoException("El Usuario no se encuentra en el sistema");
