@@ -194,49 +194,28 @@
             <a href="/ticket/formulario_simple" class="btn btn-primary btn-lg mx-2 my-2">
                 Crear Ticket
             </a>
-<!--<<<<<<< HEAD-->
-<!--		<div class="actions-grid">-->
-<!--			<a href="/ticket/formulario_simple" class="btn-action btn-create-ticket">-->
-<!--				<i class="fas fa-plus-circle"></i> Crear Ticket-->
-<!--			</a>-->
-
-<!--			<a href="/ticket/tickets" class="btn-action btn-my-tickets" th:if="${rol == 'USER'}">-->
-<!--				<i class="fas fa-ticket-alt"></i> Mis Tickets-->
-<!--			</a>-->
-<!--=======-->
-            <a href="/ticket/listaArea" class="btn btn-info btn-lg mx-2 my-2 btn-emp-area"
-               th:if="${rol == 'EMPLEADO'}">
-                Ver Tickets Dentro del Area
-            </a>
 			
-			<a href="/usuario/misDatos" class="btn btn-warning btn-lg mx-2 my-2" th:if="${rol == 'EMPLEADO' or rol == 'MANAGER'}">
+			<a href="/ticket/tickets" class="btn btn-info btn-lg mx-2 my-2 btn-emp-asigna" th:if="${rol == 'USER'}">
+				<i class="fas fa-ticket-alt"></i> Mis Tickets
+			</a>
+
+			
+			<a href="/usuario/misDatos" class="btn btn-warning btn-lg mx-2 my-2">
 				<i class="fas fa-user-circle"></i> Mis Datos
 			</a>
 
-<!--<<<<<<< HEAD-->
-<!--			<a href="/ticket/listaArea" class="btn-action btn-area-tickets" th:if="${rol == 'EMPLEADO'}">-->
-<!--				<i class="fas fa-boxes"></i> Tickets de mi Área-->
-<!--			</a>-->
-<!--=======-->
+			<a href="/ticket/listaArea" class="btn-action btn-area-tickets" th:if="${rol == 'EMPLEADO'}">
+				<i class="fas fa-boxes"></i> Tickets de mi Área
+			</a>
+
             <a href="/ticket/sinasignar" class="btn btn-info btn-lg mx-2 my-2 btn-emp-asignar"
-               th:if="${rol == 'EMPLEADO'}">
+               th:if="${rol == 'MANAGER'}">
                 Asignar un Ticket a un Area
             </a>
-            
-            <!-- Solo para clientes -->
-                       <a href="/ticket/tickets" class="btn btn-secondary btn-lg mx-2 my-2"
-                          th:if="${rol == 'USER'}">
-                           Mis Tickets
-                       </a>
 
-<!--<<<<<<< HEAD-->
-<!--			<a href="/ticket/sinasignar" class="btn-action btn-assign-ticket" th:if="${rol == 'EMPLEADO'}">-->
-<!--				<i class="fas fa-clipboard-list"></i> Asignar Ticket-->
-<!--			</a>-->
-<!--=======-->
             <!-- Solo para managers -->
             <a href="/ticket/lista" class="btn btn-info btn-lg mx-2 my-2 btn-emp-todos"
-               th:if="${rol == 'EMPLEADO'}">
+               th:if="${rol == 'MANAGER'}">
                 Ver Todos Los Tickets
             </a>
 
@@ -244,28 +223,6 @@
                th:if="${rol == 'MANAGER'}">
                 Usuarios / Asignar Empleado
             </a>
-
-<!--<<<<<<< HEAD-->
-<!--			<a href="/ticket/lista" class="btn-action btn-all-tickets" th:if="${rol == 'EMPLEADO'}">-->
-<!--				<i class="fas fa-list-alt"></i> Todos los Tickets-->
-<!--			</a>-->
-
-<!--			<a href="/manager/listar" class="btn-action btn-user-management" th:if="${rol == 'MANAGER'}">-->
-<!--				<i class="fas fa-users-cog"></i> Gestión de Usuarios-->
-<!--			</a>-->
-
-<!--			<form th:action="@{/logout}" method="post" class="btn-action-logout">-->
-<!--				<button type="submit">-->
-<!--					<i class="fas fa-sign-out-alt"></i> Cerrar Sesión-->
-<!--				</button>-->
-<!--			</form>-->
-<!--		</div>-->
-<!--	</div>-->
-	
-<!--	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"-->
-<!--			integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"-->
-<!--			crossorigin="anonymous"></script>-->
-<!--=======-->
 
             <form th:action="@{/logout}" method="post" class="mx-2 my-2">
                 <button type="submit" class="btn btn-danger btn-lg">

@@ -98,7 +98,7 @@ public class TicketController {
     }
 
 	@GetMapping("/lista")
-	@PreAuthorize("hasRole('EMPLEADO')")
+	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	public String listartickets(Model model){
 		List<Ticket> tickets = ticketRepository.findAll();
 		model.addAttribute("tickets", tickets);
@@ -106,7 +106,7 @@ public class TicketController {
     }
 	
 	@GetMapping("/listaArea")
-	@PreAuthorize("hasRole('EMPLEADO')")
+	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	public String listarticketsPorArea(Model model, @AuthenticationPrincipal UserDetails usuariolog){
 		model.addAttribute("usuarioLogueado", usuariolog);
 		List<Ticket> tickets = null;
@@ -126,6 +126,7 @@ public class TicketController {
 		return "ticket/lista_tickets";
     }
 	
+	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@GetMapping("/{idTicket}/tomarTicket")
 	public String tomarTicket(@PathVariable int idTicket, Model model) {
 		try {
@@ -143,6 +144,7 @@ public class TicketController {
         }
 	}
 	
+	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@PostMapping("/{idTicket}/tomar")
     public String procesaTomarTicket(@PathVariable int idTicket,
                                     @ModelAttribute("control") ControlDTO control, // Captura los datos del formulario en un objeto Control
@@ -174,8 +176,8 @@ public class TicketController {
         }
     }
 	
+	@PreAuthorize("hasAnyRole('MANAGER')")
 	@GetMapping("/sinasignar")
-    //@PreAuthorize("hasRole('MANAGER')") // Solo un manager puede ver y asignar tickets sin área
     public String ticketSinArea(Model model) {
         try {
             List<Ticket> ticketSinArea = ticketService.findByAreaIsNull();
@@ -189,7 +191,7 @@ public class TicketController {
     }
 	
 	@PostMapping("/{idTicket}/asignarArea")
-    //@PreAuthorize("hasRole('MANAGER')") // Solo un manager puede asignar área
+    @PreAuthorize("hasRole('MANAGER')") // Solo un manager puede asignar área
     public String asigarUnArea(@PathVariable int idTicket,
                                      @RequestParam("area") Area area,
                                      Model model) throws TicketNoEncontradoException{
@@ -212,13 +214,13 @@ public class TicketController {
 
 	    return "ticket/usuario-tickets"; // Vista con la tabla de tickets
 	}
-	
+	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@PostMapping("/{idTicket}/cambiarPrioridad")
 	public String cambiarPrioridad(@PathVariable int idTicket, @RequestParam("prioridad")Prioridad prioridad, Model model) throws Exception {
 		ticketService.asignarPrioridad(idTicket, prioridad);
 		return "redirect:/ticket/listaArea";
 	}
-	
+	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@PostMapping("/{idTicket}/cambiarEstado")
 	public String cambiarEstado(@PathVariable int idTicket, @RequestParam("estado")Estado estado, Model model) throws Exception {
 		ticketService.asignarEstado(idTicket, estado);
