@@ -25,12 +25,14 @@ import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Estado;
 import com.grupo7.oo2spring.models.Funcion;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
+import com.grupo7.oo2spring.security.UsuarioDetails;
 import com.grupo7.oo2spring.services.EmpleadoService;
 import com.grupo7.oo2spring.services.TicketService;
 import com.grupo7.oo2spring.services.UsuarioService;
@@ -96,21 +98,11 @@ public class TicketController {
         model.addAttribute("mensajeExito", "¡El ticket ha sido creado con éxito!");
         return "ticket/exito";
     }
-
-	@GetMapping("/lista")
-	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
-	public String listartickets(Model model){
-		List<Ticket> tickets = ticketRepository.findAll();
-		model.addAttribute("tickets", tickets);
-		return "ticket/lista_tickets";
-    }
-	
 	@GetMapping("/listaArea")
-	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
+	@PreAuthorize("hasAnyRole('EMPLEADO')")
 	public String listarticketsPorArea(Model model, @AuthenticationPrincipal UserDetails usuariolog){
 		model.addAttribute("usuarioLogueado", usuariolog);
 		List<Ticket> tickets = null;
-		//Empleado usuario = (Empleado) usuarioService.getUsuarioByUsername(usuariolog.getUsername());
 		Empleado empleadoOpt = empleadoService.findByEmpleadoNombre(usuariolog.getUsername());
 		if(empleadoOpt.getArea() != null) {
 			tickets = ticketService.findByArea(empleadoOpt.getArea());
@@ -128,20 +120,13 @@ public class TicketController {
 	
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@GetMapping("/{idTicket}/tomarTicket")
-	public String tomarTicket(@PathVariable int idTicket, Model model) {
-		try {
-			Ticket ticket = ticketService.getByIdTicket(idTicket);
-//			if (ticket.getEstado().equals("Cerrado") || ticket.getEstado().equals("Resuelto")) {
-//	            model.addAttribute("errorMessage", "El ticket #" + idTicket + " no puede ser tomado en su estado actual.");
-//	            return "redirect:/ticket/lista";
-//	       }
-			model.addAttribute("ticket",ticket);
-			model.addAttribute("control", new Control());
-			return "manager/toma-ticket";
-		}catch (RuntimeException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "redirect:/ticket/lista";
-        }
+	public String tomarTicket(@PathVariable int idTicket, Model model) throws TicketNoEncontradoException {
+		Ticket ticket = ticketService.buscarTicketPorId(idTicket);
+		model.addAttribute("ticket",ticket);
+		
+		model.addAttribute("control", new Control());
+		model.addAttribute("funcionDisponible",Funcion.values());
+		return "manager/toma-ticket";
 	}
 	
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
@@ -159,47 +144,46 @@ public class TicketController {
             model.addAttribute("errorMessage", "Error al tomar el ticket #" + idTicket + ": " + e.getMessage());
             return "redirect:/ticket/" + idTicket + "/tomarTicket";
         }
-        return "redirect:/ticket/lista";
+        return "redirect:/ticket/";
     }
 	
 	@GetMapping("/{idTicket}/detail")
-    public String DetalleTicket(@PathVariable int idTicket, Model model, @AuthenticationPrincipal UserDetails usuariolog) {
-        try {
-            Ticket ticketDetail = ticketService.getByIdTicket(idTicket);
-
-            model.addAttribute("ticketDetail", ticketDetail);
-            model.addAttribute("controlCreationDTO", new ControlDTO()); // Para el formulario de agregar controles
-            return "ticket/ticket-detail";
-        } catch (RuntimeException e) {
-        	model.addAttribute("errorMessage", e.getMessage());
-            return "redirect:/ticket/lista_tickets";
-        }
+    public String DetalleTicket(@PathVariable int idTicket, Model model, @AuthenticationPrincipal UserDetails usuariolog) throws TicketNoEncontradoException {
+        Ticket ticketDetail = ticketService.buscarTicketPorId(idTicket);
+        model.addAttribute("ticketDetail", ticketDetail);
+        model.addAttribute("controlCreationDTO", new ControlDTO()); // Para el formulario de agregar controles
+        return "ticket/ticket-detail";
     }
 	
 	@PreAuthorize("hasAnyRole('MANAGER')")
-	@GetMapping("/sinasignar")
-    public String ticketSinArea(Model model) {
+	@GetMapping("/lista")
+    public String ticketsDelSistema(Model model, @AuthenticationPrincipal UserDetails usuariolog) {
+		UsuarioDetails usuarioDetails = (UsuarioDetails)usuariolog;
+		UsuarioBase empleado = usuarioDetails.getUsuario();
         try {
-            List<Ticket> ticketSinArea = ticketService.findByAreaIsNull();
-            model.addAttribute("tickets", ticketSinArea);
+            List<Ticket> tickets = ticketRepository.findAll();
+            model.addAttribute("tickets", tickets);
+            model.addAttribute("rol",empleado.getRol());
             model.addAttribute("areas", Area.values());
-            return "ticket/ticket-sin-area"; 
+            model.addAttribute("estados", Estado.values());
+            model.addAttribute("prioridades", Prioridad.values());
+            return "ticket/ticket_del_sistema"; 
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "redirect:/ticket/ticket-sin-area"; 
+            return "redirect:/ticket/ticket_del_sistema"; 
         }
     }
 	
 	@PostMapping("/{idTicket}/asignarArea")
-    @PreAuthorize("hasRole('MANAGER')") // Solo un manager puede asignar área
-    public String asigarUnArea(@PathVariable int idTicket,
-                                     @RequestParam("area") Area area,
+	@PreAuthorize("hasAnyRole('MANAGER')")
+    public String asigarUnArea(@PathVariable int idTicket, @RequestParam("area") Area area,
                                      Model model) throws TicketNoEncontradoException{
 		ticketService.asignarAreaTicket(idTicket, area);
 		model.addAttribute("successMessage", "¡Área '" + area.name() + "' asignada al ticket #" + idTicket + " con éxito!");
 		return "redirect:/ticket/sinasignar";
     }
 	
+	@PreAuthorize("hasAnyRole('USER')")
 	@GetMapping("/tickets")
 	public String verTicketsUsuario(Model model, @AuthenticationPrincipal UserDetails userDetails) {
 	    if (userDetails == null) {
@@ -218,13 +202,13 @@ public class TicketController {
 	@PostMapping("/{idTicket}/cambiarPrioridad")
 	public String cambiarPrioridad(@PathVariable int idTicket, @RequestParam("prioridad")Prioridad prioridad, Model model) throws Exception {
 		ticketService.asignarPrioridad(idTicket, prioridad);
-		return "redirect:/ticket/listaArea";
+		return "redirect:/ticket/lista";
 	}
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@PostMapping("/{idTicket}/cambiarEstado")
 	public String cambiarEstado(@PathVariable int idTicket, @RequestParam("estado")Estado estado, Model model) throws Exception {
 		ticketService.asignarEstado(idTicket, estado);
-		return "redirect:/ticket/listaArea";
+		return "redirect:/ticket/lista";
 	}
 }
 

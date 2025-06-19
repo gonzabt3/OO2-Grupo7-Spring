@@ -3,6 +3,7 @@ package com.grupo7.oo2spring.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,21 +33,21 @@ public class ManagerController {
 	private final IEmpleadoRepository empleadoRepository;
    
     private final ManagerService managerService;
-	
+    @PreAuthorize("hasAnyRole('MANAGER')")
 	@GetMapping("/listar")
     public String listarUsuarios(Model model) {
         List<Usuario> usuarios = usuarioRepository.findAll();
         model.addAttribute("usuarios", usuarios);
         return "manager/listar";
     }
-    
+	@PreAuthorize("hasAnyRole('MANAGER')")
 	@GetMapping("/{id}/a-empleado")
 	public String mostrarFormularioEmpleado(@PathVariable int id, Model model) throws UsuarioNoEncontradoException{
 	        Empleado empleado = managerService.prepararEmpleadoDesdeUsuario(id);
 	        model.addAttribute("empleado", empleado);
 	        return "manager/formulario_empleado";
 	}
-    
+	@PreAuthorize("hasAnyRole('MANAGER')")
 	@PostMapping("/convertir-a-empleado")
 	public String convertirAEmpleado(@ModelAttribute Empleado empleadoForm, RedirectAttributes attr) {
 		try {
@@ -67,7 +68,7 @@ public class ManagerController {
 	        return "redirect:/manager/listar";
 	    }
 	}
-    
+	@PreAuthorize("hasAnyRole('MANAGER')")
     @PostMapping("/{id}/sacar-permisos")
     public String sacarPermisos(@PathVariable int id) throws Exception {
         // lógica para sacar permisos

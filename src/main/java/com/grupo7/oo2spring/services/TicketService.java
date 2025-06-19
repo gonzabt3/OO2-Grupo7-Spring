@@ -45,10 +45,6 @@ public class TicketService {
 
 	private final IControlRepository controlRepository;
 
-	public Ticket getByIdTicket(int idTicket) {
-		return ticketRepository.getByIdTicket(idTicket);
-	}
-
 	 public List<Ticket> findByAreaIsNull() {
 	  return ticketRepository.findByArea(Area.SIN_ASIGNAR);
 	 }
@@ -73,7 +69,6 @@ public class TicketService {
 	    return guardado;
 	}
 
-	@PreAuthorize("hasRole('EMPLEADO')")
 	@Transactional
 	public void tomarTicketConControlInicial(int idTicket, Empleado empleadoLogueado, ControlDTO control)
 			throws Exception {
@@ -104,60 +99,6 @@ public class TicketService {
 	            .orElseThrow(() -> new TicketNoEncontradoException("Ticket con ID " + idTicket + " no encontrado"));
 	    }
 	
-	 @Transactional
-	 public void asignarAreaTicket(int idTicket, Area area) throws TicketNoEncontradoException {
-	     Ticket ticket = ticketRepository.getByIdTicket(idTicket);
-
-	     if (ticket == null) {
-	         throw new TicketNoEncontradoException("No se encontró el ticket con ID " + idTicket);
-	     }
-
-	     if (area == null) {
-	         throw new RuntimeException("El área a asignar no puede ser null.");
-	     }
-
-	     ticket.setArea(area);
-	     ticketRepository.save(ticket);
-
-	     System.out.println("Área '" + area.name() + "' asignada exitosamente al ticket #" + idTicket);
-	 }
-	
-//	@Transactional(readOnly = true) // La transacción asegura que las relaciones lazy se carguen aquí
-//    public TicketDTO getTicketDetailForView(int idTicket) {
-//
-//        Ticket ticket = ticketRepository.findById(idTicket) // Usa findById o el método con fetch
-//                .orElseThrow(() -> new RuntimeException("Ticket no encontrado con ID: " + idTicket));
-//
-//        TicketDTO ticketDetailDTO = new TicketDTO();
-//        ticketDetailDTO.setIdTicket(ticket.getIdTicket());
-//        ticketDetailDTO.setTitulo(ticket.getTitulo());
-//        ticketDetailDTO.setDescripcion(ticket.getDescripcion());
-//        ticketDetailDTO.setFechaCreacion(ticket.getFechaCreacion());
-//        ticketDetailDTO.setFechaCierre(ticket.getFechaCierre());
-//        ticketDetailDTO.setEstado(ticket.getEstado());
-//        ticketDetailDTO.setPrioridad(ticket.getPrioridad());
-//        ticketDetailDTO.setArea(ticket.getArea());
-//        ticketDetailDTO.setUsuarioCreador(ticket.getUsuarioCreador());
-//
-//        // Mapea la lista de entidades Control a ControlDTOs
-//        ticketDetailDTO.setProcesos(ticket.getProcesos().stream().map(this::mapeoControlDTO).collect(Collectors.toList()));
-//
-//        return ticketDetailDTO;
-//    }
-//	private ControlDTO mapeoControlDTO(Control control) {
-//        ControlDTO controlDTO = new ControlDTO();
-//        controlDTO.setIdControl(control.getIdControl());
-//        controlDTO.setFechaEntrada(control.getFechaEntrada());
-//        controlDTO.setFechaSalida(control.getFechaSalida());
-//        controlDTO.setAccion(control.getAccion());
-//        controlDTO.setFinalizado(control.isFinalizado());
-//        controlDTO.setEmpleado(control.getEmpleado());
-//        controlDTO.setFuncion(control.getFuncion());
-//        
-//        return controlDTO;
-//    }
-//
-//>>>>>>> refs/remotes/origin/pauche
 	public List<Ticket> getTicketsByUsuario(int usuarioIdCreador) {
 		return ticketRepository.findByUsuarioCreadorIdUsuario(usuarioIdCreador);
 	}
@@ -177,5 +118,13 @@ public class TicketService {
 
 	        ticket.setEstado(nuevoEstado);
 	        return ticketRepository.save(ticket);
+	 }
+	 
+	 @Transactional
+	 public Ticket asignarAreaTicket(int idTicket, Area area) throws TicketNoEncontradoException {
+	     Ticket ticket = ticketRepository.getByIdTicket(idTicket);
+	     ticket.setArea(area);
+	     return ticketRepository.save(ticket);
+
 	 }
 }

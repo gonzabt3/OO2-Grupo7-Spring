@@ -105,6 +105,12 @@ public class Control {
 	public void setAccion(String accion) {
 		this.accion = accion;
 	}
+	public Funcion getFuncion() {
+		return funcion;
+	}
+	public void setFuncion(Funcion funcion) {
+		this.funcion = funcion;
+	}
 
 
 }

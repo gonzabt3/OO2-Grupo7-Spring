@@ -22,7 +22,6 @@
             min-height: 100vh;
         }
 
-<<<<<<< HEAD
         .container.mt-5 {
             margin-top: 3rem !important;
             margin-bottom: 3rem !important;
@@ -32,10 +31,6 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             max-width: 1300px;
         }
-=======
-    <!-- Custom styles -->
-    <link href="/css/styles.css" rel="stylesheet">
->>>>>>> refs/remotes/origin/pauche
 
         h2.mb-4 {
             color: #343a40;
@@ -273,58 +268,19 @@
                 <tbody>
                     <tr th:each="ticket : ${tickets}">
                         <td th:text="${ticket.idTicket}">ID</td>
-                        <td th:text="${ticket.descripcion}">Título</td>
+                        <td th:text="${ticket.titulo}">Título</td>
                         <td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}">Estado</td>
                         <td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'N/A'}">Prioridad</td>
 						<td th:text="${ticket.fechaCreacion != null ? ticket.fechaCreacion : 'N/A'}">Fecha Creación</td>
-<!--                        <td sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')"-->
-<!--                            th:text="${ticket.fechaCreacion != null ? ticket.fechaCreacion : 'N/A'}">-->
-<!--                            Fecha Creación-->
-<!--                        </td>-->
 
-<<<<<<< HEAD
                         <td>
                             <div class="action-group-container">
                                 <span sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')">
                                     <span th:if="${ticket.estado?.name() == 'ABIERTO'}">
-                                        <span th:if="${usuarioLogueado?.area != null and ticket.area != null and ticket.area.equals(usuarioLogueado.area)}">
                                             <a th:href="@{/ticket/{idTicket}/tomarTicket(idTicket=${ticket.idTicket})}"
                                                class="btn btn-sm btn-success">
                                                 <i class="fas fa-hand-paper"></i> Tomar Ticket
                                             </a>
-                                        </span>
-                                    </span>
-                                    <span th:unless="${ticket.estado != null and ticket.estado.name() == 'ABIERTO'}">
-                                        <button class="btn btn-sm btn-secondary" disabled
-                                                th:text="${ticket.estado != null ? 'Estado: ' + ticket.estado.name() : 'Estado: N/A'}"></button>
-=======
-    <div th:unless="${#lists.isEmpty(tickets)}" class="table-responsive">
-        <table class="table table-bordered table-hover align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Título</th>
-                    <th>Estado</th>
-                    <th>Prioridad</th>
-                    <th>Área Asignada</th>
-                    <th>Acciones</th>
-                    <th>Última Función</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="ticket : ${tickets}">
-                    <td th:text="${ticket.idTicket}">ID</td>
-                    <td th:text="${ticket.titulo}">Título</td>
-                    <td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}">Estado</td>
-                    <td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'Sin Asignar'}">Prioridad</td>
-                    <td th:text="${ticket.area != null ? ticket.area.name() : 'Sin Asignar'}">Área</td>
-                    <td>
-                        <div class="d-flex flex-column gap-1">
-                            <span sec:authorize="hasAnyRole('ROLE_EMPLEADO', 'ROLE_MANAGER')">
-                                <span th:if="${ticket.estado?.name() == 'ABIERTO'}">
-                                    <a th:href="@{/ticket/{idTicket}/tomarTicket(idTicket=${ticket.idTicket})}" 
-                                       class="btn btn-sm btn-success">Tomar Ticket</a>
->>>>>>> refs/remotes/origin/pauche
                                     </span>
                                 </span>
 
@@ -352,6 +308,7 @@
                         </td>
                     </tr>
                 </tbody>
+				
             </table>
         </div>
     </div>
@@ -376,7 +333,6 @@
                                 </option>
                             </select>
                         </div>
-<<<<<<< HEAD
 
                         <div class="mb-3" id="prioritySelectGroup">
                             <label for="modalPrioridad" class="form-label">Seleccione nueva Prioridad:</label>
@@ -394,13 +350,6 @@
                 </form>
             </div>
         </div>
-=======
-                    </td>
-                    <td th:text="${#lists.isEmpty(ticket.procesos) ? '' : ticket.procesos[ticket.procesos.size() - 1].funcion}">Función</td>
-                </tr>
-            </tbody>
-        </table>
->>>>>>> refs/remotes/origin/pauche
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
