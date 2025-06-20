@@ -33,6 +33,7 @@ public abstract class UsuarioBase {
     public UsuarioBase(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) throws Exception {
 		validarNombreApellido(nombre, apellido);
 		validarNombreUsuario(nombreUsuario);
+		validarDNI(dni);
 		validarEmail(email);
 		this.nombreUsuario = nombreUsuario;
 		this.contraseña = contraseña;

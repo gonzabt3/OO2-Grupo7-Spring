@@ -240,5 +240,11 @@ public class TicketController {
 
 	    return "ticket/usuario-tickets"; // Vista con la tabla de tickets
 	}
+	
+	//Para testear la excepcion
+    @GetMapping("/probar-exception")
+    public String probarError() throws TicketNoEncontradoException {
+        throw new TicketNoEncontradoException("No se encontró el ticket solicitado.");
+    }
 }
 
