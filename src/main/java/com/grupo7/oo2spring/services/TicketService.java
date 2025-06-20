@@ -17,7 +17,7 @@ import com.grupo7.oo2spring.dto.TicketDTO;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Estado;
-
+import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.repositories.IControlRepository;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
 
@@ -41,7 +41,6 @@ public class TicketService {
 	private final IControlRepository controlRepository;
 
 	 public List<Ticket> findByAreaIsNull() {
-	        // Call the repository method, passing Area.SIN_ASIGNAR
 	  return ticketRepository.findByArea(Area.SIN_ASIGNAR);
 	 }
 	        
@@ -70,7 +69,7 @@ public class TicketService {
 
 	}
 
-	// @PreAuthorize("hasRole('EMPLEADO')")
+	//@PreAuthorize("hasRole('EMPLEADO')")
 	@Transactional
 	public void tomarTicketConControlInicial(int idTicket, Empleado empleadoLogueado, ControlDTO control)
 			throws Exception {
@@ -98,9 +97,9 @@ public class TicketService {
 		 System.out.println("❌ Error al tomar ticket en el service:");
 	        e.printStackTrace();
 	        throw new RuntimeException("Falló tomarTicketConControlInicial: " + e.getMessage(), e);
+		}
 	}
-	}
-
+/*
 	// @PreAuthorize("hasRole('EMPLEADO')")
 	@Transactional
 	public void agregarControlATicket(int idTicket, Empleado empleado, ControlDTO control, boolean finalizaTicket)
@@ -127,7 +126,7 @@ public class TicketService {
 
 		controlRepository.save(nuevoControl);
 		ticketRepository.save(ticket);
-	}
+	}*/
 	
 	 public Ticket buscarTicketPorId(int idTicket) throws TicketNoEncontradoException {
 	        return ticketRepository.findById(idTicket)
@@ -135,23 +134,29 @@ public class TicketService {
 	    }
 	
 	 @Transactional
-	 public void asignarAreaTicket(int idTicket, Area area) throws TicketNoEncontradoException {
+	 public Ticket asignarAreaTicket(int idTicket, Area area) throws TicketNoEncontradoException {
 	     Ticket ticket = ticketRepository.getByIdTicket(idTicket);
-
-	     if (ticket == null) {
-	         throw new TicketNoEncontradoException("No se encontró el ticket con ID " + idTicket);
-	     }
-
-	     if (area == null) {
-	         throw new RuntimeException("El área a asignar no puede ser null.");
-	     }
-
 	     ticket.setArea(area);
-	     ticketRepository.save(ticket);
+	     return ticketRepository.save(ticket);
 
-	     System.out.println("Área '" + area.name() + "' asignada exitosamente al ticket #" + idTicket);
 	 }
+	 @Transactional
+	    public Ticket asignarPrioridad(int ticketId, Prioridad nuevaPrioridad) throws Exception {
+	        Ticket ticket = ticketRepository.findById(ticketId)
+	                .orElseThrow(() -> new Exception("Error al recuperar datos del Ticket existente"));
 	
+	        ticket.setPrioridad(nuevaPrioridad);
+	        return ticketRepository.save(ticket); // Guarda los cambios en la base de datos
+	    }
+	 @Transactional
+	    public Ticket asignarEstado(int ticketId, Estado nuevoEstado) throws Exception {
+	        Ticket ticket = ticketRepository.findById(ticketId)
+	                .orElseThrow(() -> new Exception("Error al recuperar datos del Ticket existente"));
+
+	        ticket.setEstado(nuevoEstado);
+	        return ticketRepository.save(ticket);
+	 }
+/*	
 	@Transactional(readOnly = true)
     public TicketDTO getTicketDetailForView(int idTicket) {
         Ticket ticket = ticketRepository.findById(idTicket)
@@ -184,7 +189,7 @@ public class TicketService {
         controlDTO.setFuncion(control.getFuncion());
         
         return controlDTO;
-    }
+    }*/
 
 	public List<Ticket> getTicketsByUsuario(int usuarioIdCreador) {
 		return ticketRepository.findByUsuarioCreadorIdUsuario(usuarioIdCreador);

@@ -22,11 +22,8 @@ import java.util.Optional;
 public class UsuarioService {
 
     private final IUsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
-    @PersistenceContext
-    private EntityManager entityManager;
     
-    
+    /*
     public Usuario guardarUsuario(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) {
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setNombreUsuario(nombreUsuario);
@@ -56,7 +53,7 @@ public class UsuarioService {
 
     	    return entityManager.find(Empleado.class, usuario.getIdUsuario());
     	}
-
+*/
     
     public Optional<Usuario> buscarEmpleadoPorEmail(String email) {
         return usuarioRepository.findByEmail(email)
@@ -71,8 +68,4 @@ public class UsuarioService {
     	return usuarioRepository.findByNombreUsuarioAndContraseña(username, password);
     }
    
-
-        public void guardarUsuario(Usuario usuario) {
-        usuarioRepository.save(usuario);
-    }
 }
