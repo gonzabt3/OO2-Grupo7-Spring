@@ -48,8 +48,6 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequestMapping("/ticket")
 public class TicketController {
-
-	private final IUsuarioRepository usuarioRepository;
 	
 	private final ITicketRepository ticketRepository;
     
