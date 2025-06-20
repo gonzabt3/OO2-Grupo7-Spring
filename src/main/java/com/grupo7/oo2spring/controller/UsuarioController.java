@@ -5,12 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Usuario;
-import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import com.grupo7.oo2spring.security.UsuarioDetails;
 
 import lombok.RequiredArgsConstructor;
@@ -19,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
-
-    private final IUsuarioRepository usuarioRepository;
     
     @GetMapping("/misDatos")
     public String verificarUsuario(Model model, @AuthenticationPrincipal UserDetails usuariolog) {
@@ -40,12 +35,4 @@ public class UsuarioController {
         }
         return "usuario/datos_usuario";
     }
-    
-    
-    
-    
-    
-
-
-
 }

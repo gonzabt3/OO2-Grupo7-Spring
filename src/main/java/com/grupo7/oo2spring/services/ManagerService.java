@@ -65,27 +65,11 @@ public class ManagerService {
 	        empleado.setArea(datosEmpleado.getArea());
 	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
 	    } else {
-//<<<<<<< HEAD
-//	    	entityManager.createNativeQuery("INSERT INTO empleado (id_usuario, area, disponibilidad) VALUES (?, ?, ?)")
-//	        .setParameter(1, usuario.getIdUsuario())
-//	        .setParameter(2, datosEmpleado.getArea().name())
-//	        .setParameter(3, datosEmpleado.isDisponibilidad())
-//	        .executeUpdate();
-//=======
-	        // Si no existe, crear una nueva
 	        empleado = new Empleado();
 	        empleado.setIdEmpleado(idUsuario); // hereda de Usuario
 	        empleado.setArea(datosEmpleado.getArea());
 	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
 	    }
-
-	    // Guardar el empleado (crea o actualiza)
-	    //empleado = empleadoRepository.save(empleado);
-
-	    // Cambiar rol a EMPLEADO
-	    
-
-	    // Devolver el empleado actualizado/creado
 	    return empleado;
 	}
 	
@@ -100,9 +84,6 @@ public class ManagerService {
 	    // Cambiar el rol del usuario a CLIENTE
 	    usuario.setRol(Rol.USER);
 	    usuarioRepository.save(usuario);
-
-	    // Borrar el registro Empleado (tabla hija)
-	    //empleadoRepository.delete(empleado);
 
 	}
 

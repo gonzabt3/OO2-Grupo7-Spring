@@ -3,6 +3,7 @@ package com.grupo7.oo2spring.services;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,7 +14,6 @@ import org.thymeleaf.context.Context;
 import jakarta.annotation.PostConstruct;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.mail.MailException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -25,14 +25,6 @@ public class EmailService {
 	    @Value("${EMAIL_USERNAME}") // <-- Dirección de Correo (ej. tunombre@gmail.com)
 	    private String emailUsername; 
 	    
-//<<<<<<< HEAD
-//	    @Value("${EMAIL_PASSWORD}") // <-- Api key generado (ej. gmail)
-//	    private String emailPassword; // 
-//	    
-//	    // Dirección de remitente que usarás, EMAIL_USERNAME de Gmail
-//	    @Value("${EMAIL_TEST}") 
-//	    private String emailSenderFrom;
-//=======
 	    @Value("${EMAIL_APIKEY}") // <-- Api key generado (ej. gmail)
 	    private String emailAPIKey; // 
 	    
@@ -46,14 +38,6 @@ public class EmailService {
 	    public void checkEmailConfig() {
 	        System.out.println("--- Configuración de EmailService ---");
 	        System.out.println("EMAIL_USERNAME cargado (Gmail): '" + emailUsername);
-//<<<<<<< HEAD
-//	        //La contraseña real por seguridad no se imprime, pero verifica que no esté vacía.
-//	        System.out.println("EMAIL_PASSWORD cargado: '" + (emailPassword != null && !emailPassword.isEmpty() ? "******" : "No cargada o vacía") + "'"); 
-//	        System.out.println("EMAIL_SENDER_FROM cargado: '" + emailSenderFrom + "'"); // Comillas para ver espacios
-//	        System.out.println("JavaMailSender bean: " + (mailSender != null ? "Inicializado" : "NO INICIALIZADO"));
-//	        System.out.println("-----------------------------------");
-//	    }
-//=======
 	        System.out.println("EMAIL_APIKEY cargado: '" + (emailAPIKey != null && !emailAPIKey.isEmpty() ? "******" : "No cargada o vacía") + "'"); 
 	        System.out.println("EMAIL_SENDER_FROM cargado: '" + emailSenderFrom + "'");
 	        System.out.println("JavaMailSender bean: " + (mailSender != null ? "Inicializado" : "NO INICIALIZADO"));
@@ -70,13 +54,6 @@ public class EmailService {
 	            mailSender.send(mensaje);
 	            System.out.println("Mensaje enviado a " + receptor);
 	        } catch (MailException e) {
-//<<<<<<< HEAD
-//	            System.err.println("ERROR: Fallo al enviar email a " + receptor + ": " + e.getMessage());
-//	            throw new RuntimeException("Fallo al enviar email", e);
-//	        }
-//	        
-//	 }
-//=======
 	        	e.printStackTrace();
 	            System.err.println("ERROR: Fallo al enviar email a " + receptor + ": " + e.getMessage());
 	            throw new RuntimeException("Fallo al enviar email", e);
@@ -84,8 +61,9 @@ public class EmailService {
 	        
 	 }
 	 
-	 public void enviarEmailConHtml(String receptor, String asunto, Map<String, Object> variables) {
+	 public void enviarEmailConHtml(String receptor, String asunto, String nombreTemplate, Map<String, Object> variables) {
 		    try {
+		        System.out.println("📨 Entró a enviarEmailConHtml()");
 		        MimeMessage mimeMessage = mailSender.createMimeMessage();
 		        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
 
@@ -108,7 +86,7 @@ public class EmailService {
 		    } catch (MessagingException e) {
 		        throw new RuntimeException("Error al enviar correo HTML", e);
 		    } catch (Exception e) {
-		    e.printStackTrace(); // o log.error(...)
+		    e.printStackTrace();
 		    throw new RuntimeException("Error al enviar correo HTML", e);
 		    }
 		}

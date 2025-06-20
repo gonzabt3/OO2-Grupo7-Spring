@@ -1,14 +1,12 @@
 package com.grupo7.oo2spring.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,21 +29,17 @@ import com.grupo7.oo2spring.models.Estado;
 import com.grupo7.oo2spring.models.Funcion;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
-import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import com.grupo7.oo2spring.security.UsuarioDetails;
 import com.grupo7.oo2spring.services.EmpleadoService;
 import com.grupo7.oo2spring.services.TicketService;
 import com.grupo7.oo2spring.services.UsuarioService;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/ticket")
 public class TicketController {
-
-	private final IUsuarioRepository usuarioRepository;
 	
 	private final ITicketRepository ticketRepository;
     

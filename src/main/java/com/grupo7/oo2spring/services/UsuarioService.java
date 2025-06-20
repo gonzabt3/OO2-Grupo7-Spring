@@ -26,60 +26,6 @@ import java.util.Optional;
 public class UsuarioService {
 
     private final IUsuarioRepository usuarioRepository;
-//<<<<<<< HEAD
-//    @Transactional
-//    public Empleado convertirAEmpleado(int idUsuario, Empleado datosEmpleado) throws Exception {
-//
-//    	Usuario usuario = usuarioRepository.findById(idUsuario)
-//    	        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-//
-//    	    usuario.setRol(Rol.EMPLEADO);
-//    	    usuarioRepository.save(usuario);
-//
-//    	    // Inserto fila empleado con el mismo ID
-//    	    entityManager.createNativeQuery("INSERT INTO empleado (id_usuario, area, disponibilidad) VALUES (?, ?, ?)")
-//    	        .setParameter(1, usuario.getIdUsuario())
-//    	        .setParameter(2, datosEmpleado.getArea().toString())  // Ajusta según tipo de campo
-//    	        .setParameter(3, datosEmpleado.isDisponibilidad())
-//    	        .executeUpdate();
-//
-//    	    return entityManager.find(Empleado.class, usuario.getIdUsuario());
-//    	}
-//=======
-//    private final PasswordEncoder passwordEncoder;
-//    @PersistenceContext
-//    private EntityManager entityManager;
-//    
-//    
-//    public Usuario guardarUsuario(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) {
-//        Usuario nuevoUsuario = new Usuario();
-//        nuevoUsuario.setNombreUsuario(nombreUsuario);
-//        nuevoUsuario.setNombre(nombre);
-//        nuevoUsuario.setApellido(apellido);
-//        nuevoUsuario.setDni(dni);
-//        nuevoUsuario.setEmail(email);
-//        nuevoUsuario.setContraseña(passwordEncoder.encode(contraseña));
-//        return usuarioRepository.save(nuevoUsuario);
-//    }
-//    
-//    @Transactional
-//    public Empleado convertirAEmpleado(int idUsuario, Empleado datosEmpleado) throws Exception {
-//
-//    	Usuario usuario = usuarioRepository.findById(idUsuario)
-//    	        .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-//
-//    	    usuario.setRol(Rol.EMPLEADO);
-//    	    usuarioRepository.save(usuario);
-//
-//    	    // Inserto fila empleado con el mismo ID
-//    	    entityManager.createNativeQuery("INSERT INTO empleado (id_usuario, area, disponibilidad) VALUES (?, ?, ?)")
-//    	        .setParameter(1, usuario.getIdUsuario())
-//    	        .setParameter(2, datosEmpleado.getArea().toString())  // Ajusta según tipo de campo
-//    	        .setParameter(3, datosEmpleado.isDisponibilidad())
-//    	        .executeUpdate();
-//
-//    	    return entityManager.find(Empleado.class, usuario.getIdUsuario());
-//    	}
 
     
     public Optional<Usuario> buscarEmpleadoPorEmail(String email) {
@@ -87,16 +33,10 @@ public class UsuarioService {
                  .filter(u -> u.getRol() == Rol.EMPLEADO);
     }
 
-//<<<<<<< HEAD
     public Usuario getUsuarioByNombreUsuario(String username) {
         return usuarioRepository.findByNombreUsuario(username);
     }
 
-//
-//    public Usuario getUsuarioByNombreUsuario(String username) {
-//        return usuarioRepository.findByNombreUsuario(username);
-//>>>>>>> refs/remotes/origin/pauche
-//    }
     
     public Optional<Usuario> buscarPorUsernameYPassword(String username, String password) {
     	return usuarioRepository.findByNombreUsuarioAndContraseña(username, password);
