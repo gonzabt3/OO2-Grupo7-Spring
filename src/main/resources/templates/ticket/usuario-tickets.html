@@ -60,7 +60,7 @@
                         <th>Usuario Creador</th>
                         <th>Estado</th>
                         <th>Prioridad</th>
-                        <th>Procesos</th>
+                        <th>Ultima Función</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,11 +73,7 @@
                         <td th:text="${ticket.usuarioCreador.nombre}"></td>
                         <td th:text="${ticket.estado}"></td>
                         <td th:text="${ticket.prioridad}"></td>
-                        <td>
-                            <ul class="list-unstyled mb-0">
-                                <li th:each="proceso : ${ticket.procesos}" th:text="${proceso.nombre}"></li>
-                            </ul>
-                        </td>
+  <td th:text="${#lists.isEmpty(ticket.procesos) ? '' : ticket.procesos[ticket.procesos.size() - 1].funcion}"></td>
                     </tr>
                 </tbody>
             </table>

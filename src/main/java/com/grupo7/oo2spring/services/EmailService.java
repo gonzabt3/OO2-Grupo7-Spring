@@ -62,33 +62,30 @@ public class EmailService {
 	        
 	 }
 	 
-	 public void enviarEmailConHtml(String receptor, String asunto, Map<String, Object> variables) {
+	 public void enviarEmailConHtml(String receptor, String asunto, String nombreTemplate, Map<String, Object> variables) {
 		    try {
+		    	System.out.println("📨 Entró a enviarEmailConHtml()");
 		        MimeMessage mimeMessage = mailSender.createMimeMessage();
 		        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
 
 		        Context context = new Context();
 		        context.setVariables(variables);
 
-		        String htmlContent = templateEngine.process("email-template", context);
-		       
+		        String htmlContent = templateEngine.process(nombreTemplate, context);
 
 		        helper.setFrom(emailSenderFrom);
-		        helper.setTo(receptor);
+		        helper.setTo("pauchearg@gmail.com");
 		        helper.setSubject(asunto);
 		        helper.setText(htmlContent, true);
-		        
-		        System.out.println("🔍 nombreUsuario: " + variables.get("nombreUsuario"));
-		        System.out.println("🔍 email: " + variables.get("email"));
-		        System.out.println("🔍 mensaje: " + variables.get("mensaje"));
 
 		        mailSender.send(mimeMessage);
 		    } catch (MessagingException e) {
 		        throw new RuntimeException("Error al enviar correo HTML", e);
 		    } catch (Exception e) {
-		    e.printStackTrace(); // o log.error(...)
-		    throw new RuntimeException("Error al enviar correo HTML", e);
+		        e.printStackTrace();
+		        throw new RuntimeException("Error al enviar correo HTML", e);
+		    }
 		}
-		}
+
 
 }

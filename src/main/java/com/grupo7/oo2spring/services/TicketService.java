@@ -1,6 +1,8 @@
 package com.grupo7.oo2spring.services;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +12,6 @@ import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.dto.ControlDTO;
-import com.grupo7.oo2spring.dto.EmpleadoDTO;
 import com.grupo7.oo2spring.dto.TicketDTO;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
@@ -25,12 +26,7 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
-import javax.management.RuntimeErrorException;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.security.access.prepost.PreAuthorize;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 
 @Service
@@ -42,10 +38,6 @@ public class TicketService {
 	private final IUsuarioRepository usuarioRepository;
 
 	private final IControlRepository controlRepository;
-
-	public Ticket getByIdTicket(int idTicket) {
-		return ticketRepository.getByIdTicket(idTicket);
-	}
 
 	 public List<Ticket> findByAreaIsNull() {
 	        // Call the repository method, passing Area.SIN_ASIGNAR
@@ -76,13 +68,13 @@ public class TicketService {
 	@Transactional
 	public void tomarTicketConControlInicial(int idTicket, Empleado empleadoLogueado, ControlDTO control)
 			throws Exception {
-		
+		try {
 		Ticket ticket = ticketRepository.getByIdTicket(idTicket);
 
 		Control controlInicial = new Control();
 		controlInicial.setTicket(ticket);
 		controlInicial.setAccion(control.getAccion());
-		controlInicial.setFechaEntrada(LocalDate.now());
+		controlInicial.setFechaEntrada(LocalDateTime.now());
 		controlInicial.setFinalizado(false); // No está finalizado al tomarlo
 		controlInicial.setFechaSalida(null);
 		controlInicial.setFuncion(control.getFuncion());
@@ -96,19 +88,24 @@ public class TicketService {
 		ticketRepository.save(ticket);
 		System.out.println("Ticket #" + idTicket + " tomado exitosamente por " + empleadoLogueado.getNombre() + " "
 				+ empleadoLogueado.getApellido());
+	}catch (Exception e) {
+		 System.out.println("❌ Error al tomar ticket en el service:");
+	        e.printStackTrace();
+	        throw new RuntimeException("Falló tomarTicketConControlInicial: " + e.getMessage(), e);
+	}
 	}
 
 	// @PreAuthorize("hasRole('EMPLEADO')")
 	@Transactional
 	public void agregarControlATicket(int idTicket, Empleado empleado, ControlDTO control, boolean finalizaTicket)
 			throws Exception {
-		Ticket ticket = getByIdTicket(idTicket);
+		Ticket ticket = buscarTicketPorId(idTicket);
 
 		Control nuevoControl = new Control();
 		nuevoControl.setAccion(control.getAccion());
 		nuevoControl.setEmpleado(empleado);
 		nuevoControl.setTicket(ticket);
-		nuevoControl.setFechaEntrada(LocalDate.now());
+		nuevoControl.setFechaEntrada(LocalDateTime.now());
 		nuevoControl.setFinalizado(finalizaTicket);
 		nuevoControl.setFuncion(control.getFuncion());
 		
@@ -117,7 +114,7 @@ public class TicketService {
 		ticket.addControl(nuevoControl);
 
 		if (finalizaTicket) {
-			nuevoControl.setFechaSalida(LocalDate.now());
+			nuevoControl.setFechaSalida(LocalDateTime.now());
 			ticket.setFechaCierre(LocalDate.now());
 			ticket.setEstado(Estado.RESUELTO); 
 		}

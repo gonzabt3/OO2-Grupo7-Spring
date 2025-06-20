@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -26,9 +27,9 @@ public class Control {
     @JoinColumn(name = "empleado_id")
     private Empleado empleado;
 
-    private LocalDate fechaEntrada;
+    private LocalDateTime fechaEntrada;
 
-    private LocalDate fechaSalida;
+    private LocalDateTime fechaSalida;
     
     private String accion;
 
@@ -38,7 +39,7 @@ public class Control {
     private Funcion funcion;
     
     
-	public Control(Ticket ticket, Empleado empleado, LocalDate fechaEntrada, LocalDate fechaSalida,
+	public Control(Ticket ticket, Empleado empleado, LocalDateTime fechaEntrada, LocalDateTime fechaSalida,
 			String accion, boolean finalizado, Funcion funcion) {
 		this.ticket = ticket;
 		this.empleado = empleado;
@@ -74,19 +75,19 @@ public class Control {
         this.ticket = ticket;
     }
 
-    public LocalDate getFechaEntrada() {
+    public LocalDateTime getFechaEntrada() {
         return fechaEntrada;
     }
 
-    public void setFechaEntrada(LocalDate fechaEntrada) {
+    public void setFechaEntrada(LocalDateTime fechaEntrada) {
         this.fechaEntrada = fechaEntrada;
     }
 
-    public LocalDate getFechaSalida() {
+    public LocalDateTime getFechaSalida() {
         return fechaSalida;
     }
 
-    public void setFechaSalida(LocalDate fechaSalida) {
+    public void setFechaSalida(LocalDateTime fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 

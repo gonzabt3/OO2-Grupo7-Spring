@@ -69,6 +69,7 @@ public class EmailController {
     
     @PostMapping("/enviar")
     public String enviarContacto(@RequestParam("mensaje") String mensaje, Principal principal) {
+    	System.out.println("👤 principal.getName(): " + principal.getName());
         Usuario usuario = usuarioService.getUsuarioByNombreUsuario(principal.getName());
 
         // 1. Guardar en la BD
@@ -79,12 +80,12 @@ public class EmailController {
 
         // 2. Enviar por email
         Map<String, Object> variables = new HashMap<>();
-        variables.put("nombreUsuario", usuario.getNombreUsuario());
+        variables.put("nombreUsuario", principal.getName());
         variables.put("email", usuario.getEmail());
         variables.put("mensaje", mensaje);
+        
 
-        emailService.enviarEmailConHtml(usuario.getEmail(), "Nuevo mensaje de contacto", variables);
-        //emailService.enviarEmailConHtml("pauchearg@gmail.com", "Nuevo mensaje de contacto", variables);
+        emailService.enviarEmailConHtml(usuario.getEmail(), "Nuevo mensaje de contacto", "email-template", variables);
         
         System.out.println("🔔 Enviando email a: " + emailSenderFrom);
 
