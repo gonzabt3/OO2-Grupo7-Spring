@@ -106,7 +106,7 @@
         }
         
         .btn-emp-area {
-            background-color: #17a2b8; /* color cyan/azul claro */
+            background-color: #17a2b8;
             border-color: #17a2b8;
         }
 
@@ -116,7 +116,7 @@
         }
 
         .btn-emp-asignar {
-            background-color: #28a745; /* verde */
+            background-color: #28a745;
             border-color: #28a745;
         }
 
@@ -126,7 +126,7 @@
         }
 
         .btn-emp-todos {
-            background-color: #ffc107; /* amarillo */
+            background-color: #ffc107;
             border-color: #ffc107;
             color: #212529;
         }
@@ -136,6 +136,18 @@
             border-color: #d39e00;
             color: #212529;
         }
+		
+		.btn-emp-todos-ticket-manager {
+		    background-color: rgb(255, 128, 0);
+		    border-color: rgb(204, 102, 0);
+		    color: #212529;
+		}
+
+		.btn-emp-todos-ticket-manager:hover {
+		    background-color: rgb(179, 89, 0);
+		    border-color: rgb(188, 148, 7);
+		    color: #212529;
+		}
 
         .btn-lg {
             min-width: 220px;
@@ -205,7 +217,7 @@
 
 
             <!-- Solo para managers -->
-            <a href="/ticket/lista" class="btn btn-info btn-lg mx-2 my-2 btn-emp-todos"
+            <a href="/ticket/lista" class="btn btn-info btn-lg mx-2 my-2 btn-emp-todos-ticket-manager"
                th:if="${rol == 'MANAGER'}">
                 Ver Todos Los Tickets
             </a>
