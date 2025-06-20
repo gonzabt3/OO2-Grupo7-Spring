@@ -197,13 +197,10 @@
             <a href="/ticket/formulario_simple" class="btn btn-primary btn-lg mx-2 my-2">
                 Crear Ticket
             </a>
-			<a href="/ticket/tickets" class="btn btn-info btn-lg mx-2 my-2 btn-emp-asigna" th:if="${rol == 'USER'}">
-				<i class="fas fa-ticket-alt"></i> Mis Tickets
-			</a>
 
-			<a href="/usuario/misDatos" class="btn btn-warning btn-lg mx-2 my-2">
-				<i class="fas fa-user-circle"></i> Mis Datos
-			</a>
+		<a href="/usuario/misDatos" class="btn btn-warning btn-lg mx-2 my-2">
+			<i class="fas fa-user-circle"></i> Mis Datos
+		</a>
 
             <a href="/ticket/listaArea" class="btn btn-info btn-lg mx-2 my-2 btn-emp-area"
                th:if="${rol == 'EMPLEADO'}">
