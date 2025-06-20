@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar Prioridad de Ticket</title>
+    </head>
+<body>
+    <h1>Cambiar Prioridad de Ticket #<span th:text="${ticket.idTicket}"></span></h1>
+    <p>Prioridad actual: <span th:text="${ticket.prioridad}"></span></p>
+
+    <form th:action="@{/ticket/{idTicket}/cambiarPrioridad(id=${ticket.idTicket})}" method="post">
+        <label for="nuevaPrioridad">Nueva Prioridad:</label>
+        <select id="nuevaPrioridad" name="nuevaPrioridad">
+            <option th:each="p : ${prioridades}" 
+                    th:value="${p}" 
+                    th:text="${p}"
+                    th:selected="${p == ticket.prioridad}"></option>
+        </select>
+        <br><br>
+        <button type="submit">Actualizar Prioridad</button>
+    </form>
+    <p><a href="/tickets/lista">Volver a la lista de Tickets</a></p>
+</body>
+</html>
