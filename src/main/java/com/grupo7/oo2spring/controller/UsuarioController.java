@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
-
+	
     @GetMapping("/misDatos")
     public String verificarUsuario(Model model, @AuthenticationPrincipal UserDetails usuariolog) {
     	UsuarioDetails usuarioDetail = (UsuarioDetails)usuariolog;
