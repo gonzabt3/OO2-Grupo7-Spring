@@ -74,7 +74,7 @@ public class EmailService {
 		        String htmlContent = templateEngine.process(nombreTemplate, context);
 
 		        helper.setFrom(emailSenderFrom);
-		        helper.setTo("pauchearg@gmail.com");
+		        helper.setTo(receptor);
 		        helper.setSubject(asunto);
 		        helper.setText(htmlContent, true);
 

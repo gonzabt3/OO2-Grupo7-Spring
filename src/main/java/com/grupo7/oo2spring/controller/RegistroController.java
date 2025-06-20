@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.grupo7.oo2spring.models.EmailToken;
@@ -84,8 +85,13 @@ public class RegistroController {
                 + "</body></html>";
         emailService.enviarEmail(usuario.getEmail(), asunto, cuerpo);
         } catch (Exception e) {
+        	
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            
             // Si algo sale mal, eliminar el usuario recién guardado
             usuarioRepository.delete(usuario);
+            
+
             model.addAttribute("errorGeneral", "Ocurrió un error al enviar el correo de confirmación. Intentá nuevamente.");
             return "usuario/registro";
         }

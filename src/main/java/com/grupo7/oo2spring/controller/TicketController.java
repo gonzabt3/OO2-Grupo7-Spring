@@ -161,12 +161,13 @@ public class TicketController {
 		    // ✅ Armar variables para el template
 		    Map<String, Object> variables = new HashMap<>();
 		    variables.put("nombreUsuario", usuarioDueño.getNombre());
-		    variables.put("email", "pauchearg@gmail.com");
+		    variables.put("email",usuarioDueño.getEmail());
 		    variables.put("tituloTicket", ticket.getTitulo());
 		    variables.put("descripcionControl", ticket.getDescripcion());
 		    variables.put("ticketId", ticket.getIdTicket());
 		    variables.put("accionControl", control.getAccion());
 		    variables.put("fechaControl", LocalDate.now().toString());
+		    //variables.put("urlDetalle", "http://localhost:8080/ticket/tickets");
 
 		    System.out.println("📌 emailService es: " + emailService);
 		    
@@ -218,11 +219,12 @@ public class TicketController {
     }
 	
 	
+	@PostMapping("/{idTicket}/asignarArea")
 	public String assignAreaToTicket(@PathVariable int idTicket,
             @RequestParam("area") Area area,
-            Model model) throws TicketNoEncontradoException {
+            RedirectAttributes redirectAttributes) throws TicketNoEncontradoException {
 		ticketService.asignarAreaTicket(idTicket, area);
-		model.addAttribute("successMessage", "¡Área '" + area.name() + "' asignada al ticket #" + idTicket + " con éxito!");
+		redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.name() + "' asignada al ticket #" + idTicket + " con éxito!");
 		return "redirect:/ticket/sinasignar";
 }
 	
