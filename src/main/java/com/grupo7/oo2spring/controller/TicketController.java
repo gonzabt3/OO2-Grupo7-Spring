@@ -23,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.grupo7.oo2spring.dto.ControlDTO;
 import com.grupo7.oo2spring.dto.TicketDTO;
+import com.grupo7.oo2spring.exception.TicketCreacionException;
 import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Control;
@@ -179,7 +180,7 @@ public class TicketController {
 
 		    model.addAttribute("successMessage", "Control agregado con éxito y correo enviado.");
             model.addAttribute("successMessage", "¡Ticket #" + idTicket + " tomado y gestión iniciada!");
-        } catch (RuntimeException e) {
+        } catch (TicketCreacionException e) {
             model.addAttribute("errorMessage", "Error al tomar el ticket #" + idTicket + ": " + e.getMessage());
             // Si hay un error, redirie al formulario de toma con el ticket para que pueda intentar de nuevo
             return "redirect:/ticket/" + idTicket + "/tomarTicket";

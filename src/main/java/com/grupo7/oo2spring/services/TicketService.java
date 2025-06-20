@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.exception.TicketCreacionException;
 import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.dto.ControlDTO;
@@ -56,12 +57,17 @@ public class TicketService {
 
 	@Transactional
 	public Ticket crearTicket(TicketDTO ticket, Usuario usuarioCreador) {
-	    System.out.println("SERVICIO: Creando ticket con DTO: " + ticket);
+		System.out.println("SERVICIO: Creando ticket con DTO: " + ticket);
+		
+		try {
+			Ticket nuevoTicket = new Ticket(ticket.getTitulo(), ticket.getDescripcion(),  usuarioCreador);
+			Ticket guardado = ticketRepository.save(nuevoTicket);
+			System.out.println("SERVICIO: Ticket guardado con ID: " + guardado.getIdTicket());
+			return guardado;
+		} catch (Exception e) {
+			throw new TicketCreacionException("Error al guardar el ticket: " + e.getMessage());
+		}
 
-	    Ticket nuevoTicket = new Ticket(ticket.getTitulo(), ticket.getDescripcion(),  usuarioCreador);
-	    Ticket guardado = ticketRepository.save(nuevoTicket);
-	    System.out.println("SERVICIO: Ticket guardado con ID: " + guardado.getIdTicket());
-	    return guardado;
 	}
 
 	// @PreAuthorize("hasRole('EMPLEADO')")
