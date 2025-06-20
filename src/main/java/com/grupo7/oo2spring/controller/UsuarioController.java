@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.security.UsuarioDetails;
-
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
