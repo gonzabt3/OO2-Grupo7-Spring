@@ -222,7 +222,7 @@ public class TicketController {
             RedirectAttributes redirectAttributes) throws TicketNoEncontradoException {
 		ticketService.asignarAreaTicket(idTicket, area);
 		redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.name() + "' asignada al ticket #" + idTicket + " con éxito!");
-		return "redirect:/ticket/sinasignar";
+		return "redirect:/ticket/lista";
 	}
 	
 	@PreAuthorize("hasAnyRole('USER')")
