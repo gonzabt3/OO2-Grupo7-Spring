@@ -3,6 +3,9 @@ package com.grupo7.oo2spring.services;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+
+import com.grupo7.oo2spring.exception.UsuarioEsEmpleadoException;
+import com.grupo7.oo2spring.exception.UsuarioNoEncontradoException;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
@@ -21,10 +24,10 @@ public class ManagerService {
 	private final IEmpleadoRepository empleadoRepository;
 	private final EntityManager entityManager;
 	
-	public Empleado prepararEmpleadoDesdeUsuario(int idUsuario) throws Exception {
+	public Empleado prepararEmpleadoDesdeUsuario(int idUsuario) throws UsuarioNoEncontradoException {
 	    Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
 	    if (usuarioOpt.isEmpty()) {
-	        throw new Exception("Usuario no encontrado");
+	        throw new UsuarioNoEncontradoException("Usuario no encontrado");
 	    }
 
 	    Usuario usuario = usuarioOpt.get();
@@ -46,11 +49,11 @@ public class ManagerService {
 	public Empleado convertirUsuarioAEmpleado(int idUsuario, Empleado datosEmpleado) throws Exception {
 		// 1. Buscar el usuario por ID
 	    Usuario usuario = usuarioRepository.findById(idUsuario)
-	        .orElseThrow(() -> new Exception("Usuario no encontrado"));
+	        .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
 	    // 2. Verificar si ya tiene el rol de EMPLEADO
 	    if (usuario.getRol() == Rol.EMPLEADO) {
-	        throw new Exception("El usuario ya es un empleado");
+	        throw new UsuarioEsEmpleadoException("El usuario ya es un empleado");
 	    }
 
 	    Empleado empleado;
