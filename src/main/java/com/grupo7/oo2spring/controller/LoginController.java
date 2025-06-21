@@ -27,7 +27,9 @@ public class LoginController {
     	 if ("true".equals(error)) {
     	        model.addAttribute("error", "Usuario o contraseña incorrectos");
     	    }
+    	 
         return "/usuario/login"; // formulario login
+        
     }
     
 }

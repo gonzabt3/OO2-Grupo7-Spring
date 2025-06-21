@@ -16,18 +16,22 @@ public class PanelController {
 	
 	@GetMapping("/panel")
 	public String mostrarPanel(Model model) {
+		
 	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 	    if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+	    	
 	        UsuarioDetails usuarioDetails = (UsuarioDetails) auth.getPrincipal();
 	        UsuarioBase usuario = usuarioDetails.getUsuario();
 	        model.addAttribute("usuario", usuario);
 
 	        String rolStr = (usuario.getRol() != null) ? usuario.getRol().toString() : "USER";
 	        model.addAttribute("rol", rolStr);
+	        
 	    }
 
 	    return "panel";
+	    
 	}
 
 

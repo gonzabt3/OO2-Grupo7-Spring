@@ -29,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/contacto")
+
 public class EmailController {
 	
 	  private final EmailService emailService;
@@ -44,6 +45,7 @@ public class EmailController {
 		  if (exito != null) {
 		        model.addAttribute("exito", true);
 		    }
+		  
 	      return "contacto/formulario-contacto"; 
 	  }
     
@@ -63,6 +65,7 @@ public class EmailController {
     
     @GetMapping("/enviar")
     public String redirectToFormulario() {
+    	
         return "redirect:/contacto/formulario-contacto";
     }
     

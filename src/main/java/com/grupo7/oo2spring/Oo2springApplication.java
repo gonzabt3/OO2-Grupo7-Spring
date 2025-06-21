@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = "com.grupo7.oo2spring")
 @EnableJpaRepositories(basePackages = "com.grupo7.oo2spring.repositories")
 @EntityScan(basePackages = "com.grupo7.oo2spring.models")
+
 public class Oo2springApplication {
 
 	public static void main(String[] args) {

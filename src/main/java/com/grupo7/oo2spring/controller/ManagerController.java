@@ -39,54 +39,72 @@ public class ManagerController {
 	
 	@GetMapping("/listar")
     public String listarUsuarios(Model model) {
+		
         List<Usuario> usuarios = usuarioRepository.findAll();
         model.addAttribute("usuarios", usuarios);
+        
         return "manager/listar";
     }
     
 	@GetMapping("/{id}/a-empleado")
 	public String mostrarFormularioEmpleado(@PathVariable int id, Model model) {
+		
 		 try {
+			 
 		        Empleado empleado = managerService.prepararEmpleadoDesdeUsuario(id);
 		        model.addAttribute("empleado", empleado);
+		        
 		        return "manager/formulario_empleado";
+		        
 		    } catch (Exception e) {
+		    	
 		        e.printStackTrace();
+		        
 		        return "redirect:/manager/listar";
 		    }
 	}
     
 	@PostMapping("/convertir-a-empleado")
 	public String convertirAEmpleado(@ModelAttribute Empleado empleadoForm, RedirectAttributes attr) {
+		
 		try {
+			
 	        Optional<Empleado> empleadoOpt = empleadoRepository.findById(empleadoForm.getIdEmpleado());
 	        if (empleadoOpt.isEmpty()) {
 	            attr.addFlashAttribute("error", "Usuario no encontrado");
+	            
 	            return "redirect:/manager/listar";
 	        }
 	
 	        managerService.convertirUsuarioAEmpleado(empleadoForm.getIdEmpleado(), empleadoForm);
 	
 	        attr.addFlashAttribute("success", "Usuario convertido en empleado exitosamente");
+	        
 	        return "redirect:/manager/listar";
 	
 	    } catch (Exception e) {
+	    	
 	        e.printStackTrace();
 	        attr.addFlashAttribute("error", "Error al convertir usuario en empleado");
+	        
 	        return "redirect:/manager/listar";
 	    }
 	}
     
     @PostMapping("/{id}/sacar-permisos")
     public String sacarPermisos(@PathVariable int id) throws Exception {
+    	
         // lógica para sacar permisos
     	 Optional<Empleado> empleado = empleadoRepository.findById(id);
     	 
     	 if (empleado != null) {
+    		 
     	        // Convertir empleado a usuario
     	        managerService.sacarPermisosEmpleado(id);
     	    }
+    	 
         return "redirect:/manager/listar";
+        
     }
 
 

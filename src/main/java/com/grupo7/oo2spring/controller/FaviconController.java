@@ -10,6 +10,7 @@ public class FaviconController {
 
 	@RequestMapping("favicon.ico")
 	public ResponseEntity<Void> favicon() {
+		
 	    return ResponseEntity.noContent().build();  // Respuesta 204 sin contenido
 	}
 }

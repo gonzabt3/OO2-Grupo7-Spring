@@ -2,6 +2,7 @@ package com.grupo7.oo2spring.dto;
 
 
 public enum Area {
+	
 	SOPORTE("Soporte"),
     VENTAS("Ventas"),
     DESARROLLO("Desarrollo"),

@@ -16,13 +16,6 @@
 
 <div class="container mt-5">
     <h2 class="mb-4">Lista de Usuarios</h2>
-
-	<div class="btn-back">
-	            <a href="/panel" class="btn btn-outline-primary">
-	                <i class="bi bi-arrow-left"></i> Volver al Panel
-	            </a>
-	        </div>
-
     <!-- Mensajes de éxito o error -->
     <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
     <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
@@ -68,6 +61,11 @@
             </tbody>
         </table>
     </div>
+	<div class="btn-back">
+		<a href="/panel" class="btn btn-outline-primary">
+		<i class="bi bi-arrow-left"></i> Volver al Panel
+		            </a>
+	</div>
 </div>
 <script src="/js/bootstrap.bundle.min.js"></script>
 </body>

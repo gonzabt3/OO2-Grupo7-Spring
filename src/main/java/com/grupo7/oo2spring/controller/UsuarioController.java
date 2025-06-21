@@ -19,20 +19,27 @@ public class UsuarioController {
 	
     @GetMapping("/misDatos")
     public String verificarUsuario(Model model, @AuthenticationPrincipal UserDetails usuariolog) {
+    	
     	UsuarioDetails usuarioDetail = (UsuarioDetails)usuariolog;
     	Object entidadLogeada = usuarioDetail.getUsuario();
+    	
     	if (entidadLogeada instanceof Empleado) {
+    		
             Empleado empleadoLogeado = (Empleado) entidadLogeada;
             model.addAttribute("usuariologueado", empleadoLogeado); // Objeto común para propiedades compartidas
             model.addAttribute("tipoEntidad", "empleado"); // Indicador de tipo
             model.addAttribute("empleadoData", empleadoLogeado); // Datos específicos de Empleado
 
         } else if (entidadLogeada instanceof Usuario) {
+        	
             Usuario usuarioLogeado = (Usuario) entidadLogeada;
             model.addAttribute("usuariologueado", usuarioLogeado); // Objeto común para propiedades compartidas
             model.addAttribute("tipoEntidad", "usuario"); // Indicador de tipo
             model.addAttribute("usuarioData", usuarioLogeado); // Datos específicos de Usuario
         }
+    	
         return "usuario/datos_usuario";
+        
     }
+    
 }

@@ -36,7 +36,9 @@ public class RegistroController {
 
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model) {
+    	
         return "usuario/registro";
+        
     }
 
     @Transactional
@@ -46,16 +48,22 @@ public class RegistroController {
         
      // Validar si el nombre de usuario ya existe
         if (usuarioRepository.existsByNombreUsuario(usuario.getNombreUsuario())) {
+        	
             model.addAttribute("errorUsuario", "El nombre de usuario ya está registrado.");
             model.addAttribute("usuario", usuario);
+            
             return "usuario/registro"; // vuelve a mostrar el formulario con error
+            
         }
         
         // Validar si el email ya existe
         if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+        	
             model.addAttribute("errorEmail", "El email ya está registrado.");
             model.addAttribute("usuario", usuario);  // Mantenemos el usuario con los datos ingresados
+            
             return "usuario/registro"; // vuelve a mostrar el formulario con error
+            
         }
         
         usuario.setRol(Rol.USER);
@@ -63,6 +71,7 @@ public class RegistroController {
         usuario.setUsuarioActivo(true);
         
         try {
+        	
         usuarioRepository.save(usuario);
         
         // Generar token
@@ -84,6 +93,7 @@ public class RegistroController {
                 + "<p>Si no te registraste en nuestro sitio, podés ignorar este mensaje.</p>"
                 + "</body></html>";
         emailService.enviarEmail(usuario.getEmail(), asunto, cuerpo);
+        
         } catch (Exception e) {
         	
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -93,21 +103,29 @@ public class RegistroController {
             
 
             model.addAttribute("errorGeneral", "Ocurrió un error al enviar el correo de confirmación. Intentá nuevamente.");
+            
             return "usuario/registro";
+            
         }
 
         System.out.println("Usuario registrado: " + usuario.getNombreUsuario());
+        
         return "redirect:/usuario/registro_exito";
+        
     }
     
     @GetMapping("/registro_exito")
     public String mostrarRegistroExito() {
+    	
         return "usuario/registro_exito";
+        
     }
     
     @GetMapping("/token_invalido")
     public String mostrarTokenInvalido() {
+    	
         return "usuario/token_invalido";
+        
     }
     
     @GetMapping("/confirmar")
@@ -117,12 +135,16 @@ public class RegistroController {
 
         if (tokenVerificacion == null) {
             model.addAttribute("error", "Token inválido");
+            
             return "usuario/token_invalido";
+            
         }
 
         if (tokenVerificacion.getExpiryDate().isBefore(LocalDateTime.now())) {
             model.addAttribute("error", "Token expirado");
+            
             return "usuario/token_invalido";
+            
         }
 
         Usuario usuario = tokenVerificacion.getUsuario();
@@ -134,6 +156,8 @@ public class RegistroController {
     
     @GetMapping("/confirmacion_exitosa")
     public String mostrarConfirmacionExitosa() {
+    	
         return "usuario/confirmacion_exitosa";
+        
 }
 }
