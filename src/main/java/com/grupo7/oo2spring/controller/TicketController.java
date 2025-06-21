@@ -244,14 +244,28 @@ public class TicketController {
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@PostMapping("/{idTicket}/cambiarPrioridad")
 	public String cambiarPrioridad(@PathVariable int idTicket, @RequestParam("prioridad")Prioridad prioridad, Model model) throws Exception {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		ticketService.asignarPrioridad(idTicket, prioridad);
-		return "redirect:/ticket/lista";
+		if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER"))) {
+            return "redirect:/ticket/lista";
+        }
+        else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_EMPLEADO"))) {
+            return "redirect:/ticket/listaArea";
+        }
+		return "redirect:/panel";
 	}
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@PostMapping("/{idTicket}/cambiarEstado")
 	public String cambiarEstado(@PathVariable int idTicket, @RequestParam("estado")Estado estado, Model model) throws Exception {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		ticketService.asignarEstado(idTicket, estado);
-		return "redirect:/ticket/lista";
+		if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_MANAGER"))) {
+            return "redirect:/ticket/lista";
+        }
+        else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_EMPLEADO"))) {
+            return "redirect:/ticket/listaArea";
+        }
+		return "redirect:/panel";
 	}
 	
 	//Para testear la excepcion
