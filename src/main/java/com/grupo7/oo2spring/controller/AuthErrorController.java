@@ -1,4 +1,4 @@
-package com.grupo7.oo2spring.controllers;
+package com.grupo7.oo2spring.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

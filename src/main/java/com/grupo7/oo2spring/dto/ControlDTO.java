@@ -1,31 +1,38 @@
 package com.grupo7.oo2spring.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.grupo7.oo2spring.models.Empleado;
+import com.grupo7.oo2spring.models.Funcion;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @NoArgsConstructor
 public class ControlDTO {
 
     private int idControl;
     private TicketDTO ticket;
     private Empleado empleado;
-    private LocalDate fechaEntrada;
-    private LocalDate fechaSalida;
+    private LocalDateTime fechaEntrada;
+    private LocalDateTime fechaSalida;
     private String accion;
     private boolean finalizado;
+    private Funcion funcion;
 
-    public ControlDTO(TicketDTO ticket, Empleado empleado, LocalDate fechaEntrada,
-			LocalDate fechaSalida, String accion, boolean finalizado) {
-		super();
+    public ControlDTO(TicketDTO ticket, Empleado empleado, LocalDateTime fechaEntrada,
+			LocalDateTime fechaSalida, String accion, boolean finalizado, Funcion funcion) {
 		this.ticket = ticket;
 		this.empleado = empleado;
 		this.fechaEntrada = fechaEntrada;
 		this.fechaSalida = fechaSalida;
 		this.accion = accion;
 		this.finalizado = finalizado;
+		this.funcion = funcion;
 	}
     
     // Getters y setters
@@ -53,19 +60,19 @@ public class ControlDTO {
         this.ticket = ticket;
     }
 
-    public LocalDate getFechaEntrada() {
+    public LocalDateTime getFechaEntrada() {
         return fechaEntrada;
     }
 
-    public void setFechaEntrada(LocalDate fechaEntrada) {
+    public void setFechaEntrada(LocalDateTime fechaEntrada) {
         this.fechaEntrada = fechaEntrada;
     }
 
-    public LocalDate getFechaSalida() {
+    public LocalDateTime getFechaSalida() {
         return fechaSalida;
     }
 
-    public void setFechaSalida(LocalDate fechaSalida) {
+    public void setFechaSalida(LocalDateTime fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 

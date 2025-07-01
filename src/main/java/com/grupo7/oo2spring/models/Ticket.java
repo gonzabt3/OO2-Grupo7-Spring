@@ -35,6 +35,8 @@ public class Ticket {
     
     @Enumerated(EnumType.STRING)
     private Area area;
+    
+
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Control> procesos;
@@ -53,7 +55,7 @@ public class Ticket {
     		this.fechaCreacion = LocalDate.now();
     		this.fechaCierre = null;
     		this.usuarioCreador = usuarioCreador;
-    		this.estado = Estado.PENDIENTE;
+    		this.estado = Estado.ABIERTO;
     		this.prioridad = Prioridad.SIN_ASIGNAR;
     		this.area = Area.SIN_ASIGNAR;
     		this.procesos = new ArrayList<Control>();

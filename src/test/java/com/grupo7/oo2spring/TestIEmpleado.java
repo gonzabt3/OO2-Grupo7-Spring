@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.grupo7.oo2spring.models.Empleado;
+import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.repositories.*;
 
@@ -19,9 +20,9 @@ import com.grupo7.oo2spring.repositories.*;
 public class TestIEmpleado {
 	
 	@Autowired
-    private IUsuarioRepository empleadoRepository;
-	@Autowired
     private PasswordEncoder passwordEncoder;
+	@Autowired
+	private IEmpleadoRepository empleadoRepository;
 
 
     @Test
@@ -30,9 +31,24 @@ public class TestIEmpleado {
     	//empleadoRepository.deleteById(4);
         Empleado empleado = new Empleado("Juan", "Perez", "20308232", "juan.perez@example.com","juan", passwordEncoder.encode("password"), Area.DESARROLLO, true);
         empleado = empleadoRepository.save(empleado);
+        
+	    Empleado manager = new Empleado(
+	            "Carlos",           // nombre
+	            "Gómez",            // apellido
+	            "30455678",         // dni
+	            "carlos@example.com", // email
+	            "carlosG",          // nombreUsuario
+	            "segura123",         // contraseña
+	            Area.SOPORTE, 
+	            true
+	        );
+	    
+        manager.setContraseña(passwordEncoder.encode(manager.getContraseña()));
+        manager.setRol(Rol.MANAGER);
+	    manager = empleadoRepository.save(manager);
 
         // Buscar por ID
-        Optional<Empleado> encontrado = empleadoRepository.findEmpleadoById(empleado.getIdUsuario());
+        Optional<Empleado> encontrado = empleadoRepository.findById(empleado.getIdEmpleado());
         assertThat(encontrado).isPresent();
         
         System.out.println("Rol del empleado creado: " + empleado.getRol());
@@ -42,7 +58,7 @@ public class TestIEmpleado {
         assertThat(encontrado.get().getApellido()).isEqualTo("Perez");
 
         // Buscar todos los empleados
-        List<Empleado> lista = empleadoRepository.findAllEmpleados();
+        List<Empleado> lista = empleadoRepository.findAll();
         assertThat(lista).isNotEmpty();
         assertThat(lista).contains(empleado);
     }

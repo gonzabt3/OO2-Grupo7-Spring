@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title th:text="${status} + ' - ' + ${error}">Conflicto de Usuario</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f8f9fa;
+			color: #343a40;
+			text-align: center;
+			padding: 50px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			min-height: 100vh;
+			margin: 0;
+		}
+
+		.container {
+			max-width: 700px;
+			background-color: #ffffff;
+			border-radius: 10px;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+			padding: 40px;
+			box-sizing: border-box;
+		}
+
+		h1 {
+			color: #dc3545;
+			/* Rojo de error, más apropiado para "no encontrado" */
+			font-size: 3em;
+			margin-bottom: 20px;
+		}
+
+		p {
+			font-size: 1.1em;
+			line-height: 1.6;
+			margin-bottom: 15px;
+		}
+
+		strong {
+			color: #343a40;
+		}
+
+		code {
+			background-color: #e9ecef;
+			padding: 3px 6px;
+			border-radius: 4px;
+			font-family: 'Courier New', monospace;
+			color: #007bff;
+		}
+
+		/* Estilos para los nuevos botones */
+		.btn-group {
+			margin-top: 25px;
+			/* Espacio superior para los botones */
+		}
+
+		.btn {
+			padding: 10px 20px;
+			font-size: 1em;
+			cursor: pointer;
+			border: 1px solid;
+			border-radius: 5px;
+			text-decoration: none;
+			/* Para el enlace que actúa como botón */
+			display: inline-block;
+			/* Para que el enlace se comporte como un bloque y acepte padding */
+			transition: background-color 0.3s ease, border-color 0.3s ease;
+		}
+
+		.btn-primary {
+			background-color: #007bff;
+			color: white;
+			border-color: #007bff;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h1>Error <span th:text="${status}"></span>: <span th:text="${error}"></span></h1>
+		<p>La operación no puede completarse.</p>
+
+		<p th:if="${message != null and message != ''}">
+			<strong>Detalle:</strong> <span th:text="${message}"></span>
+		</p>
+
+		<p>Es probable que el usuario que intentas convertir a empleado ya tenga ese ROL.</p>
+		<p>Ruta solicitada: <code><span th:text="${path}">/ruta/desconocida</span></code></p>
+
+		<p>
+			<button onclick="history.back()" type="button" class="btn btn-primary">&larr; Volver Atrás </button>
+		</p>
+	</div>
+</body>
+
+</html>

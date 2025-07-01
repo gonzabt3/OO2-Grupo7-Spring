@@ -1,10 +1,15 @@
 package com.grupo7.oo2spring.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 public class Control {
@@ -22,13 +27,28 @@ public class Control {
     @JoinColumn(name = "empleado_id")
     private Empleado empleado;
 
-    private LocalDate fechaEntrada;
+    private LocalDateTime fechaEntrada;
 
-    private LocalDate fechaSalida;
+    private LocalDateTime fechaSalida;
     
     private String accion;
 
     private boolean finalizado;
+    
+    @Enumerated(EnumType.STRING)
+    private Funcion funcion;
+    
+    
+	public Control(Ticket ticket, Empleado empleado, LocalDateTime fechaEntrada, LocalDateTime fechaSalida,
+			String accion, boolean finalizado, Funcion funcion) {
+		this.ticket = ticket;
+		this.empleado = empleado;
+		this.fechaEntrada = fechaEntrada;
+		this.fechaSalida = fechaSalida;
+		this.accion = accion;
+		this.finalizado = finalizado;
+		this.funcion = funcion;
+	}
 
     // Getters y setters
     public int getIdControl() {
@@ -55,19 +75,19 @@ public class Control {
         this.ticket = ticket;
     }
 
-    public LocalDate getFechaEntrada() {
+    public LocalDateTime getFechaEntrada() {
         return fechaEntrada;
     }
 
-    public void setFechaEntrada(LocalDate fechaEntrada) {
+    public void setFechaEntrada(LocalDateTime fechaEntrada) {
         this.fechaEntrada = fechaEntrada;
     }
 
-    public LocalDate getFechaSalida() {
+    public LocalDateTime getFechaSalida() {
         return fechaSalida;
     }
 
-    public void setFechaSalida(LocalDate fechaSalida) {
+    public void setFechaSalida(LocalDateTime fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 
@@ -86,4 +106,6 @@ public class Control {
 	public void setAccion(String accion) {
 		this.accion = accion;
 	}
+
+
 }

@@ -1,4 +1,4 @@
-package com.grupo7.oo2spring.controllers.rest;
+package com.grupo7.oo2spring.controller.rest;
 
 import com.grupo7.oo2spring.dto.LoginDTO;
 import com.grupo7.oo2spring.models.Usuario;
