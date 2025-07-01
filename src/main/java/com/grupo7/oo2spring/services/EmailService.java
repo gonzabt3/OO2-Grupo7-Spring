@@ -26,7 +26,7 @@ public class EmailService {
 	    @Value("${EMAIL_USERNAME}") // <-- Dirección de Correo (ej. tunombre@gmail.com)
 	    private String emailUsername; 
 	    
-	    @Value("${EMAIL_APIKEY}") // <-- Api key generado (ej. gmail)
+	    @Value("${EMAIL_PASSWORD}") // <-- app password generado por Gmail
 	    private String emailAPIKey; // 
 	    
 	    // Dirección de remitente que usarás, EMAIL_USERNAME de Gmail

@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.security.UsuarioDetails;
@@ -37,9 +39,19 @@ public class UsuarioController {
             model.addAttribute("tipoEntidad", "usuario"); // Indicador de tipo
             model.addAttribute("usuarioData", usuarioLogeado); // Datos específicos de Usuario
         }
+<<<<<<< Updated upstream
     	
         return "usuario/datos_usuario";
         
+=======
+    	return "usuario/datos_usuario";
+    }
+
+    @GetMapping("/prueba")
+    @ResponseBody
+    public String test() {
+        return "Controlador encontrado!";
+>>>>>>> Stashed changes
     }
     
 }
