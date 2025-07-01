@@ -39,11 +39,7 @@ public class UsuarioController {
             model.addAttribute("tipoEntidad", "usuario"); // Indicador de tipo
             model.addAttribute("usuarioData", usuarioLogeado); // Datos específicos de Usuario
         }
-<<<<<<< Updated upstream
-    	
-        return "usuario/datos_usuario";
         
-=======
     	return "usuario/datos_usuario";
     }
 
@@ -51,7 +47,6 @@ public class UsuarioController {
     @ResponseBody
     public String test() {
         return "Controlador encontrado!";
->>>>>>> Stashed changes
     }
     
 }
