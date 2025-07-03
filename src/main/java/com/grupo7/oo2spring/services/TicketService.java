@@ -64,11 +64,11 @@ public class TicketService {
 	@Transactional
 	public Ticket crearTicket(TicketDTO ticket, Usuario usuarioCreador) {
 	    System.out.println("SERVICIO: Creando ticket con DTO: " + ticket);
-			Optional<Area> areaOpt = areaService.buscarPorNombre("SIN ASIGNAR");
+			Optional<Area> areaOpt = areaService.buscarPorNombre("SIN_ASIGNAR");
 			if (areaOpt.isEmpty()) {
 					throw new RuntimeException("No se encontró el área 'SIN ASIGNAR'. No se puede crear el ticket.");
 			}
-    Area area = areaOpt.get();
+    	Area area = areaOpt.get();
 	    Ticket nuevoTicket = new Ticket(ticket.getTitulo(),ticket.getDescripcion(),  usuarioCreador, area);
 	    Ticket guardado = ticketRepository.save(nuevoTicket);
 	    System.out.println("SERVICIO: Ticket guardado con ID: " + guardado.getIdTicket());
