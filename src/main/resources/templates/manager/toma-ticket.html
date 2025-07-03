@@ -258,7 +258,7 @@
         <p><strong>Título:</strong> <span th:text="${ticket.titulo}"></span></p>
         <p><strong>Descripción:</strong> <span th:text="${ticket.descripcion}"></span></p>
         <p><strong>Estado Actual:</strong> <span th:text="${ticket.estado != null ? ticket.estado : 'N/A'}"></span></p>
-        <p><strong>Área Asignada:</strong> <span th:text="${ticket.area != null ? ticket.area : 'Sin Asignar'}"></span></p>
+        <p><strong>Área Asignada:</strong> <span th:text="${ticket.area != null ? ticket.area.nombre : 'Sin Asignar'}"></span></p>
 
         <h3>Ingrese los detalles de su primera intervención al tomar el ticket:</h3>
         <form th:action="@{/ticket/{idTicket}/tomar(idTicket=${ticket.idTicket})}" th:object="${control}" method="post">
