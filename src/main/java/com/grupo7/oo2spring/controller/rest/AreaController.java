@@ -25,18 +25,9 @@ public class AreaController {
               .orElseThrow(() -> new RuntimeException("Área no encontrada: " + nombre));
   }
 
-    @PostMapping
-    public Area crearAreaSiNoExiste(@RequestBody Area area) {
-        return areaService.crearAreaSiNoExiste(area.getNombre());
-    }
-
-    @PutMapping("/{id}")
-    public Area actualizarArea(@PathVariable Long id, @RequestBody Area area) {
-        return areaService.actualizarArea(id, area);
-    }
 
     @DeleteMapping("/{id}")
-    public void eliminarArea(@PathVariable Long id) {
+    public void eliminarArea(@PathVariable int id) {
         areaService.eliminarArea(id);
     }
 }
