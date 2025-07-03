@@ -31,7 +31,12 @@ public class AreaController {
   }
 
     @DeleteMapping("/{id}")
-    public void eliminarArea(@PathVariable int id) {
-        areaService.eliminarArea(id);
+    public ResponseEntity<?> eliminarArea(@PathVariable int id) {
+        try {
+            areaService.eliminarArea(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("No se pudo eliminar el área");
+        }
     }
 }
