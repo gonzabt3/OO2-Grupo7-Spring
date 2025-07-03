@@ -22,6 +22,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         seedAreas();
+        seedRoles();
     }
 
     private void seedAreas() {

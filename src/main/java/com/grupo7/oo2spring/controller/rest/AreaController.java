@@ -25,13 +25,13 @@ public class AreaController {
     }
     
 
+  public Area getAreaByName(@PathVariable String nombre) {
+      return areaService.buscarPorNombre(nombre)
+              .orElseThrow(() -> new RuntimeException("Área no encontrada: " + nombre));
+  }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminarArea(@PathVariable int id) {
-        try {
-            areaService.eliminarArea(id);
-            return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(404).body("No se pudo eliminar el área");
-        }
+    public void eliminarArea(@PathVariable int id) {
+        areaService.eliminarArea(id);
     }
 }
