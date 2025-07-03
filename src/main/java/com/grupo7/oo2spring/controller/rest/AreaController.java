@@ -1,8 +1,11 @@
 package com.grupo7.oo2spring.controller.rest;
 
+import com.grupo7.oo2spring.controller.rest.dto.AreaDTO;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.services.AreaService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,28 +18,42 @@ public class AreaController {
     private final AreaService areaService;
 
     @GetMapping
-    public List<Area> listarAreas() {
-        return areaService.listarAreas();
+    public List<AreaDTO> listarAreas() {
+        return areaService.listarAreas()
+                .stream()
+                .map(area -> new AreaDTO(area.getId(), area.getNombre()))
+                .toList();
     }
 
     @GetMapping("/nombre/{nombre}")
-  public Area getAreaByName(@PathVariable String nombre) {
-      return areaService.buscarPorNombre(nombre)
-              .orElseThrow(() -> new RuntimeException("Área no encontrada: " + nombre));
-  }
+    public AreaDTO getAreaByName(@PathVariable String nombre) {
+        Area area = areaService.buscarPorNombre(nombre)
+                .orElseThrow(() -> new RuntimeException("Área no encontrada: " + nombre));
+        return new AreaDTO(area.getId(), area.getNombre());
+    }
 
     @PostMapping
-    public Area crearAreaSiNoExiste(@RequestBody Area area) {
-        return areaService.crearAreaSiNoExiste(area.getNombre());
+    public AreaDTO crearAreaSiNoExiste(@RequestBody AreaDTO areaDTO) {
+        Area area = areaService.crearAreaSiNoExiste(areaDTO.nombre());
+        return new AreaDTO(area.getId(), area.getNombre());
     }
 
     @PutMapping("/{id}")
-    public Area actualizarArea(@PathVariable Long id, @RequestBody Area area) {
-        return areaService.actualizarArea(id, area);
+    public AreaDTO actualizarArea(@PathVariable Long id, @RequestBody AreaDTO areaDTO) {
+        Area areaObj = new Area();
+        areaObj.setId(areaDTO.id());
+        areaObj.setNombre(areaDTO.nombre());
+        Area area = areaService.actualizarArea(id, areaObj);
+        return new AreaDTO(area.getId(), area.getNombre());
     }
 
     @DeleteMapping("/{id}")
-    public void eliminarArea(@PathVariable Long id) {
-        areaService.eliminarArea(id);
+    public ResponseEntity<?> eliminarArea(@PathVariable Long id) {
+        try {
+            areaService.eliminarArea(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("No se pudo eliminar el área");
+        }
     }
 }
