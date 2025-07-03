@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${area.id != null} ? 'Editar Área' : 'Nueva Área'">Área</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 th:text="${area.id != null} ? 'Editar Área' : 'Nueva Área'">Área</h2>
+    <form th:action="${area.id != null} ? @{'/areas/actualizar/' + ${area.id}} : @{/areas}" 
+          th:object="${area}" method="post">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre del Área</label>
+            <input type="text" th:field="*{nombre}" class="form-control" id="nombre" placeholder="Ingrese el nombre" required>
+        </div>
+        <button type="submit" class="btn btn-primary" th:text="${area.id != null} ? 'Actualizar' : 'Crear'">Crear</button>
+        <a href="/areas" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+<script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

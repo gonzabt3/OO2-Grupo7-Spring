@@ -36,7 +36,7 @@ public class TicketDTO {
     
    
     public TicketDTO(String titulo, String descripcion,
-			Usuario usuarioCreador) {
+			Usuario usuarioCreador,Area area ) {
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.fechaCreacion = LocalDate.now();
@@ -44,7 +44,7 @@ public class TicketDTO {
 		this.usuarioCreador = usuarioCreador;
 		this.estado = Estado.PENDIENTE;
 		this.prioridad = Prioridad.SIN_ASIGNAR;
-		this.area = Area.SIN_ASIGNAR;
+		this.area = area;
 	}
 
     public int getIdTicket() {

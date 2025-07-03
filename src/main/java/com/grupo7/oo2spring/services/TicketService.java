@@ -24,7 +24,7 @@ import com.grupo7.oo2spring.repositories.ITicketRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -40,10 +40,17 @@ public class TicketService {
 
 	private final IControlRepository controlRepository;
 
-	 public List<Ticket> findByAreaIsNull() {
-	  return ticketRepository.findByArea(Area.SIN_ASIGNAR);
-	 }
-	        
+	private final AreaService areaService;
+
+	public Ticket getByIdTicket(int idTicket) {
+		return ticketRepository.getByIdTicket(idTicket);
+	}
+
+	@Transactional(readOnly = true)
+	public List<Ticket> findByAreaIsNull() {
+		return ticketRepository.findByAreaIsNull();
+	}
+	
 	@Transactional(readOnly = true)
 	public List<Ticket> findByUsuario(Usuario usuario) {
 		return ticketRepository.findByUsuarioCreador(usuario);
@@ -56,17 +63,16 @@ public class TicketService {
 
 	@Transactional
 	public Ticket crearTicket(TicketDTO ticket, Usuario usuarioCreador) {
-		System.out.println("SERVICIO: Creando ticket con DTO: " + ticket);
-		
-		try {
-			Ticket nuevoTicket = new Ticket(ticket.getTitulo(), ticket.getDescripcion(),  usuarioCreador);
-			Ticket guardado = ticketRepository.save(nuevoTicket);
-			System.out.println("SERVICIO: Ticket guardado con ID: " + guardado.getIdTicket());
-			return guardado;
-		} catch (Exception e) {
-			throw new TicketCreacionException("Error al guardar el ticket: " + e.getMessage());
-		}
-
+	    System.out.println("SERVICIO: Creando ticket con DTO: " + ticket);
+			Optional<Area> areaOpt = areaService.buscarPorNombre("SIN ASIGNAR");
+			if (areaOpt.isEmpty()) {
+					throw new RuntimeException("No se encontró el área 'SIN ASIGNAR'. No se puede crear el ticket.");
+			}
+    Area area = areaOpt.get();
+	    Ticket nuevoTicket = new Ticket(ticket.getTitulo(),ticket.getDescripcion(),  usuarioCreador, area);
+	    Ticket guardado = ticketRepository.save(nuevoTicket);
+	    System.out.println("SERVICIO: Ticket guardado con ID: " + guardado.getIdTicket());
+	    return guardado;
 	}
 
 	//@PreAuthorize("hasRole('EMPLEADO')")
