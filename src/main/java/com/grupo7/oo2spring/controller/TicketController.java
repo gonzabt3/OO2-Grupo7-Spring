@@ -229,7 +229,7 @@ public class TicketController {
             RedirectAttributes redirectAttributes) throws TicketNoEncontradoException {
 		ticketService.asignarAreaTicket(idTicket, area);
 		//redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.getTipo().getNombre() + "' asignada al ticket #" + idTicket + " con éxito!");
-		redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.getNombre() + "' asignada al ticket #" + idTicket + " con éxito!");
+		redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.getTipo().nombre + "' asignada al ticket #" + idTicket + " con éxito!");
 		return "redirect:/ticket/lista";
 	}
 	
