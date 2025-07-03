@@ -473,7 +473,7 @@
 					<td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}"></td>
 					<td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'N/A'}"></td>
 					<td th:text="${ticket.fechaCreacion}"></td>
-					<td th:text="${ticket.area != null ? ticket.area.name() : 'N/A'}"></td>
+					<td th:text="${ticket.area != null ? ticket.area.nombre : 'N/A'}"></td>
 					<td>
 
 						<div class="d-flex justify-content-center gap-2 w-100 main-action-buttons">
@@ -489,7 +489,7 @@
 							</a>
 							<button type="button" class="btn btn-sm btn-outline-info"
 								th:data-ticket-id="${ticket.idTicket}"
-								th:data-current-area="${ticket.area != null ? ticket.area.name() : ''}"
+								th:data-current-area="${ticket.area != null ? ticket.area.id : ''}"
 								onclick="openChangeModal(this, 'area')">
 								<i class="fas fa-sync-alt"></i> area
 							</button>
@@ -529,9 +529,8 @@
 						<div class="mb-3" id="areaSelectGroup">
 							<label for="modalArea" class="form-label">Seleccione Area:</label>
 							<select class="form-select" id="modalArea" name="area" required>
-								<option value="">Seleccionar</option>
-								<option th:each="area : ${areas}" th:value="${area.name()}" th:text="${area.name()}">
-								</option>
+								<option  disabled selected>Seleccionar</option>
+								<option th:each="area : ${areas}" th:value="${area.id}" th:text="${area.nombre}"></option>
 							</select>
 						</div>
 
@@ -597,7 +596,7 @@
 				modalAreaSelect.required = true;
 				changeForm.action = `/ticket/${ticketId}/asignarArea`;
 				const currentArea = button.dataset.currentArea;
-				modalAreaSelect.value = currentArea;
+				modalAreaSelect.value = currentArea ? currentArea : "";
 			}
 			if (type === 'estado') {
 				changeTypeLabel.textContent = 'Estado';
