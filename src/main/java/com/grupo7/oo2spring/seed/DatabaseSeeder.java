@@ -1,5 +1,6 @@
 package com.grupo7.oo2spring.seed;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import java.util.Arrays;
 public class DatabaseSeeder implements CommandLineRunner {
 
     private final IAreaRepository areaRepository;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -41,5 +43,3 @@ public class DatabaseSeeder implements CommandLineRunner {
         }
     }
 }
-}
-
