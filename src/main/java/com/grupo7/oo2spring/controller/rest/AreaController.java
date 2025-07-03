@@ -6,6 +6,9 @@ import com.grupo7.oo2spring.services.AreaService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import com.grupo7.oo2spring.models.Area;
+import com.grupo7.oo2spring.services.AreaService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,11 +28,17 @@ public class AreaController {
     }
     
 
+    @GetMapping
+    public List<Area> listarAreas() {
+        return areaService.listarAreas();
+    }
+
+    @GetMapping("/nombre/{nombre}")
   public Area getAreaByName(@PathVariable String nombre) {
       return areaService.buscarPorNombre(nombre)
               .orElseThrow(() -> new RuntimeException("Área no encontrada: " + nombre));
   }
-
+D
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarArea(@PathVariable int id) {
         try {
@@ -38,5 +47,9 @@ public class AreaController {
         } catch (Exception e) {
             return ResponseEntity.status(404).body("No se pudo eliminar el área");
         }
+
+    @DeleteMapping("/{id}")
+    public void eliminarArea(@PathVariable Long id) {
+        areaService.eliminarArea(id);
     }
 }

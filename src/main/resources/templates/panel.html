@@ -226,6 +226,11 @@
                 Usuarios / Asignar Empleado
             </a>
 
+            <a href="/areas" class="btn btn-warning btn-lg mx-2 my-2"
+               th:if="${rol == 'MANAGER'}">
+                Administrar Areas
+            </a>
+
 
             <form th:action="@{/logout}" method="post" class="mx-2 my-2">
                 <button type="submit" class="btn btn-danger btn-lg">
