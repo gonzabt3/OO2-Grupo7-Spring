@@ -15,6 +15,7 @@ import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.repositories.*;
+import com.grupo7.oo2spring.services.AreaService;
 
 @SpringBootTest
 public class TestIEmpleado {
@@ -23,14 +24,19 @@ public class TestIEmpleado {
     private PasswordEncoder passwordEncoder;
 	@Autowired
 	private IEmpleadoRepository empleadoRepository;
+    @Autowired
+    private AreaService areaService;
 
 
     @Test
     void testGuardarYBuscarEmpleado() throws Exception {
         // Crear empleado
-    	//empleadoRepository.deleteById(4);
-        Empleado empleado = new Empleado("Juan", "Perez", "20308232", "juan.perez@example.com","juan", passwordEncoder.encode("password"), Area.DESARROLLO, true);
-        empleado = empleadoRepository.save(empleado);
+        empleadoRepository.deleteAll(); // Limpia la tabla antes de crear empleados
+        Area area = areaService.crearAreaSiNoExiste("Soporte");
+        
+        final Empleado empleado = empleadoRepository.save(
+            new Empleado("Juan", "Perez", "20308232", "juan.perez@example.com","juan", passwordEncoder.encode("password"), area, true)
+        );
         
 	    Empleado manager = new Empleado(
 	            "Carlos",           // nombre
@@ -39,7 +45,7 @@ public class TestIEmpleado {
 	            "carlos@example.com", // email
 	            "carlosG",          // nombreUsuario
 	            "segura123",         // contraseña
-	            Area.SOPORTE, 
+	            area, 
 	            true
 	        );
 	    
@@ -60,7 +66,7 @@ public class TestIEmpleado {
         // Buscar todos los empleados
         List<Empleado> lista = empleadoRepository.findAll();
         assertThat(lista).isNotEmpty();
-        assertThat(lista).contains(empleado);
+        assertThat(lista.stream().anyMatch(e -> e.getIdEmpleado() == empleado.getIdEmpleado())).isTrue();
     }
 
 }
