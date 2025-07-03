@@ -16,7 +16,6 @@ import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.TipoArea;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.repositories.*;
-import com.grupo7.oo2spring.services.AreaService;
 
 @SpringBootTest
 public class TestIEmpleado {
@@ -27,8 +26,6 @@ public class TestIEmpleado {
 	private IEmpleadoRepository empleadoRepository;
 	@Autowired
 	private IAreaRepository areaRepository;
-    @Autowired
-    private AreaService areaService;
 
 
     @Test
@@ -39,7 +36,6 @@ public class TestIEmpleado {
     	 Area areaDesarrollo = areaOpt.get();
         Empleado empleado = new Empleado("Juan", "Perez", "20308232", "juan.perez@example.com","juan", passwordEncoder.encode("password"), areaDesarrollo, true);
         empleado = empleadoRepository.save(empleado);
-        empleadoRepository.deleteAll(); // Limpia la tabla antes de crear empleados
         
 	    Empleado manager = new Empleado(
 	            "Carlos",           // nombre

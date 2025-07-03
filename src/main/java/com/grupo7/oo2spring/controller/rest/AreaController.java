@@ -38,7 +38,7 @@ public class AreaController {
       return areaService.buscarPorNombre(nombre)
               .orElseThrow(() -> new RuntimeException("Área no encontrada: " + nombre));
   }
-D
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarArea(@PathVariable int id) {
         try {
@@ -49,7 +49,7 @@ D
         }
 
     @DeleteMapping("/{id}")
-    public void eliminarArea(@PathVariable Long id) {
+    public void eliminarArea(@PathVariable int id) {
         areaService.eliminarArea(id);
     }
 }
