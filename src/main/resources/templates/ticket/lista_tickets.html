@@ -265,7 +265,7 @@
 						<td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}">Estado</td>
 						<td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'Sin Asignar'}">Prioridad
 						</td>
-						<td th:text="${ticket.area != null ? ticket.area.name() : 'Sin Asignar'}">Área</td>
+						<td th:text="${ticket.area != null ? ticket.area.nombre : 'Sin Asignar'}">Área</td>
 						<td>
 
 							<div class="d-flex justify-content-center gap-2 w-100 main-action-buttons">
