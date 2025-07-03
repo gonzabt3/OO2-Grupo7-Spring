@@ -1,5 +1,6 @@
 package com.grupo7.oo2spring.seed;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     private final IAreaRepository areaRepository;
 
+
     @Override
     public void run(String... args) throws Exception {
         seedAreas();
@@ -28,6 +30,15 @@ public class DatabaseSeeder implements CommandLineRunner {
                 areaRepository.save(new Area(tipo));
             }
         }
+    }    
+    private void seedRoles() {
+        if (rolRepository.count() == 0) {
+            Rol[] roles = new Rol[]{
+                new Rol(RoleType.USER),
+                new Rol(RoleType.MANAGER),
+                new Rol(RoleType.EMPLEADO)
+            };
+            rolRepository.saveAll(Arrays.asList(roles));
+        }
     }
 }
-
