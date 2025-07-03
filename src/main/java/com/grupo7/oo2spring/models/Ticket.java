@@ -32,8 +32,6 @@ public class Ticket {
 
     @Enumerated(EnumType.STRING)
     private Prioridad prioridad;
-    
-
     @ManyToOne
     @JoinColumn(name = "area_id")
     private Area area;
@@ -48,7 +46,6 @@ public class Ticket {
             control.setTicket(this); // Establece el Ticket en el Control, que es el lado dueño
         }
     }
-        
     	public Ticket(String titulo, String descripcion,
     			Usuario usuarioCreador) {
     		this.titulo = titulo;
