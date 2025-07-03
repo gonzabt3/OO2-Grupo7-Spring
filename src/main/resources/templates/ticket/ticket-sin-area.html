@@ -252,7 +252,7 @@
                         <td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}"></td>
                         <td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'N/A'}"></td>
                         <td th:text="${ticket.fechaCreacion}"></td>
-						<td th:text="${ticket.area != null ? ticket.area.name() : 'N/A'}"></td>
+						<td th:text="${ticket.area != null ? ticket.area.nombre : 'N/A'}"></td>
                         <td>
                             <form th:action="@{/ticket/{idTicket}/asignarArea(idTicket=${ticket.idTicket})}" method="post">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
