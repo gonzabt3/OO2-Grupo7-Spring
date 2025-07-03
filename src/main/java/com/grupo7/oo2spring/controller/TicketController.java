@@ -39,6 +39,7 @@ import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import com.grupo7.oo2spring.security.UsuarioDetails;
+import com.grupo7.oo2spring.services.AreaService;
 import com.grupo7.oo2spring.services.EmailService;
 import com.grupo7.oo2spring.services.EmpleadoService;
 import com.grupo7.oo2spring.services.TicketService;
@@ -61,6 +62,8 @@ public class TicketController {
     private final UsuarioService usuarioService;
     
     private final EmailService emailService;
+
+    private final AreaService areaService;
     
 
     @GetMapping("/formulario_simple")
@@ -207,7 +210,8 @@ public class TicketController {
             List<Ticket> tickets = ticketRepository.findAll();
             model.addAttribute("tickets", tickets);
             model.addAttribute("rol",empleado.getRol());
-            model.addAttribute("areas", TipoArea.values());
+           // model.addAttribute("areas", TipoArea.values());
+            model.addAttribute("areas", areaService.listarAreas());
             model.addAttribute("estados", Estado.values());
             model.addAttribute("prioridades", Prioridad.values());
             return "ticket/ticket_del_sistema"; 
@@ -224,7 +228,8 @@ public class TicketController {
             @RequestParam("area") Area area,
             RedirectAttributes redirectAttributes) throws TicketNoEncontradoException {
 		ticketService.asignarAreaTicket(idTicket, area);
-		redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.getTipo().getNombre() + "' asignada al ticket #" + idTicket + " con éxito!");
+		//redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.getTipo().getNombre() + "' asignada al ticket #" + idTicket + " con éxito!");
+		redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.getNombre() + "' asignada al ticket #" + idTicket + " con éxito!");
 		return "redirect:/ticket/lista";
 	}
 	

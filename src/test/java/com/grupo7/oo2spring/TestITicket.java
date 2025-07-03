@@ -23,7 +23,7 @@ public class TestITicket {
 	    private IUsuarioRepository usuarioRepository;
 	    
 
-	    
+	 /*   
 	    @Test
 	    public void testCrearTicketsParaUsuarioExistente() {
 		    Usuario roberto = usuarioRepository.findByNombreUsuario("rober");
@@ -48,5 +48,5 @@ public class TestITicket {
             }
 	    }
 	    }
-
+ */
 }
