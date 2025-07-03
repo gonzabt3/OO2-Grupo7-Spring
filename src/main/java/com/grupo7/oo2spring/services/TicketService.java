@@ -41,13 +41,6 @@ public class TicketService {
 
 	private final IControlRepository controlRepository;
 
-<<<<<<< HEAD
-	 public List<Ticket> findByAreaIsNull() {
-	  return ticketRepository.findByArea(TipoArea.SIN_ASIGNAR);
-	  
-	 }
-	        
-=======
 	private final AreaService areaService;
 
 	public Ticket getByIdTicket(int idTicket) {
@@ -59,7 +52,6 @@ public class TicketService {
 		return ticketRepository.findByAreaIsNull();
 	}
 	
->>>>>>> 78ddca7 (remplazo area enum por entidad en la db)
 	@Transactional(readOnly = true)
 	public List<Ticket> findByUsuario(Usuario usuario) {
 		return ticketRepository.findByUsuarioCreador(usuario);
@@ -72,7 +64,6 @@ public class TicketService {
 
 	@Transactional
 	public Ticket crearTicket(TicketDTO ticket, Usuario usuarioCreador) {
-<<<<<<< HEAD
 		System.out.println("SERVICIO: Creando ticket con DTO: " + ticket);
 		
 		try {
@@ -83,19 +74,6 @@ public class TicketService {
 		} catch (Exception e) {
 			throw new TicketCreacionException("Error al guardar el ticket: " + e.getMessage());
 		}
-
-=======
-	    System.out.println("SERVICIO: Creando ticket con DTO: " + ticket);
-			Optional<Area> areaOpt = areaService.buscarPorNombre("SIN ASIGNAR");
-			if (areaOpt.isEmpty()) {
-					throw new RuntimeException("No se encontró el área 'SIN ASIGNAR'. No se puede crear el ticket.");
-			}
-    Area area = areaOpt.get();
-	    Ticket nuevoTicket = new Ticket(ticket.getTitulo(),ticket.getDescripcion(),  usuarioCreador, area);
-	    Ticket guardado = ticketRepository.save(nuevoTicket);
-	    System.out.println("SERVICIO: Ticket guardado con ID: " + guardado.getIdTicket());
-	    return guardado;
->>>>>>> 78ddca7 (remplazo area enum por entidad en la db)
 	}
 
 	//@PreAuthorize("hasRole('EMPLEADO')")
