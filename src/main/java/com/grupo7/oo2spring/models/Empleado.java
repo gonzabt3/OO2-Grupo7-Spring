@@ -9,6 +9,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +23,8 @@ public class Empleado extends UsuarioBase {
 	  @GeneratedValue(strategy = GenerationType.IDENTITY)
 	  private int idEmpleado;
 
-	@Enumerated(EnumType.STRING)
+	@ManyToOne
+	@JoinColumn(name = "area_id")
 	private Area area;
 	
 	private boolean disponibilidad;

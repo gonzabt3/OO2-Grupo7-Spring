@@ -33,7 +33,8 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private Prioridad prioridad;
     
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    @JoinColumn(name = "area_id")
     private Area area;
     
 
@@ -48,18 +49,17 @@ public class Ticket {
         }
     }
         
-    	public Ticket(String titulo, String descripcion,
-    			Usuario usuarioCreador) {
-    		this.titulo = titulo;
-    		this.descripcion = descripcion;
-    		this.fechaCreacion = LocalDate.now();
-    		this.fechaCierre = null;
-    		this.usuarioCreador = usuarioCreador;
-    		this.estado = Estado.ABIERTO;
-    		this.prioridad = Prioridad.SIN_ASIGNAR;
-    		this.area = Area.SIN_ASIGNAR;
-    		this.procesos = new ArrayList<Control>();
-    	}
+    public Ticket(String titulo, String descripcion, Usuario usuarioCreador, Area area) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.fechaCreacion = LocalDate.now();
+        this.fechaCierre = null;
+        this.usuarioCreador = usuarioCreador;
+        this.estado = Estado.PENDIENTE;
+        this.prioridad = Prioridad.SIN_ASIGNAR;
+        this.area = area;
+        this.procesos = new ArrayList<Control>();
+    }
         
         
  
