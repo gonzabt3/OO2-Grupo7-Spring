@@ -1,5 +1,6 @@
 package com.grupo7.oo2spring.services;
 
+import com.grupo7.oo2spring.enums.AreaType;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.repositories.IAreaRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,22 +23,12 @@ public class AreaService {
         return areaRepository.findById(id);
     }
 
-    public Area crearAreaSiNoExiste(String nombre) {
-        return areaRepository.findByNombre(nombre)
-            .orElseGet(() -> areaRepository.save(new Area(nombre)));
-    }
-
-    public Area actualizarArea(Long id, Area area) {
-        Area existente = areaRepository.findById(id).orElseThrow();
-        existente.setNombre(area.getNombre());
-        return areaRepository.save(existente);
-    }
 
     public void eliminarArea(Long id) {
         areaRepository.deleteById(id);
     }
 
-    public Optional<Area> buscarPorNombre(String nombre) {
-      return areaRepository.findByNombre(nombre);
+    public Optional<Area> buscarPorTipo(AreaType areaType) {
+        return areaRepository.findByType(areaType);
     }
 }

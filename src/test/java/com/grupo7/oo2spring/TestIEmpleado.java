@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
+import com.grupo7.oo2spring.enums.AreaType;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.repositories.*;
 import com.grupo7.oo2spring.services.AreaService;
@@ -25,15 +26,15 @@ public class TestIEmpleado {
 	@Autowired
 	private IEmpleadoRepository empleadoRepository;
     @Autowired
-    private AreaService areaService;
+    private IAreaRepository areaRepository;
 
 
     @Test
     void testGuardarYBuscarEmpleado() throws Exception {
         // Crear empleado
         empleadoRepository.deleteAll(); // Limpia la tabla antes de crear empleados
-        Area area = areaService.crearAreaSiNoExiste("Soporte");
-        
+        Area area = new Area(AreaType.SOPORTE);
+        areaRepository.save(area); // Asegurarse de que el área existe
         final Empleado empleado = empleadoRepository.save(
             new Empleado("Juan", "Perez", "20308232", "juan.perez@example.com","juan", passwordEncoder.encode("password"), area, true)
         );

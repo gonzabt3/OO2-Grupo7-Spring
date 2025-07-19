@@ -14,33 +14,19 @@
     <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
     <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
 
-    <div class="mb-3">
-        <a href="/areas/nuevo" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Nueva Área
-        </a>
-    </div>
+
 
     <div class="table-responsive">
         <table class="table table-bordered table-hover align-middle">
             <thead class="table-dark">
                 <tr>
                     <th>Nombre</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="area : ${areas}">
                     <td th:text="${area.nombre}">Nombre</td>
-                    <td>
-                        <a th:href="@{/areas/editar/{id}(id=${area.id})}" class="btn btn-sm btn-warning me-1">
-                            <i class="bi bi-pencil"></i> Editar
-                        </a>
-                        <a th:href="@{/areas/eliminar/{id}(id=${area.id})}" 
-                           class="btn btn-sm btn-danger"
-                           onclick="return confirm('¿Estás seguro que deseas eliminar esta área?');">
-                            <i class="bi bi-trash"></i> Borrar
-                        </a>
-                    </td>
+
                 </tr>
             </tbody>
         </table>

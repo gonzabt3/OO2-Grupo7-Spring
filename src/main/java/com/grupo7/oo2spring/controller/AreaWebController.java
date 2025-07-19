@@ -26,11 +26,6 @@ public class AreaWebController {
         return "areas/form"; // nombre del template para crear/editar
     }
 
-    @PostMapping
-    public String guardarArea(@ModelAttribute Area area) {
-        areaService.crearAreaSiNoExiste(area.getNombre());
-        return "redirect:/areas";
-    }
 
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEditarArea(@PathVariable Long id, Model model) {
@@ -40,11 +35,6 @@ public class AreaWebController {
         return "areas/form";
     }
 
-    @PostMapping("/actualizar/{id}")
-    public String actualizarArea(@PathVariable Long id, @ModelAttribute Area area) {
-        areaService.actualizarArea(id, area);
-        return "redirect:/areas";
-    }
 
     @GetMapping("/eliminar/{id}")
     public String eliminarArea(@PathVariable Long id) {

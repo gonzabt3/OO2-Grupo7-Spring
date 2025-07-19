@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.grupo7.oo2spring.enums.AreaType;
+import com.grupo7.oo2spring.enums.RoleType;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.repositories.IAreaRepository;
 
@@ -22,13 +24,17 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     private void seedAreas() {
         if (areaRepository.count() == 0) {
-            Area[] areas = {
-                new Area("Desarrollo"),
-                new Area("Testing"),
-                new Area("Soporte"),
-                new Area("SIN_ASIGNAR")
+            Area[] areas = new Area[]{
+                buildArea(AreaType.DESARROLLO),
+                buildArea(AreaType.TESTING),
+                buildArea(AreaType.SOPORTE),
+                buildArea(AreaType.SIN_ASIGNAR)
             };
             areaRepository.saveAll(Arrays.asList(areas));
         }
+    }
+
+       private Area buildArea(AreaType areaType) {
+        return new Area(areaType);
     }
 }

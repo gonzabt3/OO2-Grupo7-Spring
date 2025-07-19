@@ -14,6 +14,7 @@ import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.dto.ControlDTO;
 import com.grupo7.oo2spring.dto.TicketDTO;
+import com.grupo7.oo2spring.enums.AreaType;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Estado;
@@ -64,7 +65,7 @@ public class TicketService {
 	@Transactional
 	public Ticket crearTicket(TicketDTO ticket, Usuario usuarioCreador) {
 	    System.out.println("SERVICIO: Creando ticket con DTO: " + ticket);
-			Optional<Area> areaOpt = areaService.buscarPorNombre("SIN_ASIGNAR");
+			Optional<Area> areaOpt = areaService.buscarPorTipo(AreaType.SIN_ASIGNAR);
 			if (areaOpt.isEmpty()) {
 					throw new RuntimeException("No se encontró el área 'SIN ASIGNAR'. No se puede crear el ticket.");
 			}
