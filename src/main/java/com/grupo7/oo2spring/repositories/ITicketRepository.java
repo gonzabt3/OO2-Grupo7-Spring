@@ -31,7 +31,7 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
     // Buscar tickets creados por un usuario específico
     List<Ticket> findByUsuarioCreador(Usuario usuarioCreador);
 	
-    List<Ticket> findByUsuarioCreadorIdUsuario(int usuarioCreadorId);
+    List<Ticket> findByUsuarioCreadorId(int usuarioCreadorId);
     
     // Buscar tickets creados entre dos fechas
     List<Ticket> findByFechaCreacionBetween(LocalDate fechaInicio, LocalDate fechaFin);

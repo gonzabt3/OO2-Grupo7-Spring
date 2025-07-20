@@ -25,7 +25,7 @@ public class PanelController {
 	        UsuarioBase usuario = usuarioDetails.getUsuario();
 	        model.addAttribute("usuario", usuario);
 
-	        String rolStr = (usuario.getRol() != null) ? usuario.getRol().toString() : "USER";
+	        String rolStr = (usuario.getRol().getType().toString() != null) ? usuario.getRol().getType().toString() : "USER";
 	        model.addAttribute("rol", rolStr);
 	        
 	    }

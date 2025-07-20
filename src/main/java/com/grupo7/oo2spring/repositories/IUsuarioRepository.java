@@ -22,7 +22,7 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
 	 // Buscar usuario por nombre y apellido
     Optional<Usuario> findByNombreAndApellido(String nombre, String apellido);
 	
- // Validar existencia de nombreUsuario (devuelve true si existe)
+    // Validar existencia de nombreUsuario (devuelve true si existe)
     boolean existsByNombreUsuario(String nombreUsuario);
     
     // Validar existencia de email

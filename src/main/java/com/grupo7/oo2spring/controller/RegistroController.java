@@ -10,12 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import com.grupo7.oo2spring.enums.RoleType;
 import com.grupo7.oo2spring.models.EmailToken;
 import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IEmailTokenRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import com.grupo7.oo2spring.services.EmailService;
+import com.grupo7.oo2spring.services.RolService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -33,6 +36,8 @@ public class RegistroController {
     private final IEmailTokenRepository emailTokenRepository;
     
     private final EmailService emailService;
+
+    private final RolService rolService;
 
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model) {
@@ -66,7 +71,9 @@ public class RegistroController {
             
         }
         
-        usuario.setRol(Rol.USER);
+        Rol roleType = rolService.buscarPorTipo(RoleType.USER);
+
+        usuario.setRol(roleType);
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
         usuario.setUsuarioActivo(true);
         
@@ -92,7 +99,7 @@ public class RegistroController {
                 + "text-decoration:none;border-radius:5px;'>Confirmar cuenta</a></p>"
                 + "<p>Si no te registraste en nuestro sitio, podés ignorar este mensaje.</p>"
                 + "</body></html>";
-        emailService.enviarEmail(usuario.getEmail(), asunto, cuerpo);
+       // emailService.enviarEmail(usuario.getEmail(), asunto, cuerpo);
         
         } catch (Exception e) {
         	

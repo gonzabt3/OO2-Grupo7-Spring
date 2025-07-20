@@ -12,27 +12,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 public class Usuario extends UsuarioBase {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idUsuario;
 
     @Column(nullable = false)
     private boolean usuarioActivo; //va en Usuario xq no aplica a Empleado, solo a un Usuario normal
 
     
-    public Usuario(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) throws Exception {
-    	super(nombre, apellido, dni, email, nombreUsuario, contraseña);
-    	this.setRol(Rol.USER);
+    public Usuario(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña, Rol rol) throws Exception {
+    	super(nombre, apellido, dni, email, nombreUsuario, contraseña, rol);
     	this.usuarioActivo = false;
     }
   
-
-
-
-@Override
-	public int hashCode() {
-	return Objects.hash(idUsuario, usuarioActivo);
-	}
 
 
 
@@ -45,7 +34,7 @@ public class Usuario extends UsuarioBase {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return idUsuario == other.idUsuario && usuarioActivo == other.usuarioActivo;
+		return super.getId() == other.getId() && usuarioActivo == other.usuarioActivo;
 	}
    
    

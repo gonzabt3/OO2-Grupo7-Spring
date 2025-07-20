@@ -175,11 +175,11 @@ public class TicketController {
 		    
 		    
 		    // ✅ Enviar el email con plantilla
-		    emailService.enviarEmailConHtml(
+		    /*emailService.enviarEmailConHtml(
 		        usuarioDueño.getEmail(),
 		        "Se actualizó tu ticket #" + ticket.getIdTicket(), "email-control-agregado-template",
 		        variables
-		    );
+		    );*/
 
 		    model.addAttribute("successMessage", "Control agregado con éxito y correo enviado.");
             model.addAttribute("successMessage", "¡Ticket #" + idTicket + " tomado y gestión iniciada!");
@@ -200,7 +200,7 @@ public class TicketController {
     }
 	
 	
-	@PreAuthorize("hasAnyRole('MANAGER')")
+	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@GetMapping("/lista")
     public String ticketsDelSistema(Model model, @AuthenticationPrincipal UserDetails usuariolog) {
 		UsuarioDetails usuarioDetails = (UsuarioDetails)usuariolog;
@@ -240,7 +240,7 @@ public class TicketController {
 	    String username = userDetails.getUsername();
 	    Usuario usuario = usuarioService.getUsuarioByNombreUsuario(username);
 
-	    List<Ticket> tickets = ticketService.getTicketsByUsuario(usuario.getIdUsuario());
+	    List<Ticket> tickets = ticketService.getTicketsByUsuario(usuario.getId());
 	    model.addAttribute("tickets", tickets);
 
 	    return "ticket/usuario-tickets"; // Vista con la tabla de tickets

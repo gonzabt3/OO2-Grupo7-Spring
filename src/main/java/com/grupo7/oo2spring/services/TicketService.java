@@ -199,7 +199,7 @@ public class TicketService {
     }*/
 
 	public List<Ticket> getTicketsByUsuario(int usuarioIdCreador) {
-		return ticketRepository.findByUsuarioCreadorIdUsuario(usuarioIdCreador);
+		return ticketRepository.findByUsuarioCreadorId(usuarioIdCreador);
 	}
 }
 

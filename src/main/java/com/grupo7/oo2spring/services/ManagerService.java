@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.grupo7.oo2spring.enums.RoleType;
 import com.grupo7.oo2spring.exception.UsuarioEsEmpleadoException;
 import com.grupo7.oo2spring.exception.UsuarioNoEncontradoException;
 import com.grupo7.oo2spring.models.Empleado;
@@ -23,6 +24,7 @@ public class ManagerService {
 	private final IUsuarioRepository usuarioRepository;
 	private final IEmpleadoRepository empleadoRepository;
 	private final EntityManager entityManager;
+	private final RolService rolService;
 	
 	public Empleado prepararEmpleadoDesdeUsuario(int idUsuario) throws UsuarioNoEncontradoException {
 	    Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
@@ -33,7 +35,6 @@ public class ManagerService {
 	    Usuario usuario = usuarioOpt.get();
 
 	    Empleado empleado = new Empleado();
-	    empleado.setIdEmpleado(usuario.getIdUsuario());
 	    empleado.setNombre(usuario.getNombre());
 	    empleado.setApellido(usuario.getApellido());
 	    empleado.setDni(usuario.getDni());
@@ -52,7 +53,8 @@ public class ManagerService {
 	        .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
 
 	    // 2. Verificar si ya tiene el rol de EMPLEADO
-	    if (usuario.getRol() == Rol.EMPLEADO) {
+			Rol rolEmpleado = rolService.buscarPorTipo(RoleType.EMPLEADO);
+	    if (usuario.getRol() == rolEmpleado) {
 	        throw new UsuarioEsEmpleadoException("El usuario ya es un empleado");
 	    }
 
@@ -71,7 +73,6 @@ public class ManagerService {
 	    } else {
 	        // Si no existe, crear una nueva instancia
 	        empleado = new Empleado();
-	        empleado.setIdEmpleado(idUsuario); // hereda de Usuario
 	        empleado.setArea(datosEmpleado.getArea());
 	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
 	        empleado.setNombre(usuario.getNombre());
@@ -80,11 +81,11 @@ public class ManagerService {
 	        empleado.setEmail(usuario.getEmail());
 	        empleado.setNombreUsuario(usuario.getNombreUsuario());
 	        empleado.setContraseña(usuario.getContraseña());
-	        empleado.setRol(Rol.EMPLEADO);
+	        empleado.setRol(rolEmpleado);
 	    }
 
 	    // 4. Cambiar rol en el usuario base (por si no lo setea bien al persist)
-	    usuario.setRol(Rol.EMPLEADO);
+	    usuario.setRol(rolEmpleado);
 	    usuarioRepository.save(usuario);
 
 	    // 5. Retornar el empleado recién creado o actualizado
@@ -100,7 +101,8 @@ public class ManagerService {
 	            .orElseThrow(() -> new Exception("Usuario no encontrado"));
 
 	    // Cambiar el rol del usuario a CLIENTE
-	    usuario.setRol(Rol.USER);
+			Rol rolUsuario = rolService.buscarPorTipo(RoleType.USER);
+	    usuario.setRol(rolUsuario);
 	    usuarioRepository.save(usuario);
 
 	    // Borrar el registro Empleado (tabla hija)

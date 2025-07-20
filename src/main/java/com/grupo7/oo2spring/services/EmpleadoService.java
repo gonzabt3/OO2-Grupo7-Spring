@@ -16,7 +16,7 @@ public class EmpleadoService {
 	 private final IEmpleadoRepository empleadoRepository;
 	 
 	 public Optional<Empleado> findByEmpleado(int idEmpleado) {
-		 return empleadoRepository.findEmpleadoByIdEmpleado(idEmpleado);
+		 return empleadoRepository.findEmpleadoById(idEmpleado);
 	 }
 	 
 	 public Empleado findByEmpleadoNombre(String nombreEmpleado) {
@@ -31,7 +31,7 @@ public class EmpleadoService {
     }
 	
 	public Optional<Empleado> buscarPorId(int idEmpleado) {
-		return empleadoRepository.findEmpleadoByIdEmpleado(idEmpleado);
+		return empleadoRepository.findEmpleadoById(idEmpleado);
 	}
 
 }

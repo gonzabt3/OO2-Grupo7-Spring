@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
 import com.grupo7.oo2spring.enums.AreaType;
 import com.grupo7.oo2spring.enums.RoleType;
 import com.grupo7.oo2spring.models.Area;
+import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.repositories.IAreaRepository;
+import com.grupo7.oo2spring.repositories.IRolRepository;
 
 import java.util.Arrays;
 
@@ -17,9 +19,13 @@ public class DatabaseSeeder implements CommandLineRunner {
     @Autowired
     private IAreaRepository areaRepository;
 
+    @Autowired
+    private IRolRepository rolRepository;
+
     @Override
     public void run(String... args) throws Exception {
         seedAreas();
+        seedRoles();
     }
 
     private void seedAreas() {
@@ -34,7 +40,18 @@ public class DatabaseSeeder implements CommandLineRunner {
         }
     }
 
-       private Area buildArea(AreaType areaType) {
+    private Area buildArea(AreaType areaType) {
         return new Area(areaType);
+    }
+
+    private void seedRoles() {
+        if (rolRepository.count() == 0) {
+            Rol[] roles = new Rol[]{
+                new Rol(RoleType.USER),
+                new Rol(RoleType.MANAGER),
+                new Rol(RoleType.EMPLEADO)
+            };
+            rolRepository.saveAll(Arrays.asList(roles));
+        }
     }
 }

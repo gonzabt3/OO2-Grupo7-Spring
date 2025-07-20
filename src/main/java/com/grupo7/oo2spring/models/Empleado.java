@@ -3,9 +3,6 @@ package com.grupo7.oo2spring.models;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,10 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Empleado extends UsuarioBase {
 		 
-	@Id
-	  @EqualsAndHashCode.Include
-	  @GeneratedValue(strategy = GenerationType.IDENTITY)
-	  private int idEmpleado;
+
 
 	@ManyToOne
 	@JoinColumn(name = "area_id")
@@ -29,11 +23,10 @@ public class Empleado extends UsuarioBase {
 	
 	private boolean disponibilidad;
 	
-	public Empleado(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña, Area area, boolean disponibilidad) throws Exception {
-		super(nombre, apellido, dni, email, nombreUsuario, contraseña);
+	public Empleado(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña, Area area, boolean disponibilidad, Rol rol) throws Exception {
+		super(nombre, apellido, dni, email, nombreUsuario, contraseña, rol);
 		this.area = area;
 		this.disponibilidad = disponibilidad;
-		this.setRol(Rol.EMPLEADO);
 	}
 	
 	public Area getArea() {
@@ -77,13 +70,9 @@ public class Empleado extends UsuarioBase {
 	}
 
 	public int getIdEmpleado() {
-		return idEmpleado;
+		return super.getId();
 	}
 
-	public void setIdEmpleado(int idEmpleado) {
-		this.idEmpleado = idEmpleado;
-	}	
-	
 	
 
 

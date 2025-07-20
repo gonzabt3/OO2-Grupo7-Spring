@@ -1,9 +1,16 @@
 package com.grupo7.oo2spring.models;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,9 +18,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class UsuarioBase {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 	@Column(name = "username", nullable = false, unique = true)
     private String nombreUsuario;
 	 @Column(name="contraseña", nullable = false)
@@ -25,12 +35,13 @@ public abstract class UsuarioBase {
 	 @Column(nullable = false)
     private String dni;
 	 @Column(nullable = false, unique = true)
-    private String email;
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Rol rol;
+    protected String email;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "rol_id", nullable = false)
+    protected Rol rol;
     
-    public UsuarioBase(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) throws Exception {
+    public UsuarioBase(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña, Rol rol) throws Exception {
 		validarNombreApellido(nombre, apellido);
 		validarNombreUsuario(nombreUsuario);
 		validarDNI(dni);
@@ -41,6 +52,7 @@ public abstract class UsuarioBase {
 		this.apellido = apellido;
 		this.dni = dni;
 		this.email = email;
+    this.rol = rol;
 	}
     
     
