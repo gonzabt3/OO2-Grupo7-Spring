@@ -6,27 +6,22 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.grupo7.oo2spring.handlers.CustomAuthenticationFailureHandler;
 import com.grupo7.oo2spring.services.CustomUserDetailsService;
 import com.grupo7.oo2spring.services.UsuarioService;
 
@@ -38,22 +33,28 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity 
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SeguridadConfig {
-	
-	private final UsuarioService usuarioService;
-	private final  CustomAuthenticationFailureHandler failureHandler;
-	private final CustomUserDetailsService customUserDetailsService;
-	private final PasswordEncoder passwordEncoder;
-	
-	@Bean
-	public UserDetailsService userDetailsService() {
-	    return customUserDetailsService;
-	}
-	
+
+    private final UsuarioService usuarioService;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final PasswordEncoder passwordEncoder;
+
     @Bean
-    FilterRegistrationBean<OncePerRequestFilter> loggingFilter() {
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder);
+        return builder.build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return customUserDetailsService;
+    }
+
+    @Bean
+    public FilterRegistrationBean<OncePerRequestFilter> loggingFilter() {
         FilterRegistrationBean<OncePerRequestFilter> registrationBean = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(new OncePerRequestFilter() {
@@ -65,31 +66,21 @@ public class SeguridadConfig {
                                    " | Authenticated: " + (request.getUserPrincipal() != null));
                 filterChain.doFilter(request, response);
             }
-            
         });
 
         registrationBean.addUrlPatterns("/*");
         return registrationBean;
     }
-    
-    @Controller
-    public class AuthErrorController {
 
-        @GetMapping("/usuario/error_login")
-        public String mostrarErrorLogin(HttpServletRequest request, Model model) {
-            Object errorMessage = request.getAttribute("error_message");
-            model.addAttribute("mensaje", errorMessage != null ? errorMessage : "Error desconocido");
-            return "/error";
-        }
-    }
-    
-    
-    
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
+        FiltroAutenticacionJson filtro = new FiltroAutenticacionJson();
+        filtro.setAuthenticationManager(authManager);
+        filtro.setFilterProcessesUrl("/api/auth/login");
+
         http
-        .userDetailsService(customUserDetailsService)
-        .authorizeHttpRequests(auth -> auth
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
+            .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/",
                     "/index",
@@ -106,13 +97,23 @@ public class SeguridadConfig {
                     "/usuario/confirmar",
                     "/usuario/confirmar/**",
                     "/usuario/confirmacion_exitosa",
-                    "/usuario/token_invalido"
+                    "/usuario/token_invalido",
+                    "/api/auth/**",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/swagger-ui.html"
                 ).permitAll()
                 .requestMatchers("/panel").hasAnyRole("USER", "EMPLEADO", "MANAGER")
                 .requestMatchers("/manager/**").hasRole("MANAGER")
+                .requestMatchers("/api/manager/**").hasRole("MANAGER")
+                .requestMatchers("/api/usuarios/**").hasRole("MANAGER")
                 .anyRequest().authenticated()
-            ).formLogin(form -> form
-                .loginPage("/usuario/login")                
+            )
+            .userDetailsService(customUserDetailsService)
+            .addFilterBefore(filtro, UsernamePasswordAuthenticationFilter.class)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+            .formLogin(form -> form
+                .loginPage("/usuario/login")
                 .loginProcessingUrl("/usuario/login/process")
                 .defaultSuccessUrl("/panel", true)
                 .failureUrl("/usuario/login?error=true")
@@ -122,12 +123,9 @@ public class SeguridadConfig {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/usuario/login?logout")
                 .permitAll()
-            );
-        
+            )
+            .httpBasic(httpBasic -> httpBasic.disable()); // Disable HTTP Basic
 
         return http.build();
     }
-    
-    
-    
 }

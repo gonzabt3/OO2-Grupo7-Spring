@@ -35,6 +35,7 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
     
 	
 	List<Usuario> findByRolNot(Rol rol);
+	List<Usuario> findByRol(Rol rol);
     
 	
 

@@ -33,9 +33,10 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private Prioridad prioridad;
     
-    @Enumerated(EnumType.STRING)
+
+    @ManyToOne
+    @JoinColumn(name = "area_id")
     private Area area;
-    
 
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -57,7 +58,7 @@ public class Ticket {
     		this.usuarioCreador = usuarioCreador;
     		this.estado = Estado.ABIERTO;
     		this.prioridad = Prioridad.SIN_ASIGNAR;
-    		this.area = Area.SIN_ASIGNAR;
+    		this.area = new Area(TipoArea.SIN_ASIGNAR);
     		this.procesos = new ArrayList<Control>();
     	}
         

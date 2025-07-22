@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Convertir en Empleado</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+	
+	<div id="mensaje-container"></div>
+
+    <h2 class="mb-4">Convertir en Empleado</h2>
+
+	<form id="form-convertir-empleado" class="needs-validation" novalidate>
+	    <input type="hidden" name="idEmpleado" id="idEmpleado" />
+
+		<div class="mb-3">
+		    <label class="form-label">Nombre</label>
+		    <input type="text" name="nombre" id="nombre" class="form-control" readonly>
+		</div>
+
+		<div class="mb-3">
+		    <label class="form-label">Apellido</label>
+		    <input type="text" name="apellido" id="apellido" class="form-control" readonly>
+		</div>
+
+		<div class="mb-3">
+		    <label class="form-label">DNI</label>
+		    <input type="text" name="dni" id="dni" class="form-control" readonly>
+		</div>
+
+		<div class="mb-3">
+		    <label class="form-label">Email</label>
+		    <input type="email" name="email" id="email" class="form-control" readonly>
+		</div>
+
+		    <div class="mb-3">
+				<label class="form-label">Seleccioná un área</label>
+				<select id="area" name="areaId" class="form-select" required>
+				</select>
+		    </div>
+
+		    <div class="form-check mb-4">
+		        <input type="checkbox" name="disponibilidad" id="disponibilidad" class="form-check-input">
+		        <label class="form-check-label" for="disponibilidad">Disponible</label>
+		    </div>
+
+		    <button type="submit" class="btn btn-primary">Guardar</button>
+		</form>
+	
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+		  const params = new URLSearchParams(window.location.search);
+		  const id = params.get('id');
+
+		  // 🔄 Buscar los datos del usuario
+		  fetch(`/api/usuarios/${id}`)
+		    .then(response => {
+		      if (!response.ok) throw new Error('Usuario no encontrado');
+		      return response.json();
+		    })
+		    .then(usuario => {
+		      document.getElementById('nombre').value = usuario.nombre;
+		      document.getElementById('apellido').value = usuario.apellido;
+			  document.getElementById('dni').value = usuario.dni;
+			  document.getElementById('email').value = usuario.email;
+			  
+			  fetch('/api/area/listar')
+			    .then(res => res.json())
+			    .then(areas => {
+			      const select = document.getElementById('area');
+				  areas.forEach(area => {
+				    const opt = document.createElement('option');
+				    opt.value = area.id;
+				    opt.textContent = area.nombre;
+				    opt.setAttribute('data-nombre', area.nombre);
+				    select.appendChild(opt);
+				  });
+			    });
+		    })
+		    .catch(err => alert(err.message));
+			
+			const areaId = document.getElementById('area').value;
+			console.log('Area ID que se enviará:', areaId);
+
+		  document.getElementById('form-convertir-empleado').addEventListener('submit', e => {
+		    e.preventDefault();
+			
+			const selectArea = document.getElementById('area'); //Todo esto porque EmpleadoDTO espera un objeto de tipo Area...
+			
+			
+			
+			
+			const selectedOption = selectArea.selectedOptions[0];
+			const areaObj = {
+			  id: parseInt(selectedOption.value),             
+			  tipo: selectedOption.getAttribute('data-nombre') 
+			};
+
+			const dto = {
+			  idEmpleado: id,
+			  areaId: parseInt(selectArea.value),
+			  disponibilidad: document.getElementById('disponibilidad').checked
+			};
+
+		    fetch(`/api/manager/convertir/${id}`, {
+		      method: 'POST',
+		      headers: { 'Content-Type': 'application/json' },
+		      body: JSON.stringify(dto)
+		    })
+		      .then(response => {
+		        if (!response.ok) throw new Error('Error al convertir');
+		        return response.text();
+		      })
+		      .then(msg => {
+		        sessionStorage.setItem('successMessage', msg);
+		        window.location.href = '/manager/listar.html';
+		      })
+		      .catch(err => mostrarMensaje('danger', error.message));
+		  });
+		});
+	</script>
+	<script src="/js/utils.js"></script>
+
+</body>
+</html>

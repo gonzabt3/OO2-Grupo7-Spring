@@ -30,6 +30,7 @@ import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Ticket;
+import com.grupo7.oo2spring.models.TipoArea;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.models.Empleado;
@@ -113,7 +114,7 @@ public class TicketController {
 		//Empleado usuario = (Empleado) usuarioService.getUsuarioByUsername(usuariolog.getUsername());
 		Empleado empleadoOpt = empleadoService.findByEmpleadoNombre(usuariolog.getUsername());
 		if(empleadoOpt.getArea() != null) {
-			tickets = ticketService.findByArea(empleadoOpt.getArea());
+			tickets = ticketService.findByArea(empleadoOpt.getArea().getTipo());
 			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea());
 			model.addAttribute("tickets", tickets);
 		}else {
@@ -206,7 +207,7 @@ public class TicketController {
             List<Ticket> tickets = ticketRepository.findAll();
             model.addAttribute("tickets", tickets);
             model.addAttribute("rol",empleado.getRol());
-            model.addAttribute("areas", Area.values());
+            model.addAttribute("areas", TipoArea.values());
             model.addAttribute("estados", Estado.values());
             model.addAttribute("prioridades", Prioridad.values());
             return "ticket/ticket_del_sistema"; 
@@ -223,7 +224,7 @@ public class TicketController {
             @RequestParam("area") Area area,
             RedirectAttributes redirectAttributes) throws TicketNoEncontradoException {
 		ticketService.asignarAreaTicket(idTicket, area);
-		redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.name() + "' asignada al ticket #" + idTicket + " con éxito!");
+		redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.getTipo().getNombre() + "' asignada al ticket #" + idTicket + " con éxito!");
 		return "redirect:/ticket/lista";
 	}
 	

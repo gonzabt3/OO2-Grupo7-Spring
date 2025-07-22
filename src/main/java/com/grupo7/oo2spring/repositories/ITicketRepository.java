@@ -11,6 +11,7 @@ import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Estado;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.models.Ticket;
+import com.grupo7.oo2spring.models.TipoArea;
 import com.grupo7.oo2spring.models.Usuario;
 
 @Repository
@@ -45,7 +46,7 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
 	// Busca los tickets sin area
     List<Ticket> findByAreaIsNull();
 	
-    List<Ticket> findByArea(Area area);
+    List<Ticket> findByArea(TipoArea sinAsignar);
 	
 
 }

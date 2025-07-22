@@ -71,7 +71,6 @@ public class ManagerService {
 	    } else {
 	        // Si no existe, crear una nueva instancia
 	        empleado = new Empleado();
-	        empleado.setIdEmpleado(idUsuario); // hereda de Usuario
 	        empleado.setArea(datosEmpleado.getArea());
 	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
 	        empleado.setNombre(usuario.getNombre());
@@ -84,8 +83,10 @@ public class ManagerService {
 	    }
 
 	    // 4. Cambiar rol en el usuario base (por si no lo setea bien al persist)
-	    usuario.setRol(Rol.EMPLEADO);
-	    usuarioRepository.save(usuario);
+	    empleado.setRol(Rol.EMPLEADO);
+	    empleadoRepository.save(empleado);
+	    
+	    usuarioRepository.deleteById(idUsuario);
 
 	    // 5. Retornar el empleado recién creado o actualizado
 	    return empleado;
@@ -93,19 +94,24 @@ public class ManagerService {
 	
 	@Transactional
 	public void sacarPermisosEmpleado(int idEmpleado) throws Exception {
-		Empleado empleado = empleadoRepository.findById(idEmpleado)
-	            .orElseThrow(() -> new Exception("Empleado no encontrado"));
+	    Empleado empleado = empleadoRepository.findById(idEmpleado)
+	        .orElseThrow(() -> new Exception("Empleado no encontrado"));
 
-	    Usuario usuario = usuarioRepository.findById(empleado.getIdEmpleado())
-	            .orElseThrow(() -> new Exception("Usuario no encontrado"));
+	    // Crear usuario nuevo con datos del empleado
+	    Usuario nuevoUsuario = new Usuario();
+	    nuevoUsuario.setNombre(empleado.getNombre());
+	    nuevoUsuario.setNombreUsuario(empleado.getNombreUsuario());
+	    nuevoUsuario.setContraseña(empleado.getContraseña());
+	    nuevoUsuario.setApellido(empleado.getApellido());
+	    nuevoUsuario.setEmail(empleado.getEmail());
+	    nuevoUsuario.setDni(empleado.getDni());
+	    nuevoUsuario.setRol(Rol.USER);
+	    nuevoUsuario.setUsuarioActivo(true);
 
-	    // Cambiar el rol del usuario a CLIENTE
-	    usuario.setRol(Rol.USER);
-	    usuarioRepository.save(usuario);
+	    usuarioRepository.save(nuevoUsuario);
 
-	    // Borrar el registro Empleado (tabla hija)
-	    //empleadoRepository.delete(empleado);
-
+	    // Eliminar empleado
+	    empleadoRepository.delete(empleado);
 	}
 
 

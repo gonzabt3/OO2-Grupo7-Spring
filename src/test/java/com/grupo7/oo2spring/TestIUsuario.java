@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
+import com.grupo7.oo2spring.services.UsuarioService;
 
 @SpringBootTest
 public class TestIUsuario {
@@ -20,10 +21,14 @@ public class TestIUsuario {
     private IUsuarioRepository usuarioRepository;
 	@Autowired
     private PasswordEncoder passwordEncoder;
+	@Autowired
+	private UsuarioService usuarioService;
 	
 	@Test
     void testGuardarYBuscarUsuario() {
         // Crear usuario
+		
+		//usuarioService.eliminarUsuariosConRolEmpleado();
 		try { 
 			//usuarioRepository.deleteAll();
 	    Usuario usuario = new Usuario("Roberto", "Jimenez", "34672169", "roberto.jimenez@example.com", "rober", "test");

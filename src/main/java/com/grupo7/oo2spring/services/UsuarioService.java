@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,6 +35,16 @@ public class UsuarioService {
     
     public Optional<Usuario> buscarPorUsernameYPassword(String username, String password) {
     	return usuarioRepository.findByNombreUsuarioAndContraseña(username, password);
+    }
+    
+    public Optional<Usuario> getUsuarioById(int id) {
+    	return usuarioRepository.findById(id);
+    }
+    
+    @Transactional
+    public void eliminarUsuariosConRolEmpleado() {
+        List<Usuario> usuariosConRolEmpleado = usuarioRepository.findByRol(Rol.EMPLEADO);
+        usuarioRepository.deleteAll(usuariosConRolEmpleado);
     }
    
 }

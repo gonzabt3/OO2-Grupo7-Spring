@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
+import com.grupo7.oo2spring.models.TipoArea;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.repositories.*;
 
@@ -23,13 +24,17 @@ public class TestIEmpleado {
     private PasswordEncoder passwordEncoder;
 	@Autowired
 	private IEmpleadoRepository empleadoRepository;
+	@Autowired
+	private IAreaRepository areaRepository;
 
 
     @Test
     void testGuardarYBuscarEmpleado() throws Exception {
         // Crear empleado
     	//empleadoRepository.deleteById(4);
-        Empleado empleado = new Empleado("Juan", "Perez", "20308232", "juan.perez@example.com","juan", passwordEncoder.encode("password"), Area.DESARROLLO, true);
+    	  Optional<Area> areaOpt = areaRepository.findByTipo(TipoArea.DESARROLLO);
+    	 Area areaDesarrollo = areaOpt.get();
+        Empleado empleado = new Empleado("Juan", "Perez", "20308232", "juan.perez@example.com","juan", passwordEncoder.encode("password"), areaDesarrollo, true);
         empleado = empleadoRepository.save(empleado);
         
 	    Empleado manager = new Empleado(
@@ -39,7 +44,7 @@ public class TestIEmpleado {
 	            "carlos@example.com", // email
 	            "carlosG",          // nombreUsuario
 	            "segura123",         // contraseña
-	            Area.SOPORTE, 
+	            areaDesarrollo, 
 	            true
 	        );
 	    

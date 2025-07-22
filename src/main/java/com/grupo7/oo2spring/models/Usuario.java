@@ -14,7 +14,7 @@ import lombok.Setter;
 public class Usuario extends UsuarioBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idUsuario;
+    private Integer idUsuario;
 
     @Column(nullable = false)
     private boolean usuarioActivo; //va en Usuario xq no aplica a Empleado, solo a un Usuario normal

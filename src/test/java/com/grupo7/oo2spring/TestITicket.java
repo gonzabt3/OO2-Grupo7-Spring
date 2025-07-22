@@ -8,6 +8,7 @@ import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Estado;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.models.Ticket;
+import com.grupo7.oo2spring.models.TipoArea;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
@@ -26,8 +27,8 @@ public class TestITicket {
 	    @Test
 	    public void testCrearTicketsParaUsuarioExistente() {
 		    Usuario roberto = usuarioRepository.findByNombreUsuario("rober");
-	    for (Area area : Area.values()) {
-            if (area == Area.SIN_ASIGNAR) continue;
+	    for (TipoArea area : TipoArea.values()) {
+            if (area == TipoArea.SIN_ASIGNAR) continue;
 
             for (Prioridad prioridad : Prioridad.values()) {
                 if (prioridad == Prioridad.SIN_ASIGNAR) continue;
@@ -38,7 +39,7 @@ public class TestITicket {
                             "Descripción con prioridad " + prioridad + " y estado " + estado,
                             roberto
                     );
-                    ticket.setArea(area);
+                    ticket.setArea(new Area(area));
                     ticket.setPrioridad(prioridad);
                     ticket.setEstado(estado);
 
