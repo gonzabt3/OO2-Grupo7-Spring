@@ -1,6 +1,7 @@
 package com.grupo7.oo2spring.controller.rest;
 
-import com.grupo7.oo2spring.controller.rest.dto.AreaDTO;
+
+import com.grupo7.oo2spring.dto.AreaDTO;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.services.AreaService;
 import lombok.RequiredArgsConstructor;
