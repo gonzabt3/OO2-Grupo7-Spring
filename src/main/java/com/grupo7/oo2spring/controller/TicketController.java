@@ -115,9 +115,10 @@ public class TicketController {
 		model.addAttribute("usuarioLogueado", usuariolog);
 		List<Ticket> tickets = null;
 		//Empleado usuario = (Empleado) usuarioService.getUsuarioByUsername(usuariolog.getUsername());
-		Empleado empleadoOpt = empleadoService.findByEmpleadoNombre(usuariolog.getUsername());
+		System.out.println(usuariolog.getUsername());
+		Empleado empleadoOpt = empleadoService.findByNombreUsuario(usuariolog.getUsername());
 		if(empleadoOpt.getArea() != null) {
-			tickets = ticketService.findByArea(empleadoOpt.getArea().getTipo());
+			tickets = ticketService.findByAreaTipo(empleadoOpt.getArea().getTipo());
 			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea());
 			model.addAttribute("tickets", tickets);
 		}else {
@@ -149,7 +150,7 @@ public class TicketController {
                                     Model model) throws Exception, TicketNoEncontradoException {
 		System.out.println("➡️ Entró al controlador tomarTicketConControlInicial");
 		String nombreDelUsuarioEnSesion = usuariolog.getUsername();
-    	Empleado empleadoLogeado = empleadoService.findByEmpleadoNombre(nombreDelUsuarioEnSesion);
+    	Empleado empleadoLogeado = empleadoService.findByNombreUsuario(nombreDelUsuarioEnSesion);
     	try {
 
             ticketService.tomarTicketConControlInicial(idTicket, empleadoLogeado, control);
