@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.grupo7.oo2spring.enums.TipoArea;
+
 @Entity
 @NoArgsConstructor
 public class Ticket {
@@ -25,7 +27,7 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private Usuario usuarioCreador;
+    private UsuarioBase usuarioCreador;
 
     @Enumerated(EnumType.STRING)
     private Estado estado;
@@ -103,7 +105,7 @@ public class Ticket {
     }
     
 
-    public Usuario getUsuarioCreador() {
+    public UsuarioBase getUsuarioCreador() {
 		return usuarioCreador;
 	}
 

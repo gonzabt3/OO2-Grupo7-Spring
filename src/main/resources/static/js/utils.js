@@ -13,5 +13,5 @@ function mostrarMensaje(tipo, texto) {
 
 	    setTimeout(() => {
 	        if (contenedor.contains(alerta)) contenedor.removeChild(alerta);
-	    }, 5000);
+	    }, 10000);
 }

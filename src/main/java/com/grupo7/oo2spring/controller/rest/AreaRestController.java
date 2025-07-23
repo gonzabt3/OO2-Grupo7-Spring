@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo7.oo2spring.dto.AreaDTO;
-import com.grupo7.oo2spring.models.TipoArea;
+import com.grupo7.oo2spring.enums.TipoArea;
 import com.grupo7.oo2spring.repositories.IAreaRepository;
 import com.grupo7.oo2spring.services.UsuarioService;
 

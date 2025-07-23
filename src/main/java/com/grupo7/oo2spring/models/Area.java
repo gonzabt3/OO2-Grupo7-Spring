@@ -1,10 +1,10 @@
 package com.grupo7.oo2spring.models;
 
+import com.grupo7.oo2spring.enums.TipoArea;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
-
-import com.grupo7.oo2spring.models.TipoArea;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;

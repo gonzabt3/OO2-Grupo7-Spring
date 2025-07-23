@@ -2,14 +2,19 @@ package com.grupo7.oo2spring.services;
 
 import java.util.Optional;
 
+import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
+import com.grupo7.oo2spring.enums.TipoRol;
 import com.grupo7.oo2spring.exception.UsuarioEsEmpleadoException;
 import com.grupo7.oo2spring.exception.UsuarioNoEncontradoException;
+import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.repositories.IEmpleadoRepository;
+import com.grupo7.oo2spring.repositories.IRolRepository;
+import com.grupo7.oo2spring.repositories.ITicketRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 
 import jakarta.persistence.EntityManager;
@@ -23,6 +28,17 @@ public class ManagerService {
 	private final IUsuarioRepository usuarioRepository;
 	private final IEmpleadoRepository empleadoRepository;
 	private final EntityManager entityManager;
+	private final IRolRepository rolRepository;
+	private final UsuarioService usuarioService;
+	private final EmpleadoService empleadoService;
+	private final ITicketRepository ticketRepository;
+	
+	 public Empleado crearManager(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña, Area area, boolean disponibilidad) throws Exception {
+	        Empleado u = new Empleado(nombre, apellido, dni, email, nombreUsuario, contraseña, area, disponibilidad);
+	        Rol rolEmpleado = rolRepository.findByTipo(TipoRol.USER);
+	        u.setRol(rolEmpleado);
+	        return u;
+	    }
 	
 	public Empleado prepararEmpleadoDesdeUsuario(int idUsuario) throws UsuarioNoEncontradoException {
 	    Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
@@ -33,7 +49,7 @@ public class ManagerService {
 	    Usuario usuario = usuarioOpt.get();
 
 	    Empleado empleado = new Empleado();
-	    empleado.setIdEmpleado(usuario.getIdUsuario());
+	    //empleado.setIdEmpleado(usuario.getId());
 	    empleado.setNombre(usuario.getNombre());
 	    empleado.setApellido(usuario.getApellido());
 	    empleado.setDni(usuario.getDni());
@@ -47,50 +63,49 @@ public class ManagerService {
 	
 	@Transactional
 	public Empleado convertirUsuarioAEmpleado(int idUsuario, Empleado datosEmpleado) throws Exception {
-		// 1. Buscar el usuario por ID
 	    Usuario usuario = usuarioRepository.findById(idUsuario)
-	        .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario no encontrado"));
+	        .orElseThrow(() -> new Exception("Usuario no encontrado"));
 
-	    // 2. Verificar si ya tiene el rol de EMPLEADO
-	    if (usuario.getRol() == Rol.EMPLEADO) {
-	        throw new UsuarioEsEmpleadoException("El usuario ya es un empleado");
-	    }
 
-	    Empleado empleado;
+	    // Eliminar la fila de la tabla usuario (subclase)
+	    ticketRepository.deleteByUsuarioCreador(usuario);
+	    entityManager.remove(usuario);
+	    entityManager.flush();
 
-	    // 3. Verificar si ya existe una fila en la tabla empleado
-	    if (empleadoRepository.existsById(idUsuario)) {
-	        // Si existe, actualizarla
-	        empleado = empleadoRepository.findById(idUsuario)
-	            .orElseThrow(() -> new Exception("Error al recuperar datos del empleado existente"));
+	    // Crear un nuevo empleado con el mismo ID (en tabla empleado)
+	    Empleado empleado = new Empleado();
+	    empleado.setNombre(usuario.getNombre());
+	    empleado.setApellido(usuario.getApellido());
+	    empleado.setDni(usuario.getDni());
+	    empleado.setEmail(usuario.getEmail());
+	    empleado.setNombreUsuario(usuario.getNombreUsuario());
+	    empleado.setContraseña(usuario.getContraseña());
+	    empleado.setArea(datosEmpleado.getArea());
+	    empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
 
-	        empleado.setArea(datosEmpleado.getArea());
-	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
+	    // Asignar el rol EMPLEADO
+	    empleado.setRol(rolRepository.findByTipo(TipoRol.EMPLEADO));
 
-	        empleado = empleadoRepository.save(empleado); // Actualiza
-	    } else {
-	        // Si no existe, crear una nueva instancia
-	        empleado = new Empleado();
-	        empleado.setArea(datosEmpleado.getArea());
-	        empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
-	        empleado.setNombre(usuario.getNombre());
-	        empleado.setApellido(usuario.getApellido());
-	        empleado.setDni(usuario.getDni());
-	        empleado.setEmail(usuario.getEmail());
-	        empleado.setNombreUsuario(usuario.getNombreUsuario());
-	        empleado.setContraseña(usuario.getContraseña());
-	        empleado.setRol(Rol.EMPLEADO);
-	    }
+	    // Guardar empleado en tabla empleado
+	    empleado = entityManager.merge(empleado);
 
-	    // 4. Cambiar rol en el usuario base (por si no lo setea bien al persist)
-	    empleado.setRol(Rol.EMPLEADO);
-	    empleadoRepository.save(empleado);
-	    
-	    usuarioRepository.deleteById(idUsuario);
-
-	    // 5. Retornar el empleado recién creado o actualizado
 	    return empleado;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	@Transactional
 	public void sacarPermisosEmpleado(int idEmpleado) throws Exception {
@@ -98,20 +113,16 @@ public class ManagerService {
 	        .orElseThrow(() -> new Exception("Empleado no encontrado"));
 
 	    // Crear usuario nuevo con datos del empleado
-	    Usuario nuevoUsuario = new Usuario();
-	    nuevoUsuario.setNombre(empleado.getNombre());
-	    nuevoUsuario.setNombreUsuario(empleado.getNombreUsuario());
-	    nuevoUsuario.setContraseña(empleado.getContraseña());
-	    nuevoUsuario.setApellido(empleado.getApellido());
-	    nuevoUsuario.setEmail(empleado.getEmail());
-	    nuevoUsuario.setDni(empleado.getDni());
-	    nuevoUsuario.setRol(Rol.USER);
+	    Usuario nuevoUsuario = usuarioService.crearUsuario(empleado.getNombre(), empleado.getApellido(), empleado.getDni(), empleado.getEmail(), empleado.getNombreUsuario(), empleado.getContraseña());
 	    nuevoUsuario.setUsuarioActivo(true);
+	    
+	    // Eliminar empleado
+	    empleadoRepository.delete(empleado);
+	    empleadoRepository.flush();
 
 	    usuarioRepository.save(nuevoUsuario);
 
-	    // Eliminar empleado
-	    empleadoRepository.delete(empleado);
+
 	}
 
 

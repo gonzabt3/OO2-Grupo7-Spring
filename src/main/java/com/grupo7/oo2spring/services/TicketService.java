@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.grupo7.oo2spring.models.Ticket;
-import com.grupo7.oo2spring.models.TipoArea;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.exception.TicketCreacionException;
 import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.dto.ControlDTO;
 import com.grupo7.oo2spring.dto.TicketDTO;
+import com.grupo7.oo2spring.enums.TipoArea;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Estado;
@@ -137,7 +137,7 @@ public class TicketService {
 	 }
 
 	public List<Ticket> getTicketsByUsuario(int usuarioIdCreador) {
-		return ticketRepository.findByUsuarioCreadorIdUsuario(usuarioIdCreador);
+		return ticketRepository.findByUsuarioCreador_Id(usuarioIdCreador);
 	}
 }
 

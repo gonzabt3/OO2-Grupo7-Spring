@@ -1,12 +1,14 @@
 package com.grupo7.oo2spring.seed;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.grupo7.oo2spring.enums.TipoArea;
+import com.grupo7.oo2spring.enums.TipoRol;
 import com.grupo7.oo2spring.models.Area;
-import com.grupo7.oo2spring.models.TipoArea;
+import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.repositories.IAreaRepository;
+import com.grupo7.oo2spring.repositories.IRolRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +19,7 @@ import java.util.Arrays;
 public class DatabaseSeeder implements CommandLineRunner {
 
     private final IAreaRepository areaRepository;
+    private final IRolRepository rolRepository;
 
 
     @Override
@@ -34,24 +37,10 @@ public class DatabaseSeeder implements CommandLineRunner {
     }    
     private void seedRoles() {
         if (rolRepository.count() == 0) {
-            Rol[] roles = new Rol[]{
-                new Rol(RoleType.USER),
-                new Rol(RoleType.MANAGER),
-                new Rol(RoleType.EMPLEADO)
-            };
-            rolRepository.saveAll(Arrays.asList(roles));
+        	for (TipoRol tipo: TipoRol.values()) {
+        		rolRepository.save(new Rol(tipo));
+        	}
         }
     }
-    
-    private void seedRoles() {
-        if (rolRepository.count() == 0) {
-            Rol[] roles = new Rol[]{
-                new Rol(RoleType.USER),
-                new Rol(RoleType.MANAGER),
-                new Rol(RoleType.EMPLEADO)
-            };
-            rolRepository.saveAll(Arrays.asList(roles));
-        }
-    }
-}
+
 }

@@ -25,12 +25,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.grupo7.oo2spring.dto.ControlDTO;
 import com.grupo7.oo2spring.dto.TicketDTO;
+import com.grupo7.oo2spring.enums.TipoArea;
 import com.grupo7.oo2spring.exception.TicketCreacionException;
 import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Ticket;
-import com.grupo7.oo2spring.models.TipoArea;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.models.Empleado;
@@ -157,7 +157,7 @@ public class TicketController {
 
             
             Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-		    Usuario usuarioDueño = ticket.getUsuarioCreador(); // asumimos que Ticket tiene un Usuario asociado
+		    UsuarioBase usuarioDueño = ticket.getUsuarioCreador(); // asumimos que Ticket tiene un Usuario asociado
 		    
             System.out.println(usuarioDueño.getEmail());
 
@@ -243,7 +243,7 @@ public class TicketController {
 	    String username = userDetails.getUsername();
 	    Usuario usuario = usuarioService.getUsuarioByNombreUsuario(username);
 
-	    List<Ticket> tickets = ticketService.getTicketsByUsuario(usuario.getIdUsuario());
+	    List<Ticket> tickets = ticketService.getTicketsByUsuario(usuario.getId());
 	    model.addAttribute("tickets", tickets);
 
 	    return "ticket/usuario-tickets"; // Vista con la tabla de tickets

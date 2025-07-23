@@ -1,4 +1,4 @@
-package com.grupo7.oo2spring.models;
+package com.grupo7.oo2spring.enums;
 
 public enum TipoArea {
 	SOPORTE("Soporte"),

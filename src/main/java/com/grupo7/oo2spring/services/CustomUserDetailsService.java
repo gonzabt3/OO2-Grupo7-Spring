@@ -44,16 +44,19 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final IEmpleadoRepository empleadoRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
+    	System.out.println("ES ACA LOADBYUSERNAME");
         Usuario usuario = usuarioRepository.findByNombreUsuario(username);
+        
         if (usuario != null) {
-            System.out.println("Cargando usuario: " + usuario.getNombreUsuario() + " rol: " + usuario.getRol());
+            System.out.println("Cargando usuario: " + usuario.getNombreUsuario() + " rol: " + usuario.getRol().getTipo());
+       
             return new UsuarioDetails(usuario);
         }
 
         Empleado empleado = empleadoRepository.findEmpleadoAllByNombreUsuario(username);
         if (empleado != null) {
-            System.out.println("Cargando empleado: " + empleado.getNombreUsuario() + " rol: " + empleado.getRol());
+            System.out.println("Cargando empleado: " + empleado.getNombreUsuario() + " rol: " + empleado.getRol().getTipo());
             return new UsuarioDetails(empleado);
         }
 

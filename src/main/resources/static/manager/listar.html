@@ -99,7 +99,7 @@
 			      tbody.innerHTML = '';
 
 			      usuarios.forEach(usuario => {
-			        if (usuario.rol !== 'USER' && usuario.rol !== 'EMPLEADO') return;
+			        if (usuario.rol.tipo !== 'USER' && usuario.rol.tipo !== 'EMPLEADO') return;
 
 			        const tr = document.createElement('tr');
 			        tr.innerHTML = `
@@ -108,10 +108,10 @@
 			          <td>${usuario.dni}</td>
 			          <td>${usuario.nombreUsuario}</td>
 			          <td>${usuario.email}</td>
-			          <td>${usuario.rol}</td>
+			          <td>${usuario.rol.tipo}</td>
 			          <td>
 			            ${
-			              usuario.rol === 'USER'
+			              usuario.rol.tipo === 'USER'
 			                ? `<button class="btn btn-sm btn-success convertir-btn" data-id="${usuario.id}">Convertir a Empleado</button>`
 			                : `<button class="btn btn-sm btn-danger sacar-permisos-btn" data-id="${usuario.id}">Sacar permisos</button>`
 			            }

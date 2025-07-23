@@ -60,6 +60,7 @@ public class FiltroAutenticacionJson extends UsernamePasswordAuthenticationFilte
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
         response.getWriter().write("{\"message\": \"Login fallido\"}");
         response.getWriter().flush();
     }

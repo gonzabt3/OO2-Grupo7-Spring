@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.grupo7.oo2spring.enums.TipoRol;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
@@ -34,8 +35,8 @@ public interface IUsuarioRepository extends JpaRepository<Usuario, Integer> {
 	Optional<Usuario> findByNombreUsuarioAndContraseña(String username, String password);
     
 	
-	List<Usuario> findByRolNot(Rol rol);
-	List<Usuario> findByRol(Rol rol);
+	List<Usuario> findByRolNot(TipoRol rol);
+	List<Usuario> findByRol(TipoRol rol);
     
 	
 

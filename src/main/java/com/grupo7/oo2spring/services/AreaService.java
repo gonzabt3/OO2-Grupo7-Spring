@@ -26,7 +26,4 @@ public class AreaService {
         areaRepository.deleteById(id);
     }
 
-    public Optional<Area> buscarPorNombre(String nombre) {
-      return areaRepository.findByNombre(nombre);
-    }
 }

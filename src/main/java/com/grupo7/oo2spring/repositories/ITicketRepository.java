@@ -7,12 +7,13 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.grupo7.oo2spring.enums.TipoArea;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Estado;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.models.Ticket;
-import com.grupo7.oo2spring.models.TipoArea;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.models.UsuarioBase;
 
 @Repository
 public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
@@ -32,7 +33,7 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
     // Buscar tickets creados por un usuario específico
     List<Ticket> findByUsuarioCreador(Usuario usuarioCreador);
 	
-    List<Ticket> findByUsuarioCreadorIdUsuario(int usuarioCreadorId);
+    List<Ticket> findByUsuarioCreador_Id(int usuarioCreadorId);
     
     // Buscar tickets creados entre dos fechas
     List<Ticket> findByFechaCreacionBetween(LocalDate fechaInicio, LocalDate fechaFin);
@@ -47,6 +48,8 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
     List<Ticket> findByAreaIsNull();
 	
     List<Ticket> findByArea(TipoArea sinAsignar);
+
+	List<Ticket> deleteByUsuarioCreador(UsuarioBase usuario);
 	
 
 }

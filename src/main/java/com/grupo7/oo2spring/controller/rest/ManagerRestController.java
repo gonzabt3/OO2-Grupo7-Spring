@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.grupo7.oo2spring.dto.EmpleadoDTO;
 import com.grupo7.oo2spring.dto.UsuarioDTO;
+import com.grupo7.oo2spring.enums.TipoRol;
 import com.grupo7.oo2spring.exception.UsuarioEsEmpleadoException;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Empleado;
@@ -21,6 +22,7 @@ import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.repositories.IAreaRepository;
 import com.grupo7.oo2spring.repositories.IEmpleadoRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
+import com.grupo7.oo2spring.services.EmpleadoService;
 import com.grupo7.oo2spring.services.ManagerService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,6 +40,7 @@ public class ManagerRestController {
     private final IUsuarioRepository usuarioRepository;
     private final ManagerService managerService;
     private final IAreaRepository areaRepository;
+    private final EmpleadoService empleadoService;
     
     @GetMapping("/listar")
     public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
@@ -63,26 +66,28 @@ public class ManagerRestController {
             return ResponseEntity.badRequest().body("Usuario no encontrado");
         }
         
+        Usuario usuario = usuarioOpt.get();
+
         Area area = areaRepository.findById(dto.idArea())
-        	    .orElseThrow(() -> new RuntimeException("Área no encontrada"));
+            .orElseThrow(() -> new RuntimeException("Área no encontrada"));
 
         try {
-            Empleado empleado = new Empleado(
-                usuarioOpt.get().getNombre(),
-                usuarioOpt.get().getApellido(),
-                usuarioOpt.get().getDni(),
-                usuarioOpt.get().getEmail(),
-                usuarioOpt.get().getNombreUsuario(),
-                usuarioOpt.get().getContraseña(),
+            Empleado empleado = empleadoService.crearEmpleado(
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getDni(),
+                usuario.getEmail(),
+                usuario.getNombreUsuario(),
+                usuario.getContraseña(),
                 area,
                 dto.disponibilidad()
             );
-            
-        
+
 
             managerService.convertirUsuarioAEmpleado(id, empleado);
+
             return ResponseEntity.ok("Usuario convertido en empleado exitosamente");
-            
+
         } catch (UsuarioEsEmpleadoException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
 
@@ -91,6 +96,7 @@ public class ManagerRestController {
             return ResponseEntity.internalServerError().body("Error al convertir usuario");
         }
     }
+
     
     @PreAuthorize("hasRole('MANAGER')")
     @PostMapping("/sacar-permisos/{id}")
@@ -101,11 +107,11 @@ public class ManagerRestController {
         }
 
         Empleado empleado = empleadoOpt.get();
-        Rol rol = empleado.getRol();
+        TipoRol rol = empleado.getRol().getTipo();
         
         System.out.println("ROL: " + rol);
 
-        if (rol != Rol.EMPLEADO) {
+        if (rol != TipoRol.EMPLEADO) {
             return ResponseEntity.badRequest().body("El rol no es empleado");
         }
 

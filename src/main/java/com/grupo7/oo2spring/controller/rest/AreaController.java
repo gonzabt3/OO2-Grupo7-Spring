@@ -21,13 +21,6 @@ import java.util.List;
 public class AreaController {
 
     private final AreaService areaService;
-
-    @GetMapping("/nombre/{nombre}")
-    public AreaDTO getAreaByName(@PathVariable String nombre) {
-        Area area = areaService.buscarPorNombre(nombre)
-                .orElseThrow(() -> new RuntimeException("Área no encontrada: " + nombre));
-        return new AreaDTO(area.getId(), area.getTipo().nombre);
-    }
     
 
     @GetMapping

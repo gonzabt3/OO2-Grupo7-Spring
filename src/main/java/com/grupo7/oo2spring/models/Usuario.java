@@ -2,6 +2,8 @@ package com.grupo7.oo2spring.models;
 
 import java.util.Objects;
 
+import com.grupo7.oo2spring.enums.TipoRol;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,32 +13,23 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
+@PrimaryKeyJoinColumn(name = "id")
 public class Usuario extends UsuarioBase {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idUsuario;
-
+    
+	
+	
     @Column(nullable = false)
     private boolean usuarioActivo; //va en Usuario xq no aplica a Empleado, solo a un Usuario normal
 
     
     public Usuario(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) throws Exception {
     	super(nombre, apellido, dni, email, nombreUsuario, contraseña);
-    	this.setRol(Rol.USER);
     	this.usuarioActivo = false;
     }
   
 
 
-
-@Override
-	public int hashCode() {
-	return Objects.hash(idUsuario, usuarioActivo);
-	}
-
-
-
-	@Override
+    @Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
@@ -45,7 +38,7 @@ public class Usuario extends UsuarioBase {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return idUsuario == other.idUsuario && usuarioActivo == other.usuarioActivo;
+		return super.getId() == other.getId() && usuarioActivo == other.usuarioActivo;
 	}
    
    
