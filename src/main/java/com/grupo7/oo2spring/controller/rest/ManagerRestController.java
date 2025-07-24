@@ -63,7 +63,7 @@ public class ManagerRestController {
         }
     }
     
-    @PostMapping("/{id}/sacar-permisos") // Ruta para el endpoint REST
+    /*@PostMapping("/{id}/sacar-permisos") // Ruta para el endpoint REST
     public ResponseEntity<?> sacarPermisosRest(@PathVariable int id) {
     	Optional<Empleado> empleado = usuarioRepository.findEmpleadoById(id);
         try {
@@ -77,6 +77,6 @@ public class ManagerRestController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Error al sacar permisos: " + e.getMessage() + "\"}");
         }
-    }
+    }*/
 
 }

@@ -31,6 +31,7 @@ public class UsuarioController {
             model.addAttribute("usuariologueado", empleadoLogeado); // Objeto común para propiedades compartidas
             model.addAttribute("tipoEntidad", "empleado"); // Indicador de tipo
             model.addAttribute("empleadoData", empleadoLogeado); // Datos específicos de Empleado
+            System.out.println("el area es  " + empleadoLogeado.getArea());
 
         } else if (entidadLogeada instanceof Usuario) {
         	

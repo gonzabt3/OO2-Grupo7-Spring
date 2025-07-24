@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.grupo7.oo2spring.dto.ControlDTO;
+import com.grupo7.oo2spring.dto.TicketDTO;
 import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
@@ -31,6 +32,21 @@ public class ControlService {
 	public Optional<Control> buscarControlPorId(int controlID){
 		return controlRepository.findById(controlID);
 	}
+	
+
+	private ControlDTO convertToControlDTO(Control control) {
+        return new ControlDTO(
+            control.getIdControl(),
+            control.getTicket(),
+            control.getEmpleado() != null ? control.getEmpleado().getNombre() + " " + control.getEmpleado().getApellido() : null,
+            control.getFechaEntrada(),
+            control.getFechaSalida(),
+    		control.getAccion(),
+    		control.isFinalizado(),
+            control.getFuncion(),
+            control.getTicket().getTitulo()
+        );
+    }
 	
 	public Control revisionDeUltimoControl(Ticket ticket) {
 		int idUltimo=1;
@@ -59,7 +75,7 @@ public class ControlService {
 	}
 	
 	@Transactional
-	public void ControlInicial(int idTicket, Empleado empleadoLogueado, ControlDTO control)
+	public ControlDTO ControlInicial(int idTicket, Empleado empleadoLogueado, ControlDTO control)
 			throws Exception, TicketNoEncontradoException {
 		
 		Ticket ticket = ticketService.buscarTicketPorId(idTicket);
@@ -90,10 +106,10 @@ public class ControlService {
 		ticketRepository.save(ticket);
 		System.out.println("Ticket #" + idTicket + " tomado exitosamente por " + empleadoLogueado.getNombre() + " "
 				+ empleadoLogueado.getApellido());
-		
+		return convertToControlDTO(controlInicial);
 	}
 	
-	public void procesarEdicionTicket(ControlDTO control, int controlID) throws TicketNoEncontradoException {
+	public ControlDTO procesarEdicionTicket(ControlDTO control, int controlID) throws TicketNoEncontradoException {
 		Control controlEdicion = controlRepository.findById(controlID)
 				.orElseThrow(()-> new TicketNoEncontradoException("Control no encontrado: " + controlID));
 		
@@ -106,15 +122,11 @@ public class ControlService {
 			ticket.setFechaCierre(LocalDate.now());
 			ticket.setEstado(Estado.RESUELTO);
 			ticketRepository.save(ticket);
-			/*if(ticket.getEstado()==Estado.CERRADO) {
-				ticket.setFechaCierre(LocalDate.now());
-				ticket.setEstado(Estado.RESUELTO);
-				ticketRepository.save(ticket);
-			}*/	
 		}else {
 			controlEdicion.setFinalizado(false);
 		}
 		controlRepository.save(controlEdicion);
+		return convertToControlDTO(controlEdicion);
 	}
 
 }

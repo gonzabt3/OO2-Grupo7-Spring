@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Funcion;
+import com.grupo7.oo2spring.models.Ticket;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,23 +17,26 @@ import lombok.Setter;
 public class ControlDTO {
 
     private int idControl;
-    private TicketDTO ticket;
-    private Empleado empleado;
+    private Ticket ticket;
+    private String empleado;
     private LocalDateTime fechaEntrada;
     private LocalDateTime fechaSalida;
     private String accion;
     private boolean finalizado;
     private Funcion funcion;
+    private String tituloTicket;
 
-    public ControlDTO(TicketDTO ticket, Empleado empleado, LocalDateTime fechaEntrada,
-			LocalDateTime fechaSalida, String accion, boolean finalizado, Funcion funcion) {
-		this.ticket = ticket;
+    public ControlDTO(int idControl,Ticket ticket, String empleado, LocalDateTime fechaEntrada,
+			LocalDateTime fechaSalida, String accion, boolean finalizado, Funcion funcion,String tituloTicket) {
+		this.idControl = idControl;
+    	this.ticket = ticket;
 		this.empleado = empleado;
 		this.fechaEntrada = fechaEntrada;
 		this.fechaSalida = fechaSalida;
 		this.accion = accion;
 		this.finalizado = finalizado;
 		this.funcion = funcion;
+		this.tituloTicket=tituloTicket;
 	}
     
     // Getters y setters
@@ -44,20 +48,28 @@ public class ControlDTO {
         this.idControl = idControl;
     }
 
-    public Empleado getEmpleadoDTO() {
+    public String getEmpleado() {
 		return empleado;
 	}
 
-	public void setEmpleadoDTO(Empleado empleado) {
+	public void setEmpleado(String empleado) {
 		this.empleado = empleado;
 	}
 
-	public TicketDTO getTicket() {
+	public Ticket getTicket() {
         return ticket;
     }
 
-    public void setTicket(TicketDTO ticket) {
+    public void setTicket(Ticket ticket) {
         this.ticket = ticket;
+    }
+    
+    public String getTituloTicket() {
+    	return this.tituloTicket;
+    }
+    
+    public void setTituloTicket(String titulo) {
+    	this.tituloTicket=titulo;
     }
 
     public LocalDateTime getFechaEntrada() {

@@ -3,11 +3,18 @@ package com.grupo7.oo2spring.controller.rest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.grupo7.oo2spring.dto.ControlDTO;
+import com.grupo7.oo2spring.dto.EmpleadoDTO;
+import com.grupo7.oo2spring.dto.TicketDTO;
 import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
+import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
+import com.grupo7.oo2spring.models.Funcion;
 import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.repositories.IEmpleadoRepository;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
@@ -15,12 +22,16 @@ import com.grupo7.oo2spring.services.ControlService;
 import com.grupo7.oo2spring.services.TicketService;
 import com.grupo7.oo2spring.services.UsuarioService;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -33,155 +44,104 @@ public class ControlRestController {
 	private final TicketService ticketService;
 	private final ControlService controlService;
 	
-	
-	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
-	@GetMapping("/{idTicket}/nuevo")
-	public String crearNuevoControl(@PathVariable int idTicket, Model model) throws Exception {
-		Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-		model.addAttribute("ticket", ticket);
-		model.addAttribute("funciones", Funcion.values());
-		boolean pendiente = controlService.existeControlPendiente(ticket);
-		model.addAttribute("pendiente",pendiente);
-		if(pendiente) {
-			//model.addAttribute("errorMessage", "Ya existe un control pendiente");
-			ControlDTO controlDTOvacio = new ControlDTO();
-			controlDTOvacio.setFinalizado(false);
-			model.addAttribute("control", controlDTOvacio);
-		}else {
-			ControlDTO nuevoControl = new ControlDTO();
-			nuevoControl.setFinalizado(false);
-			model.addAttribute("control", nuevoControl);
-		}
-		return "control/crear-control";
-	}
-	
-	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
-    @GetMapping("/{idTicket}/editar/{idControl}")
-	public String mostrarEdicionDelControl(@PathVariable int idTicket, @PathVariable int idControl, 
-			@ModelAttribute("control") ControlDTO control, // Captura los datos del formulario en un objeto Control
-            @AuthenticationPrincipal UserDetails usuariolog, Model model) throws Exception {
-		Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-		Empleado empleadoLogeado = empleadoRepository.findEmpleadoByNombreUsuario(usuariolog.getUsername());
-		Control controlEditado = controlService.buscarControlPorId(idControl)
-				.orElseThrow(()-> new TicketNoEncontradoException("Control no encontrado"));
-		model.addAttribute("ticket", ticket);
-		model.addAttribute("IDcontrol", idControl);
-		model.addAttribute("funciones", Funcion.values());
-		boolean pendiente = controlService.existeControlPendiente(ticket);
-		model.addAttribute("pendiente",pendiente);
-		if(controlEditado.getEmpleado().getIdEmpleado() != empleadoLogeado.getIdEmpleado()) {
-			throw new Exception("Sin permiso para editar");
-		}
-		ControlDTO controlDTO = new ControlDTO();
-		controlDTO.setFuncion(controlEditado.getFuncion());
-		controlDTO.setAccion(controlEditado.getAccion());
-		controlDTO.setFinalizado(controlEditado.isFinalizado());
-		model.addAttribute("control", controlDTO);
-		return "control/editar-control";
-	}
+	private TicketDTO convertToTicketDTO(Ticket ticket) {
+        TicketDTO dto = new TicketDTO();
+        dto.setIdTicket(ticket.getIdTicket());
+        dto.setTitulo(ticket.getTitulo());
+        dto.setEstado(ticket.getEstado());
+        dto.setFechaCreacion(ticket.getFechaCreacion());
+        dto.setFechaCierre(ticket.getFechaCierre());
+        dto.setArea(ticket.getArea());
+        return dto;
+    }
+
+    private ControlDTO convertToControlDTO(Control control) {
+        ControlDTO dto = new ControlDTO();
+        dto.setIdControl(control.getIdControl());
+        dto.setAccion(control.getAccion());
+        dto.setFuncion(control.getFuncion()); 
+        dto.setFinalizado(control.isFinalizado());
+        dto.setFechaEntrada(control.getFechaEntrada());
+        dto.setFechaSalida(control.getFechaSalida());
+        if (control.getEmpleado() != null) {
+        	dto.setEmpleado(control.getEmpleado() != null ? control.getEmpleado().getNombre() + " " + control.getEmpleado().getApellido() : null);
+        }
+        dto.setTituloTicket(control.getTicket().getTitulo());
+        return dto;
+    }
 	
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
     @GetMapping("/listado-controles/{idTicket}")
-    public ResponseEntity<?> mostrarListaControles(@PathVariable int idTicket, @AuthenticationPrincipal UserDetails usuariolog) throws TicketNoEncontradoException {
+    public ResponseEntity<Map<String, Object>> mostrarListaControles(@PathVariable int idTicket, @AuthenticationPrincipal UserDetails usuariolog) throws TicketNoEncontradoException {
 		Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-		// Pasa el ID del usuario logueado para que la plantilla pueda mostrar/ocultar botones de edición
-        Empleado empleadoLogeado = empleadoRepository.findEmpleadoByNombreUsuario(usuariolog.getUsername());
+        TicketDTO ticketDTO = convertToTicketDTO(ticket);
+        List<ControlDTO> controlsDTO = ticket.getProcesos().stream().map(this::convertToControlDTO).collect(Collectors.toList());
         Map<String, Object> response = Map.of(
-                "ticket", ticket,
-                "controles", ticketService.buscarTicketPorId(idTicket).getProcesos(),
-                "currentUserId", empleadoLogeado.getIdEmpleado()
+                "ticket", ticketDTO,
+                "controles", controlsDTO
             );
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return ResponseEntity.ok(response);
 	}
 	
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
     @PostMapping("/{idTicket}/nuevo")
-    public String procesaCreacionControl(
+    public ResponseEntity<ControlDTO> procesaCreacionControl(
             @PathVariable int idTicket,
             @Valid @ModelAttribute("control") ControlDTO controlDTO,
             BindingResult resultado,
             @AuthenticationPrincipal UserDetails usuariolog,
-            RedirectAttributes redirectAttributes,
-            Model model) throws Exception {
+            RedirectAttributes redirectAttributes) throws Exception {
 
         Empleado empleadoLogeado = empleadoRepository.findEmpleadoByNombreUsuario(usuariolog.getUsername());
-
-        // --- Lógica de Manejo de Errores de Validación (DUPLICADA) ---
-        if (resultado.hasErrors()) {
-            try {
-                Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-                model.addAttribute("ticket", ticket);
-                model.addAttribute("funcionDisponible", Funcion.values());
-                model.addAttribute("errorMessage", "Por favor, corrige los errores en el formulario.");
-                // Lógica específica para redireccionar a la vista de CREACIÓN con errores
-                boolean hasPending = controlService.existeControlPendiente(ticket);
-                model.addAttribute("hasPendingControl", hasPending);
-                model.addAttribute("hasPermissionToEdit", true);
-                return "manager/crear-control";
-
-            } catch (TicketNoEncontradoException e) {
-                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-                return "redirect:/ticket/lista";
-            }
-        }
-
-        // --- Lógica de Procesamiento de Formulario Válido (llamada al servicio) ---
         try {
-            ticketService.tomarTicketConControlInicial(idTicket, empleadoLogeado, controlDTO);
-            redirectAttributes.addFlashAttribute("successMessage", "Nueva intervención registrada para Ticket #" + idTicket + ".");
-            return "redirect:/ticket/listado-controles/" + idTicket;
+            ControlDTO controlCreado = controlService.ControlInicial(idTicket, empleadoLogeado, controlDTO);
+            return new ResponseEntity<>(controlCreado, HttpStatus.CREATED);
 
-        } catch (RuntimeException e) { // Captura excepciones de negocio del servicio
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/ticket/" + idTicket + "/control/new"; // Vuelve al formulario de creación con error
+        } catch (TicketNoEncontradoException  e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 	
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
-	@PostMapping("/{idTicket}/edicion/{idControl}")
-	public String procesaEdicionTicket(@PathVariable int idTicket,
+	@GetMapping("/{idTicket}/ControlPendiente")
+	public ResponseEntity<?> controlPendiente(@PathVariable int idTicket) throws TicketNoEncontradoException{
+		Ticket ticket = ticketService.buscarTicketPorId(idTicket);
+		boolean pendiente = controlService.existeControlPendiente(ticket);
+		return ResponseEntity.ok(pendiente);
+	}
+	
+	
+	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
+	@GetMapping("/detalle/{idControl}")
+	public ResponseEntity<ControlDTO> obtenerControl(@PathVariable int idControl) throws TicketNoEncontradoException {
+	    Control control = controlService.buscarControlPorId(idControl).orElseThrow(()-> new TicketNoEncontradoException("Ticket no encontrado"));
+	    if (control == null) {
+	        return ResponseEntity.notFound().build();
+	    }
+	    return ResponseEntity.ok(convertToControlDTO(control)); 
+	}
+	
+	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
+	@GetMapping("/detalleTicket/{idTicket}")
+	public ResponseEntity<TicketDTO> obtenerTicket(@PathVariable int idTicket) throws TicketNoEncontradoException {
+	    Ticket ticket = ticketService.buscarTicketPorId(idTicket);
+	    if (ticket == null) {
+	        return ResponseEntity.notFound().build();
+	    }
+	    // Asegúrate de que TicketDTO incluya el título, etc.
+	    return ResponseEntity.ok(convertToTicketDTO(ticket)); // Asume que tienes un convertor
+	}
+	
+	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
+	@PutMapping("/{idTicket}/edicion/{idControl}")
+	public ResponseEntity<ControlDTO> actualizarControl(@PathVariable int idTicket,
 									@PathVariable int idControl,
-                                    @ModelAttribute("control") ControlDTO control, // Captura los datos del formulario en un objeto Control
-                                    @AuthenticationPrincipal UserDetails usuariolog,
-                                    BindingResult result,
-                                    RedirectAttributes redirectAttributes,
-                                    Model model) throws Exception {
+									@Valid @RequestBody ControlDTO control, // Captura los datos del formulario en un objeto Control
+                                    @AuthenticationPrincipal UserDetails usuariolog) throws Exception {
 		System.out.println("ENTRO AL POST DE EDITAR");
-		Ticket ticketElegido = ticketService.buscarTicketPorId(idTicket);
-		Empleado empleadoAcargo = empleadoRepository.findEmpleadoByNombreUsuario(usuariolog.getUsername());
-		//Control ultimoControl = controlService.revisionDeUltimoControl(ticketElegido);
-		
-		/*if (result.hasErrors()) {
-            try {
-                Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-                model.addAttribute("ticket", ticket);
-                model.addAttribute("funcionDisponible", Funcion.values());
-                model.addAttribute("errorMessage", "Por favor, corrige los errores en el formulario.");
-                // Lógica específica para redireccionar a la vista de EDICIÓN con errores
-                model.addAttribute("currentControlId", idControl);
-                Optional<Control> existingControlOpt = controlService.buscarControlPorId(idControl);
-                boolean hasPerm = existingControlOpt.isPresent() &&
-                                  existingControlOpt.get().getEmpleado().getIdEmpleado() == (empleadoAcargo.getIdEmpleado()) &&
-                                  !existingControlOpt.get().isFinalizado();
-                model.addAttribute("hasPermissionToEdit", hasPerm);
-                model.addAttribute("hasPendingControl", false);
-                return "manager/editar-control";
-
-            } catch (TicketNoEncontradoException e) {
-                redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-                return "redirect:/ticket/lista";
-            }
-        }*/
-		
-		controlService.procesarEdicionTicket(control,idControl);
-		/*
-		if(!ultimoControl.isFinalizado()) {
-			if(ultimoControl.getEmpleado().getDni().equalsIgnoreCase(empleadoAcargo.getDni())) {
-				controlService.procesarEdicionTicket(control,idControl);
-			}
-		}else {
-			ticketService.tomarTicketConControlInicial(idTicket, empleadoAcargo, control);
-		}*/
-		return "redirect:/control/lista";
+		ControlDTO controlActualizado = controlService.procesarEdicionTicket(control,idControl);
+		return ResponseEntity.ok(controlActualizado);
 	}
 }
