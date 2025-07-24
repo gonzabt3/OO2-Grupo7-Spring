@@ -130,15 +130,14 @@ public class ControlRestController {
 	    if (ticket == null) {
 	        return ResponseEntity.notFound().build();
 	    }
-	    // Asegúrate de que TicketDTO incluya el título, etc.
-	    return ResponseEntity.ok(convertToTicketDTO(ticket)); // Asume que tienes un convertor
+	    return ResponseEntity.ok(convertToTicketDTO(ticket));
 	}
 	
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@PutMapping("/{idTicket}/edicion/{idControl}")
 	public ResponseEntity<ControlDTO> actualizarControl(@PathVariable int idTicket,
 									@PathVariable int idControl,
-									@Valid @RequestBody ControlDTO control, // Captura los datos del formulario en un objeto Control
+									@Valid @RequestBody ControlDTO control,
                                     @AuthenticationPrincipal UserDetails usuariolog) throws Exception {
 		System.out.println("ENTRO AL POST DE EDITAR");
 		ControlDTO controlActualizado = controlService.procesarEdicionTicket(control,idControl);
