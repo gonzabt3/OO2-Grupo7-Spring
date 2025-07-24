@@ -21,7 +21,6 @@ public class UsuarioDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-    	System.out.println("ES ACA USUARIODETAILS");
         if (usuario != null && usuario.getRol().getTipo().name() != null) {
             System.out.println("Roles cargados para: " + usuario.getNombreUsuario() + " -> ROLE_" + usuario.getRol().getTipo().name());
             return List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRol().getTipo().name()));

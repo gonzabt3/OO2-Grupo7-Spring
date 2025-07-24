@@ -19,6 +19,7 @@ import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Estado;
 import com.grupo7.oo2spring.models.Prioridad;
+import com.grupo7.oo2spring.repositories.IAreaRepository;
 import com.grupo7.oo2spring.repositories.IControlRepository;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
 
@@ -42,6 +43,7 @@ public class TicketService {
 	private final IControlRepository controlRepository;
 
 	private final AreaService areaService;
+	private final IAreaRepository areaRepository;
 
 	public Ticket getByIdTicket(int idTicket) {
 		return ticketRepository.getByIdTicket(idTicket);
@@ -68,6 +70,9 @@ public class TicketService {
 		
 		try {
 			Ticket nuevoTicket = new Ticket(ticket.getTitulo(), ticket.getDescripcion(), usuarioCreador);
+			Optional<Area> areaOpt = areaRepository.findByTipo(TipoArea.SIN_ASIGNAR);
+			Area areaSinAisgnar = areaOpt.get();
+			nuevoTicket.setArea(areaSinAisgnar);
 			Ticket guardado = ticketRepository.save(nuevoTicket);
 			System.out.println("SERVICIO: Ticket guardado con ID: " + guardado.getIdTicket());
 			return guardado;

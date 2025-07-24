@@ -434,24 +434,37 @@
 </style>
 
 <body>
+	
+	
 	<header>
+		<a href="/panel" class="btn btn-secondary btn-back">
+		   <i class="fas fa-arrow-left"></i> Atrás
+		 </a>
 		<h1>Tickets sin Área Asignada</h1>
+		
+		</div>
 		<nav>
 			<ul>
 				<li><a th:href="@{/panel}">Panel de Control</a></li>
 			</ul>
 		</nav>
 	</header>
+	
+	
 	<div th:if="${successMessage}" class="alert alert-success">
 		<p th:text="${successMessage}"></p>
 	</div>
 	<div th:if="${errorMessage}" class="alert alert-danger">
 		<p th:text="${errorMessage}"></p>
 	</div>
+	
+
 
 	<div th:if="${#lists.isEmpty(tickets)}" class="alert alert-info">
 		<p>No hay tickets sin área asignada en este momento.</p>
 	</div>
+	
+
 
 	<div th:unless="${#lists.isEmpty(tickets)}">
 		<table>
@@ -473,7 +486,7 @@
 					<td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}"></td>
 					<td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'N/A'}"></td>
 					<td th:text="${ticket.fechaCreacion}"></td>
-					<td th:text="${ticket.area != null ? ticket.area.nombre : 'N/A'}"></td>
+					<td th:text="${ticket.area.tipo.nombre != null ? ticket.area.tipo.nombre : 'N/A'}"></td>
 					<td>
 
 						<div class="d-flex justify-content-center gap-2 w-100 main-action-buttons">
@@ -511,9 +524,7 @@
 				</tr>
 			</tbody>
 		</table>
-		<div class="mt-4 text-center">
-            		<a href="/panel" class="btn btn-primary"><i class="fas fa-home"></i> Volver</a>
-        	</div>
+		
 	</div>
 	<div class="modal fade" id="changeModal" tabindex="-1" aria-labelledby="changeModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -530,7 +541,7 @@
 							<label for="modalArea" class="form-label">Seleccione Area:</label>
 							<select class="form-select" id="modalArea" name="area" required>
 								<option  disabled selected>Seleccionar</option>
-								<option th:each="area : ${areas}" th:value="${area.id}" th:text="${area.nombre}"></option>
+								<option th:each="area : ${areas}" th:value="${area.id}" th:text="${area.tipo.nombre}"></option>
 							</select>
 						</div>
 

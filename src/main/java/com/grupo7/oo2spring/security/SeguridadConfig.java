@@ -24,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.grupo7.oo2spring.handlers.RestAuthenticationFailureHandler;
 import com.grupo7.oo2spring.services.CustomUserDetailsService;
 import com.grupo7.oo2spring.services.UsuarioService;
 
@@ -41,6 +42,7 @@ public class SeguridadConfig {
 
     private final UsuarioService usuarioService;
     private final CustomUserDetailsService customUserDetailsService;
+    private final RestAuthenticationFailureHandler restAuthenticationFailureHandler;
     private final PasswordEncoder passwordEncoder;
     
 
@@ -100,7 +102,7 @@ public class SeguridadConfig {
                     "/usuario/formulario",
                     "/usuario/registro_form",
                     "/usuario/registro",
-                    "/usuario/registro/*",
+                    "/usuario/registro/**",
                     "/usuario/registro_exito",
                     "/usuario/confirmar",
                     "/usuario/confirmar/**",
@@ -114,25 +116,15 @@ public class SeguridadConfig {
                 .requestMatchers("/panel").hasAnyRole("USER", "EMPLEADO", "MANAGER")
                 .requestMatchers("/manager/**").hasRole("MANAGER")
                 .requestMatchers("/api/manager/**").hasRole("MANAGER")
-                .requestMatchers("/api/usuarios/**").hasRole("MANAGER")
+                .requestMatchers("/api/usuario/**").hasRole("MANAGER")
                 .anyRequest().authenticated()
             )
             .userDetailsService(customUserDetailsService)
             .addFilterBefore(filtro, UsernamePasswordAuthenticationFilter.class)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-            .formLogin(form -> form
-                .loginPage("/usuario/login")
-                .loginProcessingUrl("/usuario/login/process")
-                .defaultSuccessUrl("/panel", true)
-                .failureUrl("/usuario/login?error=true")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/usuario/login?logout")
-                .permitAll()
-            )
-            .httpBasic(httpBasic -> httpBasic.disable()); // Disable HTTP Basic
+            .formLogin(form -> form.disable())
+            .logout(logout -> logout.disable())
+            .httpBasic(httpBasic -> httpBasic.disable());
 
         return http.build();
     }

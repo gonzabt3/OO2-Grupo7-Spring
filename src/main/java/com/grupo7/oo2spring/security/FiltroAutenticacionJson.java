@@ -3,11 +3,15 @@ package com.grupo7.oo2spring.security;
 import java.io.IOException;
 
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
@@ -60,10 +64,27 @@ public class FiltroAutenticacionJson extends UsernamePasswordAuthenticationFilte
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType("application/json");
-        response.getWriter().write("{\"message\": \"Login fallido\"}");
+        response.setContentType("application/json; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        
+        String mensaje = "Error desconocido";
+
+        if (failed instanceof DisabledException) {
+            mensaje = "Usuario no activo, confirmá tu cuenta primero";
+        } else if (failed instanceof BadCredentialsException) {
+            mensaje = "Usuario o contraseña incorrectos";
+        } else if (failed instanceof LockedException) {
+            mensaje = "La cuenta está bloqueada";
+        } else if (failed instanceof UsernameNotFoundException) {
+            mensaje = "Usuario no encontrado";
+        } else {
+            mensaje = "Error de autenticación: " + failed.getMessage();
+        }
+
+        response.getWriter().write("{\"error\": \"" + mensaje + "\"}");
         response.getWriter().flush();
     }
+
 
     public static class DatosLogin {
         private String usuario;

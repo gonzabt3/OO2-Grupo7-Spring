@@ -57,7 +57,6 @@ public class Ticket {
     		this.usuarioCreador = usuarioCreador;
     		this.estado = Estado.ABIERTO;
     		this.prioridad = Prioridad.SIN_ASIGNAR;
-    		this.area = new Area(TipoArea.SIN_ASIGNAR);
     		this.procesos = new ArrayList<Control>();
     	}
         

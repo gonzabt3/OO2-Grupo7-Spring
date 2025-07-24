@@ -43,7 +43,7 @@
                     <span th:text="${usuariologueado.email}"></span>
                 </p>
                 <p th:if="${usuariologueado.rol != null}"><strong>Rol en el Sistema:</strong>
-                    <span th:text="${usuariologueado.rol.name()}"></span> </p>
+                    <span th:text="${usuariologueado.rol.tipo.name()}"></span> </p>
                 <p><strong>DNI:</strong>
                     <span th:text="${usuariologueado.dni}"></span>
                 </p>
@@ -56,10 +56,10 @@
             </div>
             <div class="card-body">
                 <p><strong>ID de Empleado:</strong>
-                    <span th:text="${empleadoData.idEmpleado}"></span>
+                    <span th:text="${empleadoData.id}"></span>
                 </p>
                 <p><strong>Área de Trabajo:</strong>
-                    <span th:text="${empleadoData.area}"></span>
+                    <span th:text="${empleadoData.area.tipo}"></span>
                 </p>
                 <p><strong>Disponibilidad:</strong>
                     <span th:text="${empleadoData.disponibilidad ? 'Disponible' : 'No Disponible'}"></span>
@@ -80,7 +80,7 @@
             </div>
             <div class="card-body">
                 <p><strong>ID de Usuario:</strong>
-                    <span th:text="${usuarioData.idUsuario}"></span>
+                    <span th:text="${usuarioData.id}"></span>
                 </p>
                 <p><strong>Cuenta Activa:</strong>
                     <span th:text="${usuarioData.usuarioActivo ? 'Sí' : 'No'}"></span>
