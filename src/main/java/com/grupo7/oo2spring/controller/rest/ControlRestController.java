@@ -89,7 +89,7 @@ public class ControlRestController {
 		TicketDTO ticketDTO = convertirTicketDTO(ticket);
 		List<ControlDTO> controlsDTO = ticket.getProcesos().stream().map(this::convertirControlDTO)
 				.collect(Collectors.toList());
-		Map<String, Object> response = Map.of("ticket", ticketDTO, "controles", controlsDTO);
+		Map<String, Object> response = Map.of("ticket", ticketDTO, "controles", controlsDTO,"estadoTicket", ticket.getEstado().name());
 		return ResponseEntity.ok(response);
 	}
 
@@ -113,7 +113,7 @@ public class ControlRestController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		}
+		} 
 	}
 
 	@Operation(summary = "Verificar si un ticket tiene un control pendiente", description = "Comprueba si hay una intervención (control) en curso para un ticket dado.")

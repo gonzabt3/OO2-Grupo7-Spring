@@ -90,6 +90,8 @@
 				sessionStorage.removeItem('successMessage');
 			}
 
+			let ticketEstado = null;
+
 			async function cargarControles(ticketId) {
 				if (!ticketId) {
 					mostrarMensaje('danger', 'Por favor, ingrese un ID de ticket.');
@@ -99,6 +101,7 @@
 					return;
 				}
 
+				let mensajeParaMostrarFinal = '';
 				try {
 					const response = await fetch(`/api/control/listado-controles/${ticketId}`);
 
@@ -111,8 +114,19 @@
 					}
 
 					const data = await response.json();
+					ticketEstado = data.estadoTicket;
+					if (ticketEstado === 'PENDIENTE') {
+						crearControlBtn.style.display = 'none';
+						mensajeParaMostrarFinal = `No se pueden crear nuevos controles para tickets en estado "PENDIENTE". Primero debe ser tomado.`;
+					} else if (ticketEstado === 'RESUELTO' || ticketEstado === 'CERRADO') {
+						crearControlBtn.style.display = 'block'; 
+						crearControlBtn.setAttribute('disabled', 'true');
+						mensajeParaMostrarFinal = `El ticket está ${ticketEstado}. No se pueden crear más controles.`;
+					} else {
+						crearControlBtn.style.display = 'block';
+						crearControlBtn.removeAttribute('disabled'); 
+					}
 					controlesTbody.innerHTML = '';
-
 					if (data.controles && data.controles.length > 0) {
 						data.controles.forEach(control => {
 							const tr = document.createElement('tr');
@@ -132,10 +146,17 @@
 			                    `;
 							controlesTbody.appendChild(tr);
 						});
-						mostrarMensaje('success', `Controles del ticket ${ticketId} cargados exitosamente.`);
+						if (!mensajeParaMostrarFinal) {
+							mensajeParaMostrarFinal = `Controles del ticket ${ticketId} cargados exitosamente.`;
+						}
 					} else {
 						controlesTbody.innerHTML = '<tr><td colspan="8" class="text-center">No hay controles para este ticket.</td></tr>';
-						mostrarMensaje('info', `El ticket ${ticketId} no tiene controles registrados.`);
+						if (!mensajeParaMostrarFinal) {
+							mensajeParaMostrarFinal = `El ticket ${ticketId} no tiene controles registrados.`;
+						}
+					}
+					if (mensajeParaMostrarFinal) {
+						mostrarMensaje('info', mensajeParaMostrarFinal);
 					}
 
 				} catch (error) {

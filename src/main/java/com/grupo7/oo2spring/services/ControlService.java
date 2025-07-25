@@ -118,6 +118,9 @@ public class ControlService {
 		if(existeControlPendiente(ticket)) {
 			throw new Exception("Existe un control pendiente");
 		}
+		if (ticket.getEstado() == Estado.PENDIENTE) {
+            throw new IllegalStateException("No se puede crear un control para un ticket en estado PENDIENTE. Primero debe ser tomado.");
+        }
 		Control controlInicial = new Control();
 		controlInicial.setTicket(ticket);
 		controlInicial.setAccion(control.accion());
