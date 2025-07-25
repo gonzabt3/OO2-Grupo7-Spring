@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.grupo7.oo2spring.enums.TipoArea;
+
 @Entity
 @NoArgsConstructor
 public class Ticket {
@@ -25,18 +27,16 @@ public class Ticket {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private Usuario usuarioCreador;
+    private UsuarioBase usuarioCreador;
 
     @Enumerated(EnumType.STRING)
     private Estado estado;
 
     @Enumerated(EnumType.STRING)
     private Prioridad prioridad;
-    
     @ManyToOne
     @JoinColumn(name = "area_id")
     private Area area;
-    
 
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -48,18 +48,18 @@ public class Ticket {
             control.setTicket(this); // Establece el Ticket en el Control, que es el lado dueño
         }
     }
-        
-    public Ticket(String titulo, String descripcion, Usuario usuarioCreador, Area area) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.fechaCreacion = LocalDate.now();
-        this.fechaCierre = null;
-        this.usuarioCreador = usuarioCreador;
-        this.estado = Estado.PENDIENTE;
-        this.prioridad = Prioridad.SIN_ASIGNAR;
-        this.area = area;
-        this.procesos = new ArrayList<Control>();
-    }
+    	public Ticket(String titulo, String descripcion,
+    			Usuario usuarioCreador) {
+    		this.titulo = titulo;
+    		this.descripcion = descripcion;
+    		this.fechaCreacion = LocalDate.now();
+    		this.fechaCierre = null;
+    		this.usuarioCreador = usuarioCreador;
+    		this.estado = Estado.ABIERTO;
+    		this.prioridad = Prioridad.SIN_ASIGNAR;
+    		this.area = new Area(TipoArea.SIN_ASIGNAR);
+    		this.procesos = new ArrayList<Control>();
+    	}
         
         
  
@@ -105,7 +105,7 @@ public class Ticket {
     }
     
 
-    public Usuario getUsuarioCreador() {
+    public UsuarioBase getUsuarioCreador() {
 		return usuarioCreador;
 	}
 
