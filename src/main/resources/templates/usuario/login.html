@@ -62,9 +62,13 @@
 
             <button type="submit" class="btn btn-primary">Ingresar</button>
 
-            <a th:href="@{/usuario/registro}" class="btn-link">Crear nuevo usuario</a>
+			<div class="text-center mt-3">
+			    <a th:href="@{/usuario/registro}" class="btn btn-outline-primary">Crear nuevo usuario</a>
+			</div>
 
-            <p th:if="${param.error}" class="error-message">Usuario o contraseña incorrectos</p>
+			<div th:if="${param.error}" class="alert alert-danger" role="alert">
+			  <span th:text="${param.error}"></span>
+			</div>
         </form>
     </div>
     <script src="/js/bootstrap.bundle.min.js"></script>
@@ -89,20 +93,21 @@
 		        const username = document.querySelector('input[name="username"]').value;
 		        const password = document.querySelector('input[name="password"]').value;
 
-                const response = await fetch("/api/auth/login", {
-                  method: "POST",
-                  credentials: "include", 
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ usuario: username, clave: password })
-                });
+				const response = await fetch("/api/auth/login", {
+				  method: "POST",
+				  credentials: "include",
+				  headers: { "Content-Type": "application/json" },
+				  body: JSON.stringify({ usuario: username, clave: password })
+				});
 
-		        if (response.ok) {
-		            window.location.href = "/panel";
-		        } else {
-		            // Mostrar mensaje de error
-		            alert("Usuario o contraseña incorrectos");
-		        }
-		    });
+				if (response.ok) {
+				  window.location.href = "/panel.html";
+				} else {
+				  const data = await response.json();
+				  alert(data.error || "Error desconocido");
+				}
+			});
+
     </script>
 </body>
 </html>

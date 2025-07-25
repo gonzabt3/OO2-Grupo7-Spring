@@ -6,6 +6,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.grupo7.oo2spring.handlers.RestAuthenticationFailureHandler;
 import com.grupo7.oo2spring.services.CustomUserDetailsService;
 import com.grupo7.oo2spring.services.UsuarioService;
 
@@ -39,15 +41,22 @@ public class SeguridadConfig {
 
     private final UsuarioService usuarioService;
     private final CustomUserDetailsService customUserDetailsService;
+    private final RestAuthenticationFailureHandler restAuthenticationFailureHandler;
     private final PasswordEncoder passwordEncoder;
+    
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        builder.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder);
-        return builder.build();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
-
+    
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(customUserDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
+    }
+    
     @Bean
     public UserDetailsService userDetailsService() {
         return customUserDetailsService;
@@ -79,7 +88,7 @@ public class SeguridadConfig {
         filtro.setFilterProcessesUrl("/api/auth/login");
 
         http
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**")) // REST CSRF disabled
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/",
@@ -92,7 +101,7 @@ public class SeguridadConfig {
                     "/usuario/formulario",
                     "/usuario/registro_form",
                     "/usuario/registro",
-                    "/usuario/registro/*",
+                    "/usuario/registro/**",
                     "/usuario/registro_exito",
                     "/usuario/confirmar",
                     "/usuario/confirmar/**",
@@ -105,24 +114,16 @@ public class SeguridadConfig {
                 ).permitAll()
                 .requestMatchers("/panel").hasAnyRole("USER", "EMPLEADO", "MANAGER")
                 .requestMatchers("/manager/**").hasRole("MANAGER")
+                .requestMatchers("/api/manager/**").hasRole("MANAGER")
+                .requestMatchers("/api/usuario/**").hasRole("MANAGER")
                 .anyRequest().authenticated()
             )
             .userDetailsService(customUserDetailsService)
             .addFilterBefore(filtro, UsernamePasswordAuthenticationFilter.class)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-            .formLogin(form -> form
-                .loginPage("/usuario/login")
-                .loginProcessingUrl("/usuario/login/process")
-                .defaultSuccessUrl("/panel", true)
-                .failureUrl("/usuario/login?error=true")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/usuario/login?logout")
-                .permitAll()
-            )
-            .httpBasic(httpBasic -> httpBasic.disable()); // Disable HTTP Basic
+            .formLogin(form -> form.disable())
+            .logout(logout -> logout.disable())
+            .httpBasic(httpBasic -> httpBasic.disable());
 
         return http.build();
     }

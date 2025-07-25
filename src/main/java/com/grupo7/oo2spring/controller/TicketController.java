@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.grupo7.oo2spring.dto.ControlDTO;
 import com.grupo7.oo2spring.dto.TicketDTO;
+import com.grupo7.oo2spring.enums.TipoArea;
 import com.grupo7.oo2spring.exception.TicketCreacionException;
 import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Area;
@@ -38,6 +39,7 @@ import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import com.grupo7.oo2spring.security.UsuarioDetails;
+import com.grupo7.oo2spring.services.AreaService;
 import com.grupo7.oo2spring.services.EmailService;
 import com.grupo7.oo2spring.services.EmpleadoService;
 import com.grupo7.oo2spring.services.TicketService;
@@ -60,6 +62,8 @@ public class TicketController {
     private final UsuarioService usuarioService;
     
     private final EmailService emailService;
+
+    private final AreaService areaService;
     
 
     @GetMapping("/formulario_simple")
@@ -111,9 +115,10 @@ public class TicketController {
 		model.addAttribute("usuarioLogueado", usuariolog);
 		List<Ticket> tickets = null;
 		//Empleado usuario = (Empleado) usuarioService.getUsuarioByUsername(usuariolog.getUsername());
-		Empleado empleadoOpt = empleadoService.findByEmpleadoNombre(usuariolog.getUsername());
+		System.out.println(usuariolog.getUsername());
+		Empleado empleadoOpt = empleadoService.findByNombreUsuario(usuariolog.getUsername());
 		if(empleadoOpt.getArea() != null) {
-			tickets = ticketService.findByArea(empleadoOpt.getArea());
+			tickets = ticketService.findByAreaTipo(empleadoOpt.getArea().getTipo());
 			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea());
 			model.addAttribute("tickets", tickets);
 		}else {
@@ -145,7 +150,7 @@ public class TicketController {
                                     Model model) throws Exception, TicketNoEncontradoException {
 		System.out.println("➡️ Entró al controlador tomarTicketConControlInicial");
 		String nombreDelUsuarioEnSesion = usuariolog.getUsername();
-    	Empleado empleadoLogeado = empleadoService.findByEmpleadoNombre(nombreDelUsuarioEnSesion);
+    	Empleado empleadoLogeado = empleadoService.findByNombreUsuario(nombreDelUsuarioEnSesion);
     	try {
 
             ticketService.tomarTicketConControlInicial(idTicket, empleadoLogeado, control);
@@ -153,7 +158,7 @@ public class TicketController {
 
             
             Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-		    Usuario usuarioDueño = ticket.getUsuarioCreador(); // asumimos que Ticket tiene un Usuario asociado
+		    UsuarioBase usuarioDueño = ticket.getUsuarioCreador(); // asumimos que Ticket tiene un Usuario asociado
 		    
             System.out.println(usuarioDueño.getEmail());
 
@@ -206,7 +211,8 @@ public class TicketController {
             List<Ticket> tickets = ticketRepository.findAll();
             model.addAttribute("tickets", tickets);
             model.addAttribute("rol",empleado.getRol());
-            model.addAttribute("areas", Area.values());
+           // model.addAttribute("areas", TipoArea.values());
+            model.addAttribute("areas", areaService.listarAreas());
             model.addAttribute("estados", Estado.values());
             model.addAttribute("prioridades", Prioridad.values());
             return "ticket/ticket_del_sistema"; 
@@ -223,7 +229,8 @@ public class TicketController {
             @RequestParam("area") Area area,
             RedirectAttributes redirectAttributes) throws TicketNoEncontradoException {
 		ticketService.asignarAreaTicket(idTicket, area);
-		redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.name() + "' asignada al ticket #" + idTicket + " con éxito!");
+		//redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.getTipo().getNombre() + "' asignada al ticket #" + idTicket + " con éxito!");
+		redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.getTipo().nombre + "' asignada al ticket #" + idTicket + " con éxito!");
 		return "redirect:/ticket/lista";
 	}
 	
@@ -237,7 +244,7 @@ public class TicketController {
 	    String username = userDetails.getUsername();
 	    Usuario usuario = usuarioService.getUsuarioByNombreUsuario(username);
 
-	    List<Ticket> tickets = ticketService.getTicketsByUsuario(usuario.getIdUsuario());
+	    List<Ticket> tickets = ticketService.getTicketsByUsuario(usuario.getId());
 	    model.addAttribute("tickets", tickets);
 
 	    return "ticket/usuario-tickets"; // Vista con la tabla de tickets

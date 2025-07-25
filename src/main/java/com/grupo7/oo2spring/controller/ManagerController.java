@@ -67,14 +67,14 @@ public class ManagerController {
 		
 		try {
 			
-	        Optional<Empleado> empleadoOpt = empleadoRepository.findById(empleadoForm.getIdEmpleado());
+	        Optional<Empleado> empleadoOpt = empleadoRepository.findById(empleadoForm.getId());
 	        if (empleadoOpt.isEmpty()) {
 	            attr.addFlashAttribute("error", "Usuario no encontrado");
 	            
 	            return "redirect:/manager/listar";
 	        }
 	
-	        managerService.convertirUsuarioAEmpleado(empleadoForm.getIdEmpleado(), empleadoForm);
+	        managerService.convertirUsuarioAEmpleado(empleadoForm.getId(), empleadoForm);
 	
 	        attr.addFlashAttribute("success", "Usuario convertido en empleado exitosamente");
 	        

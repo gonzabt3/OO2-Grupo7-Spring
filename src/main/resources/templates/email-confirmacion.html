@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmación de cuenta</title>
+</head>
+<body>
+    <h2>¡Gracias por registrarte!</h2>
+    <p>Para confirmar tu cuenta, hacé clic en el siguiente botón:</p>
+    <p>
+        <a th:href="${confirmUrl}"
+           style="display:inline-block;padding:10px 20px;background-color:#4CAF50;color:white;
+           text-decoration:none;border-radius:5px;">
+            Confirmar cuenta
+        </a>
+    </p>
+    <p>Si no te registraste en nuestro sitio, podés ignorar este mensaje.</p>
+</body>
+</html>

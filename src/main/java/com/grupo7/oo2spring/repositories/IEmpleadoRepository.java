@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.grupo7.oo2spring.enums.TipoRol;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Empleado;
 
@@ -25,30 +26,30 @@ public interface IEmpleadoRepository extends JpaRepository<Empleado, Integer> {
 	//Buscar empleados ordenados por nombre ascendente
     List<Empleado> findAllByOrderByNombreAsc();
 
-	Optional<Empleado> findEmpleadoByIdEmpleado(int idEmpleado);
+	Optional<Empleado> findEmpleadoById(int idEmpleado);
 
-    @Query("SELECT u FROM Empleado u WHERE u.nombreUsuario = :nombreUsuario AND u.rol = 'EMPLEADO'")
-    public Empleado findEmpleadoByNombreUsuario(@Param("nombreUsuario") String nombreUsuario);
+	@Query("SELECT e FROM Empleado e WHERE e.nombreUsuario = :nombreUsuario")
+	Empleado findByNombreUsuario(@Param("nombreUsuario") String nombreUsuario);
     
     public Empleado findEmpleadoAllByNombreUsuario(@Param("nombreUsuario") String nombreUsuario); //Tambien busca a managers
     
-    @Query("SELECT u FROM Empleado u WHERE u.rol = 'EMPLEADO'")
+    @Query("SELECT u FROM Empleado u WHERE u.rol.tipo = com.grupo7.oo2spring.enums.TipoRol.EMPLEADO")
     List<Empleado> findAllEmpleados();
     
-    @Query("SELECT u FROM Empleado u WHERE u.rol = 'MANAGER'")
+    @Query("SELECT u FROM Empleado u WHERE u.rol.tipo = com.grupo7.oo2spring.enums.TipoRol.MANAGER")
     List<Empleado> findAllManagers();
 
     // Buscar manager por nombre de usuario
-    @Query("SELECT u FROM Empleado u WHERE u.rol = 'MANAGER' AND u.nombreUsuario = :nombreUsuario")
+    @Query("SELECT u FROM Empleado u WHERE u.rol.tipo = com.grupo7.oo2spring.enums.TipoRol.MANAGER AND u.nombreUsuario = :nombreUsuario")
     Optional<Empleado> findManagerByNombreUsuario(@Param("nombreUsuario") String nombreUsuario);
 
     // Buscar manager por email
-    @Query("SELECT u FROM Empleado u WHERE u.rol = 'MANAGER' AND u.email = :email")
+    @Query("SELECT u FROM Empleado u WHERE u.rol.tipo = com.grupo7.oo2spring.enums.TipoRol.MANAGER AND u.email = :email")
     Optional<Empleado> findManagerByEmail(@Param("email") String email);
 
     // Verificar si existe un manager con cierto nombre de usuario
-    @Query("SELECT COUNT(u) > 0 FROM Empleado u WHERE u.rol = 'MANAGER' AND u.nombreUsuario = :nombreUsuario")
-    boolean existsManagerByNombreUsuario(@Param("nombreUsuario") String nombreUsuario);
+    @Query("SELECT COUNT(u) > 0 FROM Empleado u WHERE u.rol.tipo = com.grupo7.oo2spring.enums.TipoRol.MANAGER AND u.nombreUsuario = :nombreUsuario")
+    boolean existsManagerByUsuarioBase_nombreUsuario(@Param("nombreUsuario") String nombreUsuario);
 
 	
 

@@ -34,7 +34,7 @@
 <body>
     <div class="card bg-white">
         <h1>Registrarse</h1>
-        <form th:action="@{/usuario/registro}" method="post">
+        <form th:action="@{/usuario/registro}" method="post"  th:object="${usuario}">
             <div class="mb-3">
 				
 				<div class="mb-3">

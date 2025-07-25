@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Control</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/styles.css" rel="stylesheet">
+    <style>
+        /* Tu CSS personalizado (lo dejé igual) */
+        body {
+            background: linear-gradient(to right, #e0f7fa, #ffffff);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .panel-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .role-badge {
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .btn-lg {
+            min-width: 220px;
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: 600;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-transform: capitalize;
+            letter-spacing: 0.05em;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+        }
+        .btn-primary { background-color: #007bff; border: none; color: white; }
+        .btn-primary:hover { background-color: #0056b3; box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4); transform: translateY(-2px); }
+        .btn-secondary { background-color: #6c757d; border: none; color: white; }
+        .btn-secondary:hover { background-color: #545b62; box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4); transform: translateY(-2px); }
+        .btn-info { background-color: #17a2b8; border: none; color: white; }
+        .btn-info:hover { background-color: #117a8b; box-shadow: 0 4px 12px rgba(23, 162, 184, 0.4); transform: translateY(-2px); }
+        .btn-warning { background-color: #ffc107; border: none; color: #212529; }
+        .btn-warning:hover { background-color: #d39e00; box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4); transform: translateY(-2px); }
+        .btn-outline-dark { border: 2px solid #343a40; background-color: transparent; color: #343a40; font-weight: 600; }
+        .btn-outline-dark:hover { background-color: #343a40; color: white; box-shadow: 0 4px 12px rgba(52, 58, 64, 0.6); transform: translateY(-2px); }
+        .btn-emp-area { background-color: #17a2b8; border-color: #17a2b8; }
+        .btn-emp-area:hover { background-color: #138496; border-color: #117a8b; }
+        .btn-emp-todos-ticket-manager { background-color: rgb(255, 128, 0); border-color: rgb(204, 102, 0); color: #212529; }
+        .btn-emp-todos-ticket-manager:hover { background-color: rgb(179, 89, 0); border-color: rgb(188, 148, 7); }
+        footer { background-color: #343a40; color: white; padding: 20px 0; text-align: center; margin-top: auto; }
+        footer a { color: #ffffff; text-decoration: underline; }
+        @media (max-width: 768px) {
+            .d-flex { flex-direction: column; align-items: center; }
+        }
+        .footer a:hover { color: #ccc; }
+    </style>
+</head>
+<body>
+
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container mt-5">
+    <div class="panel-container mx-auto" style="max-width: 800px;">
+        <h1 class="text-center mb-4">Panel de Control</h1>
+
+        <div class="text-center">
+            <span id="rolActual" class="role-badge">ROL ACTUAL: Cargando...</span>
+        </div>
+
+        <div class="d-flex justify-content-center flex-wrap mt-4">
+            <a href="/ticket/formulario_simple" class="btn btn-primary btn-lg mx-2 my-2">
+                Crear Ticket
+            </a>
+
+            <a href="/usuario/misDatos" class="btn btn-warning btn-lg mx-2 my-2">
+                <i class="fas fa-user-circle"></i> Mis Datos
+            </a>
+
+            <!-- Botones por rol -->
+			<a href="/ticket/listaArea" class="btn btn-info btn-lg mx-2 my-2 d-none solo-empleado" id="btn-empleado">
+			    Ver Tickets Dentro del Área
+			</a>
+
+			<a href="/ticket/tickets" class="btn btn-secondary btn-lg mx-2 my-2 d-none solo-user" id="btn-user">
+			    Mis Tickets
+			</a>
+
+			<a href="/ticket/lista" class="btn btn-info btn-lg mx-2 my-2 d-none solo-manager" id="btn-manager-tickets">
+			    Ver Todos Los Tickets
+			</a>
+
+			<a href="/manager/listar.html" class="btn btn-warning btn-lg mx-2 my-2 d-none solo-manager" id="btn-manager-usuarios">
+			    Usuarios / Asignar Empleado
+			</a>
+
+			<a href="/contacto/formulario-contacto" class="btn btn-outline-dark btn-lg d-none solo-user" id="btn-user-contacto">
+			    Contactar Soporte
+			</a>
+
+            <button id="btnLogout" type="button" class="btn btn-danger btn-lg mx-2 my-2">
+                Cerrar Sesión
+            </button>
+        </div>
+
+        <!-- Contacto soporte (solo USER) -->
+        <div class="text-center mt-5">
+            <a href="/contacto/formulario-contacto" class="btn btn-outline-dark btn-lg d-none" id="btn-user-contacto">
+                Contactar Soporte
+            </a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Obtener y mostrar el rol actual
+  window.addEventListener('DOMContentLoaded', () => {
+    fetch('/api/rol', { credentials: 'include' })
+      .then(response => {
+        if (!response.ok) throw new Error('Error al obtener rol');
+        return response.json();
+      })
+      .then(data => {
+        document.getElementById('rolActual').textContent = 'ROL ACTUAL: ' + data.rol;
+
+        // Si querés usar esto para mostrar/ocultar botones:
+		 if (data.rol === 'MANAGER') {
+		    document.querySelectorAll('.solo-manager').forEach(btn => btn.classList.remove('d-none'));
+		  }
+		  if (data.rol === 'EMPLEADO') {
+		    document.querySelectorAll('.solo-empleado').forEach(btn => btn.classList.remove('d-none'));
+		  }
+		  if (data.rol === 'USER') {
+		    document.querySelectorAll('.solo-user').forEach(btn => btn.classList.remove('d-none'));
+		  }
+      })
+      .catch(error => {
+        console.error(error);
+        document.getElementById('rolActual').textContent = 'ROL ACTUAL: (error al cargar)';
+      });
+  });
+
+  // Cerrar sesión
+  document.getElementById("btnLogout").addEventListener("click", async () => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" }
+      });
+      if (response.ok) {
+        window.location.href = "/usuario/login";
+      } else {
+        alert("Error al cerrar sesión");
+      }
+    } catch (error) {
+      alert("Error de red: " + error.message);
+    }
+  });
+</script>
+
+</body>
+</html>

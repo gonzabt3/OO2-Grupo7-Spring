@@ -2,26 +2,27 @@ package com.grupo7.oo2spring.models;
 
 import java.util.Objects;
 
+import com.grupo7.oo2spring.enums.TipoRol;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
+@PrimaryKeyJoinColumn(name = "id")
 public class Empleado extends UsuarioBase {
 		 
-	@Id
-	  @EqualsAndHashCode.Include
-	  @GeneratedValue(strategy = GenerationType.IDENTITY)
-	  private int idEmpleado;
 
-	@Enumerated(EnumType.STRING)
+	@ManyToOne
+	@JoinColumn(name = "area_id")
 	private Area area;
 	
 	private boolean disponibilidad;
@@ -30,7 +31,6 @@ public class Empleado extends UsuarioBase {
 		super(nombre, apellido, dni, email, nombreUsuario, contraseña);
 		this.area = area;
 		this.disponibilidad = disponibilidad;
-		this.setRol(Rol.EMPLEADO);
 	}
 	
 	public Area getArea() {
@@ -70,16 +70,8 @@ public class Empleado extends UsuarioBase {
 		if (getClass() != obj.getClass())
 			return false;
 		Empleado other = (Empleado) obj;
-		return area == other.area && disponibilidad == other.disponibilidad;
+		return area.getTipo() == other.area.getTipo() && disponibilidad == other.disponibilidad;
 	}
-
-	public int getIdEmpleado() {
-		return idEmpleado;
-	}
-
-	public void setIdEmpleado(int idEmpleado) {
-		this.idEmpleado = idEmpleado;
-	}	
 	
 	
 

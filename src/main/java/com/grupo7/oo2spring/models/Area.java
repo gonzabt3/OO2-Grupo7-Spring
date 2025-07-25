@@ -1,24 +1,35 @@
 package com.grupo7.oo2spring.models;
 
+import com.grupo7.oo2spring.enums.TipoArea;
 
-public enum Area {
-	SOPORTE("Soporte"),
-    VENTAS("Ventas"),
-    DESARROLLO("Desarrollo"),
-    FINANZAS("Finanzas"),
-    RECURSOS_HUMANOS("Recursos Humanos"),
-    MARKETING("Marketing"),
-	SIN_ASIGNAR("Sin Asignar");
-    
-    public final String nombre;
-	
-    Area(String nombre) {
-    	this.nombre = nombre;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import lombok.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Getter
+@Setter
+@Table(name = "area")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Area {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(hidden = true)
+    private int id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(unique = true, nullable = false)
+    private TipoArea tipo;
+
+    public Area(TipoArea tipo) {
+        this.tipo = tipo;
     }
-    
-    public String getNombre() {
-		return nombre;
-	}
-    
-    
+   
+
 }

@@ -1,8 +1,17 @@
 package com.grupo7.oo2spring.models;
 
+import jakarta.persistence.Id;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +20,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class UsuarioBase {
 
+	  @Id
+	  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+	    private int id;
 	@Column(name = "username", nullable = false, unique = true)
     private String nombreUsuario;
 	 @Column(name="contraseña", nullable = false)
@@ -26,8 +39,8 @@ public abstract class UsuarioBase {
     private String dni;
 	 @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "rol_id", nullable = false)
     private Rol rol;
     
     public UsuarioBase(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña) throws Exception {
@@ -79,6 +92,8 @@ public abstract class UsuarioBase {
               throw new Exception("DNI inválido.");
           }
       }
+      
+      
 
 
       public String getNombreUsuario() {

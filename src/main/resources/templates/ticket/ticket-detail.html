@@ -134,7 +134,7 @@
             <li class="list-group-item"><strong>Estado:</strong> <span th:text="${ticketDetail.estado}"></span></li>
             <li class="list-group-item"><strong>Prioridad:</strong> <span th:text="${ticketDetail.prioridad}"></span></li>
             <li class="list-group-item"><strong>Área Asignada:</strong>
-                <span th:text="${ticketDetail.area != null ? ticketDetail.area.name() : 'Sin Asignar'}"></span>
+                <span th:text="${ticketDetail.area.tipo.nombre != null ? ticketDetail.area.tipo.nombre : 'Sin Asignar'}"></span>
             </li>
         </ul>
     </div>

@@ -1,36 +1,71 @@
 package com.grupo7.oo2spring.controller.rest;
 
-import com.grupo7.oo2spring.dto.LoginDTO;
-import com.grupo7.oo2spring.models.Usuario;
-import com.grupo7.oo2spring.services.UsuarioService;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/auth")
-@RequiredArgsConstructor
 public class LoginRestController {
 
-	private final UsuarioService usuarioService;
+    private final AuthenticationManager authenticationManager;
 
-	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody LoginDTO request, HttpSession session) {
-	    Optional<Usuario> usuarioOpt = usuarioService.buscarPorUsernameYPassword(
-	            request.username(), request.password());
+    public LoginRestController(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
 
-	    if (usuarioOpt.isPresent()) {
-	        Usuario usuario = usuarioOpt.get();
-	        session.setAttribute("usuario", usuario);
-	        session.setAttribute("rolUsuario", usuario.getRol());
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsuario(), loginRequest.getClave())
+            );
 
-	        return ResponseEntity.ok("Login exitoso para: " + usuario.getNombreUsuario());
-	    } else {
-	        return ResponseEntity.status(401).body("Usuario o contraseña incorrectos");
-	    }
-	}
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            return ResponseEntity.ok(Map.of("message", "Login exitoso"));
+
+        } catch (DisabledException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Map.of("error", "Usuario no activo, confirmá tu cuenta primero."));
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "Usuario o contraseña incorrectos."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Error inesperado."));
+        }
+    }
     
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout(HttpServletRequest request) {
+        SecurityContextHolder.clearContext();
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return ResponseEntity.ok(Map.of("message", "Logout exitoso"));
+    }
+}
+
+
+
+// Clase POJO para recibir el login JSON
+class LoginRequest {
+    private String usuario;
+    private String clave;
+
+    // Getters y setters
+    public String getUsuario() { return usuario; }
+    public void setUsuario(String usuario) { this.usuario = usuario; }
+    public String getClave() { return clave; }
+    public void setClave(String clave) { this.clave = clave; }
 }

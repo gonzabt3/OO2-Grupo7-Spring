@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cuenta no activa</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #007bff, #6610f2);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container-noactivo {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .container-noactivo h2 {
+            margin-bottom: 30px;
+            color: #dc3545;
+        }
+
+        .btn-primary, .btn-secondary {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-link {
+            display: block;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-noactivo">
+        <h2>Cuenta no activa</h2>
+        <p th:text="${mensaje}">Tu cuenta aún no ha sido activada. Por favor, revisá tu correo y confirmá tu cuenta para poder iniciar sesión.</p>
+
+        <form th:action="@{/usuario/reenvio_token}" method="post">
+            <input type="hidden" name="email" th:value="${email}" />
+            <button type="submit" class="btn btn-secondary">Reenviar correo de confirmación</button>
+        </form>
+
+        <a th:href="@{/usuario/registro}" class="btn btn-primary mt-3">Registrar nueva cuenta</a>
+    </div>
+</body>
+</html>

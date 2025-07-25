@@ -17,8 +17,16 @@ public class LoginController {
     	        model.addAttribute("error", "Usuario o contraseña incorrectos");
     	    }
     	 
-        return "/usuario/login"; // formulario login
+        return "usuario/login"; // formulario login
         
     }
+    
+    @GetMapping("/error_login")
+    public String mostrarErrorLogin(HttpServletRequest request, Model model) {
+        String errorMessage = (String) request.getAttribute("error_message");
+        model.addAttribute("errorMessage", errorMessage);
+        return "usuario/login"; // La vista login donde mostrarás el error
+    }
+
     
 }
