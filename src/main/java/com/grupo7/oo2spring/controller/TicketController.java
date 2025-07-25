@@ -61,8 +61,6 @@ public class TicketController {
     private final EmpleadoService empleadoService;
     
     private final UsuarioService usuarioService;
-    
-    private final EmailService emailService;
 
     private final AreaService areaService;
     
