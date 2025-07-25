@@ -81,6 +81,22 @@ public class TicketService {
 		}
 	}
 
+	    @Transactional
+    public Ticket update(int id, Ticket ticketActualizado) throws TicketNoEncontradoException {
+        Ticket ticketExistente = ticketRepository.findById(id)
+            .orElseThrow(() -> new TicketNoEncontradoException("Ticket con ID " + id + " no encontrado"));
+
+        // Actualiza solo los campos que se pueden modificar
+        ticketExistente.setTitulo(ticketActualizado.getTitulo());
+        ticketExistente.setDescripcion(ticketActualizado.getDescripcion());
+        ticketExistente.setPrioridad(ticketActualizado.getPrioridad());
+        ticketExistente.setEstado(ticketActualizado.getEstado());
+        ticketExistente.setArea(ticketActualizado.getArea());
+        // Agrega aquí otros campos editables si corresponde
+
+        return ticketRepository.save(ticketExistente);
+    }
+
 	//@PreAuthorize("hasRole('EMPLEADO')")
 	@Transactional
 	public void tomarTicketConControlInicial(int idTicket, Empleado empleadoLogueado, ControlDTO control)
@@ -144,6 +160,14 @@ public class TicketService {
 	public List<Ticket> getTicketsByUsuario(int usuarioIdCreador) {
 		return ticketRepository.findByUsuarioCreador_Id(usuarioIdCreador);
 	}
+
+	  @Transactional
+    public void delete(int id) throws TicketNoEncontradoException {
+        if (!ticketRepository.existsById(id)) {
+            throw new TicketNoEncontradoException("Ticket con ID " + id + " no encontrado");
+        }
+        ticketRepository.deleteById(id);
+    }
 }
 
 
