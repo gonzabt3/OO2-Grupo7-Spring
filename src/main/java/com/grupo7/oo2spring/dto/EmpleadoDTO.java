@@ -1,28 +1,17 @@
 package com.grupo7.oo2spring.dto;
 
-
-import com.grupo7.oo2spring.models.Area;
-import com.grupo7.oo2spring.models.Rol;
-
-import lombok.NoArgsConstructor;
-
-import com.grupo7.oo2spring.models.Area;
-import com.grupo7.oo2spring.models.Rol;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@Schema
+@Schema(description = "DTO para convertir un usuario en empleado")
 public record EmpleadoDTO(
-    @Schema(description = "ID del usuario", example = "4")
-    int idUsuario,
 
-    @Schema(description = "Área del nuevo empleado")
-    Area area,
+    @Schema(description = "Id del Empleado", example = "5")
+    int idEmpleado,
 
-    @Schema(description = "Disponibilidad del empleado", example = "true")
+    @Schema(description = "Id de Área asignada al empleado", example = "SOPORTE")
+    int idArea,
+
+    @Schema(description = "Disponibilidad actual del empleado", example = "true")
     boolean disponibilidad
+
 ) {}
-	
-	
-	
-	
