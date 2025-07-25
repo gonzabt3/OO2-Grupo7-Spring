@@ -144,56 +144,6 @@ public class TicketController {
         }
 	}
 	
-	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
-	@PostMapping("/{idTicket}/tomar")
-    public String processTakeTicket(@PathVariable int idTicket,
-                                    @ModelAttribute("control") ControlDTO control,
-                                    @AuthenticationPrincipal UserDetails usuariolog,
-                                    Model model) throws Exception, TicketNoEncontradoException {
-		System.out.println("➡️ Entró al controlador tomarTicketConControlInicial");
-		String nombreDelUsuarioEnSesion = usuariolog.getUsername();
-    	Empleado empleadoLogeado = empleadoService.findByEmpleadoNombre(nombreDelUsuarioEnSesion);
-    	try {
-
-            ticketService.tomarTicketConControlInicial(idTicket, empleadoLogeado, control);
-            
-
-            
-            Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-		    UsuarioBase usuarioDueño = ticket.getUsuarioCreador();
-		    
-            System.out.println(usuarioDueño.getEmail());
-
-		    // ✅ Armar variables para el template
-		    Map<String, Object> variables = new HashMap<>();
-		    variables.put("nombreUsuario", usuarioDueño.getNombre());
-		    variables.put("email",usuarioDueño.getEmail());
-		    variables.put("tituloTicket", ticket.getTitulo());
-		    variables.put("descripcionControl", ticket.getDescripcion());
-		    variables.put("ticketId", ticket.getIdTicket());
-		    variables.put("accionControl", control.accion());
-		    variables.put("fechaControl", LocalDate.now().toString());
-		    //variables.put("urlDetalle", "http://localhost:8080/ticket/tickets");
-
-		    System.out.println("📌 emailService es: " + emailService);
-		    
-		    
-		    // ✅ Enviar el email con plantilla
-		    emailService.enviarEmailConHtml(
-		        usuarioDueño.getEmail(),
-		        "Se actualizó tu ticket #" + ticket.getIdTicket(), "email-control-agregado-template",
-		        variables
-		    );
-
-		    model.addAttribute("successMessage", "Control agregado con éxito y correo enviado.");
-            model.addAttribute("successMessage", "¡Ticket #" + idTicket + " tomado y gestión iniciada!");
-        } catch (TicketCreacionException e) {
-            model.addAttribute("errorMessage", "Error al tomar el ticket #" + idTicket + ": " + e.getMessage());
-            return "redirect:/ticket/" + idTicket + "/tomarTicket";
-        }
-        return "redirect:/ticket/lista";
-    }
-	
 	@GetMapping("/{idTicket}/detalle")
     public String DetalleTicket(@PathVariable int idTicket, Model model, @AuthenticationPrincipal UserDetails usuariolog) throws TicketNoEncontradoException {
         Ticket ticketDetalle = ticketService.buscarTicketPorId(idTicket);

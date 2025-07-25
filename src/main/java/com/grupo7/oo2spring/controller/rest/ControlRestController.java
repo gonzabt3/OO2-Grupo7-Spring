@@ -12,8 +12,11 @@ import com.grupo7.oo2spring.dto.TicketDTO;
 import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
+import com.grupo7.oo2spring.models.Funcion;
 import com.grupo7.oo2spring.models.Ticket;
+import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.services.ControlService;
+import com.grupo7.oo2spring.services.EmailService;
 import com.grupo7.oo2spring.services.EmpleadoService;
 import com.grupo7.oo2spring.services.TicketService;
 
@@ -25,6 +28,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,6 +48,7 @@ public class ControlRestController {
 	private final EmpleadoService empleadoService;
 	private final TicketService ticketService;
 	private final ControlService controlService;
+	private final EmailService emailService;
 
 	private TicketDTO convertirTicketDTO(Ticket ticket) {
 		TicketDTO dto = new TicketDTO();
@@ -180,21 +186,52 @@ public class ControlRestController {
                           "El ticket pasará a estado ABIERTO y el control tendrá acciones predeterminadas y no estará finalizado.")
  	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@PostMapping("/{idTicket}/tomarTicket")
-	public ResponseEntity<ControlDTO> tomarTicketYCrearControlInicial(
+	public ResponseEntity<Map<String, Object>> tomarTicketYCrearControlInicial(
 			@Parameter(description = "ID del ticket a tomar") @PathVariable int idTicket,
 			@AuthenticationPrincipal UserDetails usuariolog) {
+		
+		Map<String, Object> responseBody = new HashMap<>();
 		try {
 			Empleado empleadoLogueado = empleadoService.findByEmpleadoNombre(usuariolog.getUsername());
 			if (empleadoLogueado == null) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 			}
 			ControlDTO nuevoControl = controlService.tomarTicket(idTicket, empleadoLogueado);
+			Ticket ticket = ticketService.buscarTicketPorId(idTicket);
+			UsuarioBase usuarioDueño = ticket.getUsuarioCreador();
+			if (usuarioDueño != null && usuarioDueño.getEmail() != null) {
+                Map<String, Object> emailVariables = new HashMap<>();
+                emailVariables.put("nombreUsuario", usuarioDueño.getNombre());
+                emailVariables.put("email", usuarioDueño.getEmail());
+                emailVariables.put("tituloTicket", ticket.getTitulo());
+                emailVariables.put("descripcionTicket", ticket.getDescripcion()); 
+                emailVariables.put("ticketId", ticket.getIdTicket());
+                emailVariables.put("accionControl", nuevoControl.accion()); 
+                emailVariables.put("funcionControl", Funcion.valueOf(nuevoControl.funcion())); 
+                emailVariables.put("fechaControl", LocalDate.now().toString());
 
-			return ResponseEntity.status(HttpStatus.CREATED).body(nuevoControl);
+                System.out.println("📌 Enviando email a: " + usuarioDueño.getEmail());
+                emailService.enviarEmailConHtml(
+                	usuarioDueño.getEmail(),
+                    "Tu ticket #" + ticket.getIdTicket() + " ha sido tomado y se inició un control",
+                    "email-control-agregado-template", 
+                    emailVariables
+                );
+                responseBody.put("emailSent", true);
+            } else {
+                System.err.println("No se pudo enviar email: Usuario creador o email no disponible para ticket #" + idTicket);
+                responseBody.put("emailSent", false);
+                responseBody.put("emailError", "No se encontró el usuario creador o su email.");
+            }
+
+            responseBody.put("message", "¡Ticket #" + idTicket + " tomado y control inicial creado!");
+            responseBody.put("control", nuevoControl);
+            responseBody.put("ticketId", idTicket); 
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
 
 		} catch (TicketNoEncontradoException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch (IllegalArgumentException e) { // Capturará si hay un problema con la función predeterminada
+		} catch (IllegalArgumentException e) { 
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		} catch (Exception e) {
 			System.err.println("Error al tomar ticket y crear control inicial: " + e.getMessage());
