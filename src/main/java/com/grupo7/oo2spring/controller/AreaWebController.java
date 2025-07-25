@@ -1,5 +1,6 @@
 package com.grupo7.oo2spring.controller;
 
+
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.services.AreaService;
 import lombok.RequiredArgsConstructor;
