@@ -1,6 +1,7 @@
 package com.grupo7.oo2spring.controller;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,6 +124,8 @@ public class TicketController {
 		}else {
 			model.addAttribute("message", "No existen tickets asignados a su Area ");
 		}
+		model.addAttribute("estados", Arrays.asList(Estado.values()));
+        model.addAttribute("prioridades", Arrays.asList(Prioridad.values()));
 		model.addAttribute("tickets", tickets);
 		return "ticket/lista_tickets";
     }
@@ -168,7 +171,7 @@ public class TicketController {
 		    variables.put("tituloTicket", ticket.getTitulo());
 		    variables.put("descripcionControl", ticket.getDescripcion());
 		    variables.put("ticketId", ticket.getIdTicket());
-		    variables.put("accionControl", control.getAccion());
+		    variables.put("accionControl", control.accion());
 		    variables.put("fechaControl", LocalDate.now().toString());
 		    //variables.put("urlDetalle", "http://localhost:8080/ticket/tickets");
 
@@ -195,7 +198,7 @@ public class TicketController {
     public String DetalleTicket(@PathVariable int idTicket, Model model, @AuthenticationPrincipal UserDetails usuariolog) throws TicketNoEncontradoException {
         Ticket ticketDetalle = ticketService.buscarTicketPorId(idTicket);
         model.addAttribute("ticketDetalle", ticketDetalle);
-        model.addAttribute("controlCreationDTO", new ControlDTO()); // Para el formulario de agregar controles
+        //model.addAttribute("controlCreationDTO", new ControlDTO());
         return "ticket/ticket-detalle";
     }
 	

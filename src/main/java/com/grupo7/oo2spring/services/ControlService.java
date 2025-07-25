@@ -13,6 +13,7 @@ import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Estado;
+import com.grupo7.oo2spring.models.Funcion;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.repositories.IAreaRepository;
@@ -35,16 +36,26 @@ public class ControlService {
 	
 
 	private ControlDTO convertToControlDTO(Control control) {
+		String empleadoNombreCompleto = null;
+        if (control.getEmpleado() != null) {
+            empleadoNombreCompleto = control.getEmpleado().getNombre() + " " + control.getEmpleado().getApellido();
+        }
+
+        String tituloTicket = null;
+        if (control.getTicket() != null) {
+            tituloTicket = control.getTicket().getTitulo();
+        }
+
         return new ControlDTO(
-            control.getIdControl(),
-            control.getTicket(),
-            control.getEmpleado() != null ? control.getEmpleado().getNombre() + " " + control.getEmpleado().getApellido() : null,
-            control.getFechaEntrada(),
-            control.getFechaSalida(),
-    		control.getAccion(),
-    		control.isFinalizado(),
-            control.getFuncion(),
-            control.getTicket().getTitulo()
+                control.getIdControl(),
+                control.getTicket().getIdTicket(),
+                control.getAccion(),
+                control.getFuncion() != null ? control.getFuncion().name() : null,
+                control.isFinalizado(),
+                control.getFechaEntrada(),
+                control.getFechaSalida(),
+                empleadoNombreCompleto,
+                tituloTicket
         );
     }
 	
@@ -62,17 +73,42 @@ public class ControlService {
 	}
 	
 	@Transactional
-	public void TomarTicket(int idTicket) throws Exception, TicketNoEncontradoException {
-		Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-		if(existeControlPendiente(ticket)) {
-			throw new Exception("Existe un control pendiente");
-		}
-		if(ticket.getEstado() == Estado.PENDIENTE) {
-			ticket.setEstado(Estado.ABIERTO);
-			ticket.setPrioridad(Prioridad.MEDIA);
-		}
-		ticketRepository.save(ticket);
-	}
+    public ControlDTO tomarTicket(int idTicket, Empleado empleadoLogueado)
+            throws Exception, TicketNoEncontradoException {
+
+        Ticket ticket = ticketService.buscarTicketPorId(idTicket);
+        if (ticket == null) {
+            throw new TicketNoEncontradoException("Ticket no encontrado con ID: " + idTicket);
+        }
+
+        if (existeControlPendiente(ticket)) {
+            throw new Exception("Ya existe una intervención en curso para este ticket.");
+        }
+
+        Control controlInicial = new Control();
+        controlInicial.setTicket(ticket);
+        controlInicial.setEmpleado(empleadoLogueado);
+
+        controlInicial.setAccion("Ticket tomado. Inicio de la intervención.");
+        controlInicial.setFuncion(Funcion.SEGUIMIENTO); 
+        controlInicial.setFinalizado(false); 
+        controlInicial.setFechaEntrada(LocalDateTime.now()); 
+        controlInicial.setFechaSalida(null);
+
+        ticket.addControl(controlInicial);
+
+        
+        ticket.setEstado(Estado.ABIERTO); // El ticket pasa a ABIERTO
+        
+
+        controlRepository.save(controlInicial);
+        ticketRepository.save(ticket);
+
+        System.out.println("Ticket #" + idTicket + " tomado exitosamente por " + empleadoLogueado.getNombre() + " "
+                + empleadoLogueado.getApellido() + " (Control inicial creado).");
+
+        return convertToControlDTO(controlInicial);
+    }
 	
 	@Transactional
 	public ControlDTO ControlInicial(int idTicket, Empleado empleadoLogueado, ControlDTO control)
@@ -84,14 +120,14 @@ public class ControlService {
 		}
 		Control controlInicial = new Control();
 		controlInicial.setTicket(ticket);
-		controlInicial.setAccion(control.getAccion());
+		controlInicial.setAccion(control.accion());
 		controlInicial.setFechaEntrada(LocalDateTime.now());
-		controlInicial.setFinalizado(control.isFinalizado()); // No está finalizado al tomarlo
+		controlInicial.setFinalizado(control.finalizado()); // No está finalizado al tomarlo
 		controlInicial.setFechaSalida(null);
-		controlInicial.setFuncion(control.getFuncion());
+		controlInicial.setFuncion(Funcion.valueOf(control.funcion().toUpperCase()));
 		controlInicial.setEmpleado(empleadoLogueado);
 		ticket.addControl(controlInicial);
-		if (control.isFinalizado()) {
+		if (control.finalizado()) {
 			controlInicial.setFinalizado(true);
 			controlInicial.setFechaSalida(LocalDateTime.now());
 			ticket.setFechaCierre(LocalDate.now()); // El ticket se cierra/resuelve
@@ -113,9 +149,9 @@ public class ControlService {
 		Control controlEdicion = controlRepository.findById(controlID)
 				.orElseThrow(()-> new TicketNoEncontradoException("Control no encontrado: " + controlID));
 		
-		controlEdicion.setFuncion(control.getFuncion());
-		controlEdicion.setAccion(control.getAccion());
-		if(control.isFinalizado()) {
+		controlEdicion.setFuncion(Funcion.valueOf(control.funcion().toUpperCase()));
+		controlEdicion.setAccion(control.accion());
+		if(control.finalizado()) {
 			controlEdicion.setFinalizado(true);
 			controlEdicion.setFechaSalida(LocalDateTime.now());
 			Ticket ticket = controlEdicion.getTicket();

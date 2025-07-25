@@ -18,6 +18,7 @@ import com.grupo7.oo2spring.enums.TipoArea;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Estado;
+import com.grupo7.oo2spring.models.Funcion;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.repositories.IControlRepository;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
@@ -85,11 +86,11 @@ public class TicketService {
 
 		Control controlInicial = new Control();
 		controlInicial.setTicket(ticket);
-		controlInicial.setAccion(control.getAccion());
+		controlInicial.setAccion(control.accion());
 		controlInicial.setFechaEntrada(LocalDateTime.now());
 		controlInicial.setFinalizado(false); // No está finalizado al tomarlo
 		controlInicial.setFechaSalida(null);
-		controlInicial.setFuncion(control.getFuncion());
+		controlInicial.setFuncion(Funcion.valueOf(control.funcion().toUpperCase()));
 		
 		controlInicial.setEmpleado(empleadoLogueado);
 		ticket.setEstado(Estado.ABIERTO);
