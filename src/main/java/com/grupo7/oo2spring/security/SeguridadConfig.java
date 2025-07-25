@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -98,7 +99,7 @@ public class SeguridadConfig {
                         "/usuario/token_invalido", "/api/auth/**", "/swagger-ui/**",
                         "/v3/api-docs/**", "/swagger-ui.html"
                     ).permitAll()
-                    .requestMatchers("/api/**").authenticated() // Protegés tus endpoints API
+                    .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/panel").hasAnyRole("USER", "EMPLEADO", "MANAGER")
                     .requestMatchers("/api/usuario/getUsuario").authenticated()
                     .requestMatchers("/manager/**").hasRole("MANAGER")
