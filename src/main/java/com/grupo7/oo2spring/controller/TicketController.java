@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.grupo7.oo2spring.dto.ControlDTO;
 import com.grupo7.oo2spring.dto.TicketDTO;
+import com.grupo7.oo2spring.enums.TipoArea;
 import com.grupo7.oo2spring.exception.TicketCreacionException;
 import com.grupo7.oo2spring.exception.TicketNoEncontradoException;
 import com.grupo7.oo2spring.models.Area;
@@ -116,7 +117,7 @@ public class TicketController {
 		//Empleado usuario = (Empleado) usuarioService.getUsuarioByUsername(usuariolog.getUsername());
 		Empleado empleadoOpt = empleadoService.findByEmpleadoNombre(usuariolog.getUsername());
 		if(empleadoOpt.getArea() != null) {
-			tickets = ticketService.findByArea(empleadoOpt.getArea());
+			tickets = ticketService.findByArea(empleadoOpt.getArea().getTipo());
 			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea());
 			model.addAttribute("tickets", tickets);
 		}else {
@@ -156,7 +157,7 @@ public class TicketController {
 
             
             Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-		    Usuario usuarioDueño = ticket.getUsuarioCreador(); // asumimos que Ticket tiene un Usuario asociado
+		    UsuarioBase usuarioDueño = ticket.getUsuarioCreador(); // asumimos que Ticket tiene un Usuario asociado
 		    
             System.out.println(usuarioDueño.getEmail());
 
@@ -209,6 +210,7 @@ public class TicketController {
             List<Ticket> tickets = ticketRepository.findAll();
             model.addAttribute("tickets", tickets);
             model.addAttribute("rol",empleado.getRol());
+           // model.addAttribute("areas", TipoArea.values());
             model.addAttribute("areas", areaService.listarAreas());
             model.addAttribute("estados", Estado.values());
             model.addAttribute("prioridades", Prioridad.values());
@@ -226,7 +228,8 @@ public class TicketController {
             @RequestParam("area") Area area,
             RedirectAttributes redirectAttributes) throws TicketNoEncontradoException {
 		ticketService.asignarAreaTicket(idTicket, area);
-		redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.getNombre() + "' asignada al ticket #" + idTicket + " con éxito!");
+		//redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.getTipo().getNombre() + "' asignada al ticket #" + idTicket + " con éxito!");
+		redirectAttributes.addFlashAttribute("successMessage", "¡Área '" + area.getTipo().nombre + "' asignada al ticket #" + idTicket + " con éxito!");
 		return "redirect:/ticket/lista";
 	}
 	
@@ -240,7 +243,7 @@ public class TicketController {
 	    String username = userDetails.getUsername();
 	    Usuario usuario = usuarioService.getUsuarioByNombreUsuario(username);
 
-	    List<Ticket> tickets = ticketService.getTicketsByUsuario(usuario.getIdUsuario());
+	    List<Ticket> tickets = ticketService.getTicketsByUsuario(usuario.getId());
 	    model.addAttribute("tickets", tickets);
 
 	    return "ticket/usuario-tickets"; // Vista con la tabla de tickets

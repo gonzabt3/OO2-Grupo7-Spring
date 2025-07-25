@@ -1,4 +1,3 @@
-
 package com.grupo7.oo2spring.controller.rest;
 
 import java.util.ArrayList;
@@ -30,11 +29,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-
-@RequiredArgsConstructor
+@Tag(name = "Manager", description = "Operaciones para gestionar empleados")
 @RestController
 @RequestMapping("/api/manager")
+@RequiredArgsConstructor
 public class ManagerRestController {
+
 
 	private final IEmpleadoRepository empleadoRepository;
     private final IUsuarioRepository usuarioRepository;
