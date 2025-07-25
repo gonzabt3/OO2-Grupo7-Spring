@@ -18,26 +18,12 @@ public class AreaService {
         return areaRepository.findAll();
     }
 
-    public Optional<Area> buscarPorId(Long id) {
+    public Optional<Area> buscarPorId(int id) {
         return areaRepository.findById(id);
     }
-
-    public Area crearAreaSiNoExiste(String nombre) {
-        return areaRepository.findByNombre(nombre)
-            .orElseGet(() -> areaRepository.save(new Area(nombre)));
-    }
-
-    public Area actualizarArea(Long id, Area area) {
-        Area existente = areaRepository.findById(id).orElseThrow();
-        existente.setNombre(area.getNombre());
-        return areaRepository.save(existente);
-    }
-
-    public void eliminarArea(Long id) {
+    
+    public void eliminarArea(int id) {
         areaRepository.deleteById(id);
     }
 
-    public Optional<Area> buscarPorNombre(String nombre) {
-      return areaRepository.findByNombre(nombre);
-    }
 }

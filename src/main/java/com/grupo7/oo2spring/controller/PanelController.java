@@ -24,8 +24,12 @@ public class PanelController {
 	        UsuarioDetails usuarioDetails = (UsuarioDetails) auth.getPrincipal();
 	        UsuarioBase usuario = usuarioDetails.getUsuario();
 	        model.addAttribute("usuario", usuario);
+	        
+	        System.out.println(usuario);
 
-	        String rolStr = (usuario.getRol() != null) ? usuario.getRol().toString() : "USER";
+	        String rolStr = (usuario.getRol().getTipo() != null) ? usuario.getRol().getTipo().toString() : "USER";
+	        
+	        System.out.println(rolStr);
 	        model.addAttribute("rol", rolStr);
 	        
 	    }

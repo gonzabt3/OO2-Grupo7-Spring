@@ -1,6 +1,11 @@
 package com.grupo7.oo2spring.controller.rest;
 
-import com.grupo7.oo2spring.controller.rest.dto.AreaDTO;
+import com.grupo7.oo2spring.dto.AreaDTO;
+import com.grupo7.oo2spring.models.Area;
+import com.grupo7.oo2spring.services.AreaService;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.services.AreaService;
 import lombok.RequiredArgsConstructor;
@@ -16,39 +21,15 @@ import java.util.List;
 public class AreaController {
 
     private final AreaService areaService;
+    
 
     @GetMapping
-    public List<AreaDTO> listarAreas() {
-        return areaService.listarAreas()
-                .stream()
-                .map(area -> new AreaDTO(area.getId(), area.getNombre()))
-                .toList();
-    }
-
-    @GetMapping("/nombre/{nombre}")
-    public AreaDTO getAreaByName(@PathVariable String nombre) {
-        Area area = areaService.buscarPorNombre(nombre)
-                .orElseThrow(() -> new RuntimeException("Área no encontrada: " + nombre));
-        return new AreaDTO(area.getId(), area.getNombre());
-    }
-
-    @PostMapping
-    public AreaDTO crearAreaSiNoExiste(@RequestBody AreaDTO areaDTO) {
-        Area area = areaService.crearAreaSiNoExiste(areaDTO.nombre());
-        return new AreaDTO(area.getId(), area.getNombre());
-    }
-
-    @PutMapping("/{id}")
-    public AreaDTO actualizarArea(@PathVariable Long id, @RequestBody AreaDTO areaDTO) {
-        Area areaObj = new Area();
-        areaObj.setId(areaDTO.id());
-        areaObj.setNombre(areaDTO.nombre());
-        Area area = areaService.actualizarArea(id, areaObj);
-        return new AreaDTO(area.getId(), area.getNombre());
+    public List<Area> listarAreas() {
+        return areaService.listarAreas();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> eliminarArea(@PathVariable Long id) {
+    public ResponseEntity<?> eliminarArea(@PathVariable int id) {
         try {
             areaService.eliminarArea(id);
             return ResponseEntity.noContent().build();

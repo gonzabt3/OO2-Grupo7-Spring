@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import com.grupo7.oo2spring.enums.TipoRol;
 import com.grupo7.oo2spring.models.EmailToken;
 import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
@@ -66,7 +68,7 @@ public class RegistroController {
             
         }
         
-        usuario.setRol(Rol.USER);
+        usuario.setRol(new Rol(TipoRol.USER));
         usuario.setContraseña(passwordEncoder.encode(usuario.getContraseña()));
         usuario.setUsuarioActivo(true);
         
