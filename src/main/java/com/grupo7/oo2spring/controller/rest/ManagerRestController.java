@@ -1,82 +1,129 @@
 
 package com.grupo7.oo2spring.controller.rest;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
+import com.grupo7.oo2spring.dto.EmpleadoDTO;
+import com.grupo7.oo2spring.dto.UsuarioDTO;
+import com.grupo7.oo2spring.enums.TipoRol;
+import com.grupo7.oo2spring.exception.UsuarioEsEmpleadoException;
+import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Empleado;
+import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.models.UsuarioBase;
+import com.grupo7.oo2spring.repositories.IAreaRepository;
+import com.grupo7.oo2spring.repositories.IEmpleadoRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
+import com.grupo7.oo2spring.services.EmpleadoService;
 import com.grupo7.oo2spring.services.ManagerService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/managers")
+@RequestMapping("/api/manager")
 public class ManagerRestController {
-	private final IUsuarioRepository usuarioRepository;
+
+	private final IEmpleadoRepository empleadoRepository;
+    private final IUsuarioRepository usuarioRepository;
     private final ManagerService managerService;
+    private final IAreaRepository areaRepository;
+    private final EmpleadoService empleadoService;
     
-    @GetMapping("/listar") // Mapea GET a /api/usuarios
-    public ResponseEntity<List<Usuario>> listarUsuarios() {
-        List<Usuario> usuarios = usuarioRepository.findAll(); // Misma lógica
-        return ResponseEntity.ok(usuarios); // ¡Devuelve la lista como JSON con 200 OK!
-    }
-    
-    @GetMapping("/{id}/datos-conversion-empleado") // Un nombre de ruta más claro para REST
-    public ResponseEntity<Empleado> getDatosParaConversionAEmpleado(@PathVariable int id) {
-        try {
-            // Aquí la lógica es la misma: prepara el objeto Empleado con datos del Usuario
-            Empleado empleado = managerService.prepararEmpleadoDesdeUsuario(id);
-            return ResponseEntity.ok(empleado); // Devuelve el objeto Empleado como JSON
-        } catch (Exception e) {
-            // Manejo de errores REST:
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404 si usuario no encontrado
-        }
-    }
-    
-    @PostMapping("/convertir") // Ruta para el endpoint REST
-    public ResponseEntity<?> convertirUsuarioAEmpleadoRest(@RequestBody Empleado empleadoData) { // Recibe JSON
-        try {
-            // La lógica de validación y llamada al servicio es la misma
-            Empleado empleadoConvertido = managerService.convertirUsuarioAEmpleado(empleadoData.getIdEmpleado(), empleadoData);
+    @GetMapping("/listar")
+    public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
+    	List<UsuarioBase> todos = new ArrayList<>();
+        todos.addAll(usuarioRepository.findAll());
+        todos.addAll(empleadoRepository.findAll());
 
-            // Respuesta REST: 200 OK, 201 Created si es nueva conversión, o 4xx si hay errores
-            return ResponseEntity.ok(empleadoConvertido); // Devuelve el Empleado convertido como JSON
-        } catch (IllegalArgumentException e) { // Ejemplo de manejo de errores más específico
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"" + e.getMessage() + "\"}");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Error interno al convertir: " + e.getMessage() + "\"}");
-        }
+        List<UsuarioDTO> usuariosDTO = todos.stream()
+            .map(UsuarioDTO::new)
+            .collect(Collectors.toList());
+
+        return ResponseEntity.ok(usuariosDTO);
     }
     
-    /*@PostMapping("/{id}/sacar-permisos") // Ruta para el endpoint REST
-    public ResponseEntity<?> sacarPermisosRest(@PathVariable int id) {
-    	Optional<Empleado> empleado = usuarioRepository.findEmpleadoById(id);
+
+    @PreAuthorize("hasRole('MANAGER')")
+    @Operation(summary = "Convierte un usuario en empleado")
+    @PostMapping("/convertir/{id}")
+    public ResponseEntity<String> convertirAEmpleado(@PathVariable int id, @RequestBody EmpleadoDTO dto) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Usuario no encontrado");
+        }
+        
+        Usuario usuario = usuarioOpt.get();
+
+        Area area = areaRepository.findById(dto.idArea())
+            .orElseThrow(() -> new RuntimeException("Área no encontrada"));
+
         try {
-            if (empleado !=null ) {
-            	managerService.sacarPermisosEmpleado(id);
-                return ResponseEntity.ok().body("{\"message\": \"Permisos de empleado revocados exitosamente\"}"); // 200 OK
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"Empleado no encontrado para sacar permisos\"}"); // 404 si no existe
-            }
+            Empleado empleado = empleadoService.crearEmpleado(
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getDni(),
+                usuario.getEmail(),
+                usuario.getNombreUsuario(),
+                usuario.getContraseña(),
+                area,
+                dto.disponibilidad()
+            );
+
+
+            managerService.convertirUsuarioAEmpleado(id, empleado);
+
+            return ResponseEntity.ok("Usuario convertido en empleado exitosamente");
+
+        } catch (UsuarioEsEmpleadoException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"Error al sacar permisos: " + e.getMessage() + "\"}");
+            return ResponseEntity.internalServerError().body("Error al convertir usuario");
         }
-    }*/
+    }
 
-}
+    
+    @PreAuthorize("hasRole('MANAGER')")
+    @PostMapping("/sacar-permisos/{id}")
+    public ResponseEntity<String> sacarPermisos(@PathVariable int id) {
+        Optional<Empleado> empleadoOpt = empleadoRepository.findById(id);
+        if (empleadoOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Empleado no encontrado");
+        }
+
+        Empleado empleado = empleadoOpt.get();
+        TipoRol rol = empleado.getRol().getTipo();
+        
+        System.out.println("ROL: " + rol);
+
+        if (rol != TipoRol.EMPLEADO) {
+            return ResponseEntity.badRequest().body("El rol no es empleado");
+        }
+
+        try {
+            managerService.sacarPermisosEmpleado(id);
+            return ResponseEntity.ok("Permisos sacados correctamente");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Error al sacar permisos");
+        }
+    }
+
+
+        
+    }

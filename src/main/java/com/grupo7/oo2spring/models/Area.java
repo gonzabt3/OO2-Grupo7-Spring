@@ -1,23 +1,33 @@
 package com.grupo7.oo2spring.models;
 
+import com.grupo7.oo2spring.enums.TipoArea;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import lombok.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "area")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Area {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(hidden = true)
-    private Long id;
+    private int id;
 
+    @Enumerated(EnumType.STRING)
     @Column(unique = true, nullable = false)
-    private String nombre;
+    private TipoArea tipo;
 
-    public Area(String nombre) { 
-    this.nombre = nombre;
-}
+    public Area(TipoArea tipo) {
+        this.tipo = tipo;
+    }
 }
