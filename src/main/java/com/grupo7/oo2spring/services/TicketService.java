@@ -77,7 +77,6 @@ public class TicketService {
 		}
 	}
 
-	//@PreAuthorize("hasRole('EMPLEADO')")
 	@Transactional
 	public void tomarTicketConControlInicial(int idTicket, Empleado empleadoLogueado, ControlDTO control)
 			throws Exception {
