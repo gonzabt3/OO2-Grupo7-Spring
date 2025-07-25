@@ -58,8 +58,8 @@ public class TicketService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Ticket> findByArea(TipoArea area) {
-		return ticketRepository.findByArea(area);
+	public List<Ticket> findByArea_Tipo(TipoArea area) {
+		return ticketRepository.findByArea_Tipo(area);
 	}
 
 	@Transactional

@@ -114,11 +114,11 @@ public class TicketController {
 	public String listarticketsPorArea(Model model, @AuthenticationPrincipal UserDetails usuariolog){
 		model.addAttribute("usuarioLogueado", usuariolog);
 		List<Ticket> tickets = null;
-		//Empleado usuario = (Empleado) usuarioService.getUsuarioByUsername(usuariolog.getUsername());
 		Empleado empleadoOpt = empleadoService.findByEmpleadoNombre(usuariolog.getUsername());
-		if(empleadoOpt.getArea() != null) {
-			tickets = ticketService.findByArea(empleadoOpt.getArea().getTipo());
-			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea());
+		System.out.println("el area es" + empleadoOpt.getArea().getTipo().getNombre());
+		if(empleadoOpt.getArea().getTipo() != null) {
+			tickets = ticketService.findByArea_Tipo(empleadoOpt.getArea().getTipo());
+			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea().getTipo().getNombre());
 			model.addAttribute("tickets", tickets);
 		}else {
 			model.addAttribute("message", "No existen tickets asignados a su Area ");
@@ -144,7 +144,7 @@ public class TicketController {
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@PostMapping("/{idTicket}/tomar")
     public String processTakeTicket(@PathVariable int idTicket,
-                                    @ModelAttribute("control") ControlDTO control, // Captura los datos del formulario en un objeto Control
+                                    @ModelAttribute("control") ControlDTO control,
                                     @AuthenticationPrincipal UserDetails usuariolog,
                                     Model model) throws Exception, TicketNoEncontradoException {
 		System.out.println("➡️ Entró al controlador tomarTicketConControlInicial");
@@ -157,7 +157,7 @@ public class TicketController {
 
             
             Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-		    UsuarioBase usuarioDueño = ticket.getUsuarioCreador(); // asumimos que Ticket tiene un Usuario asociado
+		    UsuarioBase usuarioDueño = ticket.getUsuarioCreador();
 		    
             System.out.println(usuarioDueño.getEmail());
 
@@ -186,18 +186,17 @@ public class TicketController {
             model.addAttribute("successMessage", "¡Ticket #" + idTicket + " tomado y gestión iniciada!");
         } catch (TicketCreacionException e) {
             model.addAttribute("errorMessage", "Error al tomar el ticket #" + idTicket + ": " + e.getMessage());
-            // Si hay un error, redirie al formulario de toma con el ticket para que pueda intentar de nuevo
             return "redirect:/ticket/" + idTicket + "/tomarTicket";
         }
-        return "redirect:/ticket/lista"; // Redirige al dashboard o a la vista de detalle del ticket recién tomado
+        return "redirect:/ticket/lista";
     }
 	
-	@GetMapping("/{idTicket}/detail")
+	@GetMapping("/{idTicket}/detalle")
     public String DetalleTicket(@PathVariable int idTicket, Model model, @AuthenticationPrincipal UserDetails usuariolog) throws TicketNoEncontradoException {
-        Ticket ticketDetail = ticketService.buscarTicketPorId(idTicket);
-        model.addAttribute("ticketDetail", ticketDetail);
+        Ticket ticketDetalle = ticketService.buscarTicketPorId(idTicket);
+        model.addAttribute("ticketDetalle", ticketDetalle);
         model.addAttribute("controlCreationDTO", new ControlDTO()); // Para el formulario de agregar controles
-        return "ticket/ticket-detail";
+        return "ticket/ticket-detalle";
     }
 	
 	
@@ -210,7 +209,6 @@ public class TicketController {
             List<Ticket> tickets = ticketRepository.findAll();
             model.addAttribute("tickets", tickets);
             model.addAttribute("rol",empleado.getRol());
-           // model.addAttribute("areas", TipoArea.values());
             model.addAttribute("areas", areaService.listarAreas());
             model.addAttribute("estados", Estado.values());
             model.addAttribute("prioridades", Prioridad.values());
@@ -246,7 +244,7 @@ public class TicketController {
 	    List<Ticket> tickets = ticketService.getTicketsByUsuario(usuario.getId());
 	    model.addAttribute("tickets", tickets);
 
-	    return "ticket/usuario-tickets"; // Vista con la tabla de tickets
+	    return "ticket/usuario-tickets"; 
 	}
 	
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")

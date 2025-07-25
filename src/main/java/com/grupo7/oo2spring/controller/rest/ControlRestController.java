@@ -19,6 +19,7 @@ import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.repositories.IEmpleadoRepository;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
 import com.grupo7.oo2spring.services.ControlService;
+import com.grupo7.oo2spring.services.EmpleadoService;
 import com.grupo7.oo2spring.services.TicketService;
 import com.grupo7.oo2spring.services.UsuarioService;
 
@@ -41,6 +42,7 @@ public class ControlRestController {
 
 	private final ITicketRepository ticketRepository;
 	private final IEmpleadoRepository empleadoRepository;
+	private final EmpleadoService empleadoService;
 	private final TicketService ticketService;
 	private final ControlService controlService;
 	
@@ -87,12 +89,11 @@ public class ControlRestController {
     @PostMapping("/{idTicket}/nuevo")
     public ResponseEntity<ControlDTO> procesaCreacionControl(
             @PathVariable int idTicket,
-            @Valid @ModelAttribute("control") ControlDTO controlDTO,
-            BindingResult resultado,
+            @Valid @RequestBody ControlDTO controlDTO,
             @AuthenticationPrincipal UserDetails usuariolog,
             RedirectAttributes redirectAttributes) throws Exception {
 
-        Empleado empleadoLogeado = empleadoRepository.findEmpleadoByNombreUsuario(usuariolog.getUsername());
+        Empleado empleadoLogeado = empleadoService.findByEmpleadoNombre(usuariolog.getUsername());
         try {
             ControlDTO controlCreado = controlService.ControlInicial(idTicket, empleadoLogeado, controlDTO);
             return new ResponseEntity<>(controlCreado, HttpStatus.CREATED);

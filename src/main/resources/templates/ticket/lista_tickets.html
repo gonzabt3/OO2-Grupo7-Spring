@@ -255,7 +255,6 @@
 						<th>Prioridad</th>
 						<th>Área Asignada</th>
 						<th>Acciones</th>
-						<th>Última Función</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -265,7 +264,7 @@
 						<td th:text="${ticket.estado != null ? ticket.estado.name() : 'N/A'}">Estado</td>
 						<td th:text="${ticket.prioridad != null ? ticket.prioridad.name() : 'Sin Asignar'}">Prioridad
 						</td>
-						<td th:text="${ticket.area != null ? ticket.area.nombre : 'Sin Asignar'}">Área</td>
+						<td th:text="${ticket.area.tipo.nombre != null ? ticket.area.tipo.nombre : 'Sin Asignar'}">Área</td>
 						<td>
 
 							<div class="d-flex justify-content-center gap-2 w-100 main-action-buttons">
@@ -279,7 +278,7 @@
 								    Ver Controles de Tickets
 								</a>
 								<!--							</span>-->
-								<a th:href="@{/ticket/{idTicket}/detail(idTicket=${ticket.idTicket})}"
+								<a th:href="@{/ticket/{idTicket}/detalle(idTicket=${ticket.idTicket})}"
 									class="btn btn-sm btn-outline-info">
 									<i class="fas fa-info-circle"></i> Detalles
 								</a>
@@ -298,9 +297,6 @@
 								</button>
 							</div>
 						</td>
-						<td
-							th:text="${#lists.isEmpty(ticket.procesos) ? '' : ticket.procesos[ticket.procesos.size() - 1].funcion}">
-							Función</td>
 					</tr>
 				</tbody>
 			</table>

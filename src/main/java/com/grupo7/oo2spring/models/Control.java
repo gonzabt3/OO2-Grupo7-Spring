@@ -55,10 +55,6 @@ public class Control {
         return idControl;
     }
 
-    private void setIdControl(int idControl) {
-        this.idControl = idControl;
-    }
-
     public Empleado getEmpleado() {
 		return empleado;
 	}
@@ -106,6 +102,13 @@ public class Control {
 	public void setAccion(String accion) {
 		this.accion = accion;
 	}
+	
+	public Funcion getFuncion() {
+        return funcion;
+    }
 
+    public void setFuncion(Funcion funcion) {
+        this.funcion = funcion;
+    }
 
 }

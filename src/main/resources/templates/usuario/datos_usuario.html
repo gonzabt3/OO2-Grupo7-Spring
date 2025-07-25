@@ -42,8 +42,6 @@
                 <p><strong>Email:</strong>
                     <span th:text="${usuariologueado.email}"></span>
                 </p>
-                <p th:if="${usuariologueado.rol != null}"><strong>Rol en el Sistema:</strong>
-                    <span th:text="${usuariologueado.rol.name()}"></span> </p>
                 <p><strong>DNI:</strong>
                     <span th:text="${usuariologueado.dni}"></span>
                 </p>
@@ -56,21 +54,14 @@
             </div>
             <div class="card-body">
                 <p><strong>ID de Empleado:</strong>
-                    <span th:text="${empleadoData.idEmpleado}"></span>
+                    <span th:text="${empleadoData.id}"></span>
                 </p>
                 <p><strong>Área de Trabajo:</strong>
-                    <span th:text="${empleadoData.area.nombre}"></span>
+                    <span th:text="${empleadoData.area.tipo.nombre}"></span>
                 </p>
                 <p><strong>Disponibilidad:</strong>
                     <span th:text="${empleadoData.disponibilidad ? 'Disponible' : 'No Disponible'}"></span>
                 </p>
-<!--                <div th:if="${empleadoData.rol != null and empleadoData.rol.name() == 'MANAGER'}">-->
-<!--                    <hr>-->
-<!--                    <p class="text-muted">¡Eres un Manager! Tienes acceso a herramientas de gestión.</p>-->
-<!--                    <a href="/manager/dashboard" class="btn btn-info btn-sm">-->
-<!--                        <i class="fas fa-tools"></i> Ir al Panel de Manager-->
-<!--                    </a>-->
-<!--                </div>-->
             </div>
         </div>
 
@@ -80,7 +71,7 @@
             </div>
             <div class="card-body">
                 <p><strong>ID de Usuario:</strong>
-                    <span th:text="${usuarioData.idUsuario}"></span>
+                    <span th:text="${usuarioData.id}"></span>
                 </p>
                 <p><strong>Cuenta Activa:</strong>
                     <span th:text="${usuarioData.usuarioActivo ? 'Sí' : 'No'}"></span>

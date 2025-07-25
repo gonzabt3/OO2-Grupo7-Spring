@@ -56,7 +56,7 @@
 		<h4 class="mb-4">Título: <span id="tituloTicket"></span></h4>
 
 		<form id="formCreacion">
-			<fieldset id="permisoEdicion" disabled>
+			<fieldset id="permisoEdicion">
 				<div class="mb-3">
 					<label for="funcion" class="form-label">Función/Tipo de Intervención</label>
 					<select id="funcion" class="form-select" name="funcion">
@@ -123,7 +123,7 @@
 				funciones.forEach(func => {
 					const option = document.createElement('option');
 					option.value = func;
-					option.textContent = func.charAt(0).toUpperCase() + func.slice(1).toLowerCase(); 
+					option.textContent = func.charAt(0).toUpperCase() + func.slice(1).toLowerCase();
 					funcionesDisponibles.appendChild(option);
 				});
 				const controlPendienteResponse = await fetch(`/api/control/${ticketId}/ControlPendiente`);
@@ -133,8 +133,22 @@
 				const tienePendiente = await controlPendienteResponse.json();
 
 				if (tienePendiente) {
-					mostrarMensaje('warning', 'Ya existe una intervención en curso para este ticket. No puedes iniciar una nueva hasta que la anterior sea finalizada.'); // 'alertContainer' ya no es necesario aquí
-				} 
+					if (permisoEdicion) {
+						permisoEdicion.setAttribute('disabled', true); // Deshabilitar el formulario
+					}
+					if (AlertaPendiente) {
+						AlertaPendiente.style.display = 'block'; // Mostrar la alerta
+						AlertaPendiente.innerHTML = '<i class="bi bi-exclamation-triangle-fill"></i> Ya existe una intervención en curso para este ticket. No puedes iniciar una nueva hasta que la anterior sea finalizada.';
+					}
+					mostrarMensaje('warning', 'Ya existe una intervención en curso para este ticket. No puedes iniciar una nueva hasta que la anterior sea finalizada.');
+				} else {
+					if (permisoEdicion) {
+						permisoEdicion.removeAttribute('disabled'); // HABILITAR el formulario
+					}
+					if (AlertaPendiente) {
+						AlertaPendiente.style.display = 'none'; // Ocultar la alerta si no hay pendiente
+					}
+				}
 			} catch (error) {
 				mostrarMensaje('danger', `Error al cargar la información`);
 				console.error(error);
@@ -182,8 +196,8 @@
 					sessionStorage.setItem('successMessage', 'Control creado exitosamente.');
 
 					setTimeout(() => {
-						window.location.href = `/listado-controles.html?ticketId=${ticketId}`;
-					}, 1500);
+						window.location.href = `/controles/listado-controles.html?ticketId=${ticketId}`;
+					}, 500);
 
 				} catch (error) {
 					console.error('Error al crear control:', error);

@@ -116,34 +116,35 @@
     </style>
 <body>
 <div class="container mt-5">
-    <h2 class="mb-4">Detalle del Ticket #<span th:text="${ticketDetail.idTicket}">ID</span></h2>
+    <h2 class="mb-4">Detalle del Ticket #<span th:text="${ticketDetalle.idTicket}">ID</span></h2>
     <div class="mb-4">
         <h4>Información General</h4>
         <ul class="list-group">
-            <li class="list-group-item"><strong>Título:</strong> <span th:text="${ticketDetail.titulo}"></span></li>
-            <li class="list-group-item"><strong>Descripción:</strong> <span th:text="${ticketDetail.descripcion}"></span></li>
+            <li class="list-group-item"><strong>Título:</strong> <span th:text="${ticketDetalle.titulo}"></span></li>
+            <li class="list-group-item"><strong>Descripción:</strong> <span th:text="${ticketDetalle.descripcion}"></span></li>
 <!--
             <li class="list-group-item"><strong>Creado por:</strong>
                 <span th:text="${ticketDetail.usuarioCreador != null ? (ticketDetail.usuarioCreador.nombre + ' ' + ticketDetail.usuarioCreador.apellido) : 'N/A'}"></span>
             </li>
 -->
-            <li class="list-group-item"><strong>Fecha de Creación:</strong> <span th:text="${#temporals.format(ticketDetail.fechaCreacion, 'dd-MM-yyyy')}"></span></li>
-            <li class="list-group-item"><strong>Fecha de Cierre:</strong>
-                <span th:text="${ticketDetail.fechaCierre != null ? #temporals.format(ticketDetail.fechaCierre, 'dd-MM-yyyy') : 'Pendiente'}"></span>
-            </li>
-            <li class="list-group-item"><strong>Estado:</strong> <span th:text="${ticketDetail.estado}"></span></li>
-            <li class="list-group-item"><strong>Prioridad:</strong> <span th:text="${ticketDetail.prioridad}"></span></li>
+<!--            <li class="list-group-item"><strong>Fecha de Creación:</strong> -->
+<!--				<span th:text="${#temporals.format(ticketDetalle.fechaCreacion, 'dd-MM-yyyy')}"></span></li>-->
+<!--            <li class="list-group-item"><strong>Fecha de Cierre:</strong>-->
+<!--                <span th:text="${ticketDetalle.fechaCierre != null ? #temporals.format(ticketDetalle.fechaCierre, 'dd-MM-yyyy') : 'Pendiente'}"></span>-->
+<!--            </li>-->
+            <li class="list-group-item"><strong>Estado:</strong> <span th:text="${ticketDetalle.estado}"></span></li>
+            <li class="list-group-item"><strong>Prioridad:</strong> <span th:text="${ticketDetalle.prioridad}"></span></li>
             <li class="list-group-item"><strong>Área Asignada:</strong>
-                <span th:text="${ticketDetail.area != null ? ticketDetail.area.nombre : 'Sin Asignar'}"></span>
+                <span th:text="${ticketDetalle.area.tipo.nombre != null ? ticketDetalle.area.tipo.nombre : 'Sin Asignar'}"></span>
             </li>
         </ul>
     </div>
     <div class="mb-4">
         <h4>Historial de Procesos (Controles)</h4>
-        <div th:if="${ticketDetail.procesos.isEmpty()}">
+        <div th:if="${ticketDetalle.procesos.isEmpty()}">
             <div class="alert alert-info">No hay procesos registrados para este ticket aún.</div>
         </div>
-        <div th:if="${!ticketDetail.procesos.isEmpty()}">
+        <div th:if="${!ticketDetalle.procesos.isEmpty()}">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover align-middle">
                     <thead class="table-dark">
@@ -157,10 +158,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="control : ${ticketDetail.procesos}">
+                        <tr th:each="control : ${ticketDetalle.procesos}">
                             <td th:text="${control.idControl}"></td>
                             <td th:text="${#temporals.format(control.fechaEntrada, 'dd-MM-yyyy')}"></td>
-                            <td th:text="${control.fechaSalida != null ? #temporals.format(control.fechaSalida, 'dd-MM-yyyy') : 'N/A'}"></td>
+<!--                            <td th:text="${control.fechaSalida != null ? #temporals.format(control.fechaSalida, 'dd-MM-yyyy') : 'N/A'}"></td>-->
                             <td th:text="${control.accion}"></td>
                             <td th:text="${control.empleado != null ? control.empleado.nombre : 'N/A'}"></td>
                             <td th:text="${control.finalizado ? 'Sí' : 'No'}"></td>

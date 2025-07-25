@@ -34,7 +34,7 @@ public class EmpleadoService {
 	 }
 	 
 	 public Empleado findByEmpleadoNombre(String nombreEmpleado) {
-		 return empleadoRepository.findEmpleadoByNombreUsuario(nombreEmpleado);
+		 return empleadoRepository.findEmpleadoAllByNombreUsuario(nombreEmpleado);
 	 }
 	
 	public Empleado guardarEmpleado(Empleado empleado) {
