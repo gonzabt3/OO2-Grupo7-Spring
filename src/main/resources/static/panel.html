@@ -97,19 +97,22 @@
 			    Ver Todos Los Tickets
 			</a>
 			
-			<!-- Contacto soporte (solo USER) -->
-					<a href="/contacto/formulario-contacto" class="btn btn-outline-dark btn-lg d-none solo-user" id="btn-user-contacto">
-						    Contactar Soporte
-						</a>
+		
 
 			<a href="/manager/listar.html" class="btn btn-warning btn-lg mx-2 my-2 d-none solo-manager" id="btn-manager-usuarios">
 			    Usuarios / Asignar Empleado
+			</a>
+			
+			<a href="/contacto/formulario-contacto" class="btn btn-outline-dark btn-lg mx-2 my-2 d-none solo-user" id="btn-user-contacto">
+			    Contactar Soporte
 			</a>
 
 
             <button id="btnLogout" type="button" class="btn btn-danger btn-lg mx-2 my-2">
                 Cerrar Sesión
             </button>
+			
+
         </div>
 
        
@@ -159,7 +162,7 @@
 		  if (data.rol === 'EMPLEADO') {
 		    document.querySelectorAll('.solo-empleado').forEach(btn => btn.classList.remove('d-none'));
 		  }
-		  if (data.rol === 'USER') {
+		  if (data.rol === 'USUARIO') {
 		    document.querySelectorAll('.solo-user').forEach(btn => btn.classList.remove('d-none'));
 		  }
       })

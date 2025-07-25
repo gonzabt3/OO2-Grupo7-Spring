@@ -78,87 +78,76 @@
 <script>
 
 	document.addEventListener('DOMContentLoaded', function () {
-		
-		const storedMsg = sessionStorage.getItem('successMessage');
-		  if (storedMsg) {
-		    mostrarMensaje('success', storedMsg);
-		    sessionStorage.removeItem('successMessage');
-		  }
-		
-		cargarUsuarios();
-		
+	  cargarUsuarios();
 
-		
+	  const tbody = document.getElementById('usuarios-tbody');
+	  tbody.addEventListener('click', function (e) {
+	    const btn = e.target;
+
+	    if (btn.classList.contains('convertir-btn')) {
+	      const id = btn.getAttribute('data-id');
+	      window.location.href = `formulario_empleado.html?id=${id}`;
+	    }
+
+	    if (btn.classList.contains('sacar-permisos-btn')) {
+	      if (!confirm('¿Estás seguro que querés sacar permisos a este empleado?')) return;
+
+	      const id = btn.getAttribute('data-id');
+
+	      fetch(`/api/manager/sacar-permisos/${id}`, {
+	        method: 'POST',
+	      })
+	        .then(response => {
+	          if (!response.ok) {
+	            return response.text().then(text => { throw new Error(text) });
+	          }
+	          return response.text();
+	        })
+	        .then(msg => {
+	          mostrarMensaje('success', msg);
+	          cargarUsuarios();
+	        })
+	        .catch(error => {
+	          mostrarMensaje('danger', error.message);
+	        });
+	    }
+	  });
 	});
-	
+
 	function cargarUsuarios() {
-			  const tbody = document.getElementById('usuarios-tbody');
-			  fetch('/api/manager/listar')
-			    .then(response => response.json())
-			    .then(usuarios => {
-			      tbody.innerHTML = '';
+	  const tbody = document.getElementById('usuarios-tbody');
+	  fetch('/api/manager/listar')
+	    .then(response => response.json())
+	    .then(usuarios => {
+	      tbody.innerHTML = '';
 
-			      usuarios.forEach(usuario => {
-			        if (usuario.rol.tipo !== 'USER' && usuario.rol.tipo !== 'EMPLEADO') return;
+	      usuarios.forEach(usuario => {
+	        if (usuario.rol.tipo !== 'USER' && usuario.rol.tipo !== 'EMPLEADO') return;
 
-			        const tr = document.createElement('tr');
-			        tr.innerHTML = `
-			          <td>${usuario.nombre}</td>
-			          <td>${usuario.apellido}</td>
-			          <td>${usuario.dni}</td>
-			          <td>${usuario.nombreUsuario}</td>
-			          <td>${usuario.email}</td>
-			          <td>${usuario.rol.tipo}</td>
-			          <td>
-			            ${
-			              usuario.rol.tipo === 'USER'
-			                ? `<button class="btn btn-sm btn-success convertir-btn" data-id="${usuario.id}">Convertir a Empleado</button>`
-			                : `<button class="btn btn-sm btn-danger sacar-permisos-btn" data-id="${usuario.id}">Sacar permisos</button>`
-			            }
-			          </td>
-			        `;
-			        tbody.appendChild(tr);
-			      });
-			    })
-			    .catch(error => {
-			      mostrarMensaje('danger', 'Error al cargar usuarios');
-			      console.error(error);
-			    });
-				
-				tbody.addEventListener('click', function (e) {
-							        const btn = e.target;
-
-							        if (btn.classList.contains('convertir-btn')) {
-							            const id = btn.getAttribute('data-id');
-										
-										window.location.href = `formulario_empleado.html?id=${id}`;
-							            
-							        }
-
-				        if (btn.classList.contains('sacar-permisos-btn')) {
-				            if (!confirm('¿Estás seguro que querés sacar permisos a este empleado?')) return;
-
-							const id = btn.getAttribute('data-id');
-
-							fetch(`/api/manager/sacar-permisos/${id}`, {
-							  method: 'POST',
-							})			  .then(response => {
-						    if (!response.ok) {
-						      return response.text().then(text => { throw new Error(text) });
-						    }
-						    return response.text();
-						  })
-						  .then(msg => {
-						     mostrarMensaje('success', msg);
-							cargarUsuarios();
-						  })
-						  .catch(error => {
-						    mostrarMensaje('danger', error.message);
-						  });
-				        }
-				    });
-			}
-	
+	        const tr = document.createElement('tr');
+	        tr.innerHTML = `
+	          <td>${usuario.nombre}</td>
+	          <td>${usuario.apellido}</td>
+	          <td>${usuario.dni}</td>
+	          <td>${usuario.nombreUsuario}</td>
+	          <td>${usuario.email}</td>
+	          <td>${usuario.rol.tipo}</td>
+	          <td>
+	            ${
+	              usuario.rol.tipo === 'USER'
+	                ? `<button class="btn btn-sm btn-success convertir-btn" data-id="${usuario.id}">Convertir a Empleado</button>`
+	                : `<button class="btn btn-sm btn-danger sacar-permisos-btn" data-id="${usuario.id}">Sacar permisos</button>`
+	            }
+	          </td>
+	        `;
+	        tbody.appendChild(tr);
+	      });
+	    })
+	    .catch(error => {
+	      mostrarMensaje('danger', 'Error al cargar usuarios');
+	      console.error(error);
+	    });
+	}
 
 	
 	

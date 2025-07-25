@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -50,6 +51,10 @@ public interface IEmpleadoRepository extends JpaRepository<Empleado, Integer> {
     // Verificar si existe un manager con cierto nombre de usuario
     @Query("SELECT COUNT(u) > 0 FROM Empleado u WHERE u.rol.tipo = com.grupo7.oo2spring.enums.TipoRol.MANAGER AND u.nombreUsuario = :nombreUsuario")
     boolean existsManagerByUsuarioBase_nombreUsuario(@Param("nombreUsuario") String nombreUsuario);
+    
+    @Modifying
+    @Query("DELETE FROM Empleado e WHERE e.id = :id")
+    void borrarSubclaseEmpleado(@Param("id") int id);
 
 	
 

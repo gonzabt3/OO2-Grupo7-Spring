@@ -57,5 +57,15 @@ public class UsuarioService {
         List<Usuario> usuariosConRolEmpleado = usuarioRepository.findByRol(TipoRol.EMPLEADO);
         usuarioRepository.deleteAll(usuariosConRolEmpleado);
     }
+
+    @Transactional
+	public void deleteUsuario(int id) {
+		usuarioRepository.deleteById(id);
+		
+	}
+
+    public Usuario saveOrUpdate(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
    
 }
