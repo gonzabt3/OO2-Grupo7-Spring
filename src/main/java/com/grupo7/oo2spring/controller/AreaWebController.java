@@ -1,6 +1,5 @@
 package com.grupo7.oo2spring.controller;
 
-
 import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.services.AreaService;
 import lombok.RequiredArgsConstructor;
@@ -27,28 +26,16 @@ public class AreaWebController {
         return "areas/form"; // nombre del template para crear/editar
     }
 
-    @PostMapping
-    public String guardarArea(@ModelAttribute Area area) {
-        areaService.crearAreaSiNoExiste(area.getNombre());
-        return "redirect:/areas";
-    }
-
     @GetMapping("/editar/{id}")
-    public String mostrarFormularioEditarArea(@PathVariable Long id, Model model) {
+    public String mostrarFormularioEditarArea(@PathVariable int id, Model model) {
         Area area = areaService.buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Área no encontrada: " + id));
         model.addAttribute("area", area);
         return "areas/form";
     }
 
-    @PostMapping("/actualizar/{id}")
-    public String actualizarArea(@PathVariable Long id, @ModelAttribute Area area) {
-        areaService.actualizarArea(id, area);
-        return "redirect:/areas";
-    }
-
     @GetMapping("/eliminar/{id}")
-    public String eliminarArea(@PathVariable Long id) {
+    public String eliminarArea(@PathVariable int id) {
         areaService.eliminarArea(id);
         return "redirect:/areas";
     }
