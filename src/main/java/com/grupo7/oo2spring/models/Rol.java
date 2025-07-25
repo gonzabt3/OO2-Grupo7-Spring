@@ -24,4 +24,7 @@ public class Rol {
     public Rol(@NotNull TipoRol tipo) {
         this.tipo = tipo;
     }
+    
+    
 
+}

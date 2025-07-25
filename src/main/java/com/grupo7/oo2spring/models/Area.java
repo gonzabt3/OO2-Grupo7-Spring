@@ -30,4 +30,6 @@ public class Area {
     public Area(TipoArea tipo) {
         this.tipo = tipo;
     }
+   
+
 }
