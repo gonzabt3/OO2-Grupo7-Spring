@@ -207,9 +207,9 @@
         <h1>Tickets sin Área Asignada</h1>
         <nav>
             <ul>
-                <li><a th:href="@{/panel}">Panel de Control</a></li>
+                <li><a href="/panel.html">Panel de Control</a></li>
                 <li><a th:href="@{/ticket/lista}">Todos los Tickets</a></li>
-                <li><a th:href="@{/logout}">Cerrar Sesión</a></li>
+                <li><a href="/logout">Cerrar Sesión</a></li>
             </ul>
         </nav>
     </header>
@@ -269,10 +269,11 @@
         </div>
         
         <div>
-        <a href="/panel" class="btn btn-outline-primary mb-4">
+        <a href="/panel.html" class="btn btn-outline-primary mb-4">
                <i class="bi bi-arrow-left"></i> Volver al Panel
            </a>
            </div>
     </main>
+<script src="/js/utils.js"></script>
 </body>
 </html>

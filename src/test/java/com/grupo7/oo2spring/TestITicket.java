@@ -12,8 +12,10 @@ import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.models.Ticket;
 import com.grupo7.oo2spring.enums.TipoArea;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.repositories.IAreaRepository;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
+import com.grupo7.oo2spring.repositories.IUsuarioBaseRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 
 @SpringBootTest
@@ -28,11 +30,16 @@ public class TestITicket {
 	    @Autowired
 	    private IAreaRepository areaRepository;
 	    
+	    @Autowired
+	    private IUsuarioBaseRepository usuarioBaseRepository;
+	    
 
 	    
 	    @Test
 	    public void testCrearTicketsParaUsuarioExistente() {
-		    Usuario roberto = usuarioRepository.findByNombreUsuario("rober");
+	    	ticketRepository.deleteAll();
+		    Optional<UsuarioBase> usuarioOpt = usuarioBaseRepository.findByNombreUsuario("rober");
+		    UsuarioBase roberto = usuarioOpt.get();
 
 	    for (TipoArea area : TipoArea.values()) {
             if (area == TipoArea.SIN_ASIGNAR) continue;

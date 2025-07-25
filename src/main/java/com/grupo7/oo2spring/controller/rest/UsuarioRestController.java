@@ -15,8 +15,10 @@ import com.grupo7.oo2spring.dto.RolDTO;
 import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.repositories.IRolRepository;
+import com.grupo7.oo2spring.security.UsuarioDetails;
 import com.grupo7.oo2spring.services.UsuarioService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -38,5 +40,26 @@ public class UsuarioRestController {
 	            return ResponseEntity.notFound().build();
 	        }
 	    }
+	    
+	    @GetMapping("/getUsuario")
+	    public ResponseEntity<Map<String, String>> getUsuario() {
+	    	System.out.println("hello");
+	        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        Object principal = auth.getPrincipal();
+
+	        System.out.println("auth: " + principal);
+
+	        if (principal instanceof UsuarioDetails detalles) {
+	            UsuarioBase usuario = detalles.getUsuario();
+	            String nombreUsuario = usuario.getNombreUsuario();
+
+	            return ResponseEntity.ok(Map.of("nombreUsuario", nombreUsuario));
+	        }
+
+	        // Si no está autenticado o no es UsuarioDetails
+	        return ResponseEntity.status(401).build();
+	    }
+
+
 
 	}

@@ -47,10 +47,20 @@
             text-align: center;
             margin-top: 10px;
         }
+		#mensaje-expirado .alert {
+		  max-width: 100%;
+		  white-space: normal; /* permite saltos de línea */
+		  word-break: break-word; /* corta palabras largas si es necesario */
+		  margin-bottom: 20px;
+		  text-align: center;
+		}
+
     </style>
 </head>
 <body>
+	
     <div class="login-container">
+		<div id="mensaje-expirado"></div>
         <h2>Iniciar Sesión</h2>
        <form id="login-form">
 
@@ -70,9 +80,18 @@
 			  <span th:text="${param.error}"></span>
 			</div>
         </form>
-    </div>
+	<div>
     <script src="/js/bootstrap.bundle.min.js"></script>
     <script>
+		
+		const params = new URLSearchParams(window.location.search);
+		  if (params.get("expired") === "true") {
+		    const divMensaje = document.createElement("div");
+		    divMensaje.className = "alert alert-warning";
+		    divMensaje.textContent = "Sesión expirada. Por favor, vuelve a iniciar sesión.";
+		    document.getElementById("mensaje-expirado").appendChild(divMensaje);
+		  }
+			
         togglePassword.addEventListener('click', () => {
             const isPassword = passwordInput.type === 'password';
 
@@ -86,6 +105,7 @@
 		        togglePassword.classList.add('bi-eye');        
 		    }
 		});
+	
 		
 		document.getElementById("login-form").addEventListener("submit", async function (e) {
 		        e.preventDefault();

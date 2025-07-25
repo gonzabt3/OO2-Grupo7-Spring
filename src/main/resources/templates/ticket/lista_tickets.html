@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<head>
-	<meta charset="UTF-8">
-	<title>Lista de Tickets</title>
-	<link rel="stylesheet" href="/css/style.css">
-</head>
+<header>
+        <h1>Lista de Tickets</h1>
+        <nav>
+            <ul>
+                <li><a href="/panel.html">Panel de Control</a></li>
+                <li><a th:href="@{/ticket/listaArea}">Volver a la lista de tickets</a></li>
+                <li><a href="/logout">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+    </header>
 <style>
 	/* Estilos generales para el cuerpo */
 	body {
@@ -17,44 +22,49 @@
 		padding: 0;
 	}
 
-	/* Estilos del encabezado */
-	header {
-		background-color: #2c3e50;
-		color: #ffffff;
-		padding: 15px 30px;
-		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
+	/* Header Styles */
+	        header {
+	            background-color: #2c3e50; /* Dark blue-gray */
+	            color: #ffffff;
+	            padding: 15px 30px;
+	            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	            display: flex;
+	            justify-content: space-between;
+	            align-items: center;
+	        }
 
-	header h1 {
-		margin: 0;
-		font-size: 1.8em;
-	}
+	        header h1 {
+	            margin: 0;
+	            font-size: 1.8em;
+	        }
 
-	header nav ul {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: flex;
-	}
+	        header h1 span {
+	            color: #3498db; /* Highlight ticket ID */
+	        }
 
-	header nav ul li {
-		margin-left: 25px;
-	}
+	        header nav ul {
+	            list-style: none;
+	            margin: 0;
+	            padding: 0;
+	            display: flex;
+	        }
 
-	header nav ul li a {
-		color: #ffffff;
-		text-decoration: none;
-		font-weight: bold;
-		padding: 5px 0;
-		transition: color 0.3s ease;
-	}
+	        header nav ul li {
+	            margin-left: 25px;
+	        }
 
-	header nav ul li a:hover {
-		color: #3498db;
-	}
+	        header nav ul li a {
+	            color: #ffffff;
+	            text-decoration: none;
+	            font-weight: bold;
+	            padding: 5px 0;
+	            transition: color 0.3s ease;
+	        }
+
+	        header nav ul li a:hover {
+	            color: #3498db; /* Blue accent on hover */
+	        }
+
 
 	/* Estilos del contenido principal */
 	main {
@@ -227,11 +237,10 @@
 
 <body>
 	<div class="container mt-5">
-		<h2 class="mb-4">Lista de Tickets</h2>
 
 		<!-- Botón de volver al panel -->
 		<div class="mb-3">
-			<a href="/panel" class="btn btn-outline-primary">
+			<a href="/panel.html" class="btn btn-outline-primary">
 				<i class="bi bi-arrow-left"></i> Volver al Panel
 			</a>
 		</div>
@@ -301,7 +310,7 @@
 				</tbody>
 			</table>
 			<div class="mt-4 text-center">
-				<a href="/panel" class="btn btn-primary"><i class="fas fa-home"></i> Volver</a>
+				<a href="/panel.html" class="btn btn-primary"><i class="fas fa-home"></i> Volver</a>
 			</div>
 		</div>
 		<div class="modal fade" id="changeModal" tabindex="-1" aria-labelledby="changeModalLabel" aria-hidden="true">

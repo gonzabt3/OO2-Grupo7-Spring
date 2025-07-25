@@ -122,11 +122,6 @@
         <ul class="list-group">
             <li class="list-group-item"><strong>Título:</strong> <span th:text="${ticketDetail.titulo}"></span></li>
             <li class="list-group-item"><strong>Descripción:</strong> <span th:text="${ticketDetail.descripcion}"></span></li>
-<!--
-            <li class="list-group-item"><strong>Creado por:</strong>
-                <span th:text="${ticketDetail.usuarioCreador != null ? (ticketDetail.usuarioCreador.nombre + ' ' + ticketDetail.usuarioCreador.apellido) : 'N/A'}"></span>
-            </li>
--->
             <li class="list-group-item"><strong>Fecha de Creación:</strong> <span th:text="${#temporals.format(ticketDetail.fechaCreacion, 'dd-MM-yyyy')}"></span></li>
             <li class="list-group-item"><strong>Fecha de Cierre:</strong>
                 <span th:text="${ticketDetail.fechaCierre != null ? #temporals.format(ticketDetail.fechaCierre, 'dd-MM-yyyy') : 'Pendiente'}"></span>
@@ -177,7 +172,7 @@
         </a>
     </div>
 </div>
-
+<script src="/js/utils.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

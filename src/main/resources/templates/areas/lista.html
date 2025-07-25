@@ -30,7 +30,7 @@
             </thead>
             <tbody>
                 <tr th:each="area : ${areas}">
-                    <td th:text="${area.nombre}">Nombre</td>
+                    <td th:text="${area.tipo.nombre}">Nombre</td>
                     <td>
                         <a th:href="@{/areas/editar/{id}(id=${area.id})}" class="btn btn-sm btn-warning me-1">
                             <i class="bi bi-pencil"></i> Editar
@@ -46,7 +46,7 @@
         </table>
     </div>
     <div class="btn-back">
-        <a href="/panel" class="btn btn-outline-primary">
+        <a href="/panel.html" class="btn btn-outline-primary">
             <i class="bi bi-arrow-left"></i> Volver al Panel
         </a>
     </div>

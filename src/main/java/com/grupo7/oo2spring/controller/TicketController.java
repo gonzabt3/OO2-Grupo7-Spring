@@ -80,7 +80,7 @@ public class TicketController {
         if (usuariolog == null) {
             System.out.println("CONTROLADOR: Usuario no autenticado");
             redirectAttributes.addFlashAttribute("mensaje", "Error con el Usuario");
-            return "redirect:/panel";
+            return "redirect:/panel.html";
         }
 
         String nombreDelUsuarioEnSesion = usuariolog.getUsername();
@@ -157,21 +157,21 @@ public class TicketController {
             
 
             
+            
             Ticket ticket = ticketService.buscarTicketPorId(idTicket);
 		    UsuarioBase usuarioDueño = ticket.getUsuarioCreador(); // asumimos que Ticket tiene un Usuario asociado
 		    
-            System.out.println(usuarioDueño.getEmail());
+            System.out.println(usuarioDueño);
 
 		    // ✅ Armar variables para el template
 		    Map<String, Object> variables = new HashMap<>();
 		    variables.put("nombreUsuario", usuarioDueño.getNombre());
-		    variables.put("email",usuarioDueño.getEmail());
+		    variables.put("email", usuarioDueño.getEmail());
 		    variables.put("tituloTicket", ticket.getTitulo());
 		    variables.put("descripcionControl", ticket.getDescripcion());
 		    variables.put("ticketId", ticket.getIdTicket());
 		    variables.put("accionControl", control.getAccion());
 		    variables.put("fechaControl", LocalDate.now().toString());
-		    //variables.put("urlDetalle", "http://localhost:8080/ticket/tickets");
 
 		    System.out.println("📌 emailService es: " + emailService);
 		    
@@ -190,7 +190,7 @@ public class TicketController {
             // Si hay un error, redirie al formulario de toma con el ticket para que pueda intentar de nuevo
             return "redirect:/ticket/" + idTicket + "/tomarTicket";
         }
-        return "redirect:/ticket/lista"; // Redirige al dashboard o a la vista de detalle del ticket recién tomado
+        return "redirect:/ticket/listaArea"; // Redirige al dashboard o a la vista de detalle del ticket recién tomado
     }
 	
 	@GetMapping("/{idTicket}/detail")
@@ -261,7 +261,7 @@ public class TicketController {
         else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_EMPLEADO"))) {
             return "redirect:/ticket/listaArea";
         }
-		return "redirect:/panel";
+		return "redirect:/panel.html";
 	}
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@PostMapping("/{idTicket}/cambiarEstado")
@@ -274,7 +274,7 @@ public class TicketController {
         else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_EMPLEADO"))) {
             return "redirect:/ticket/listaArea";
         }
-		return "redirect:/panel";
+		return "redirect:/panel.html";
 	}
 	
 	//Para testear la excepcion

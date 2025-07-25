@@ -49,7 +49,7 @@ public class Ticket {
         }
     }
     	public Ticket(String titulo, String descripcion,
-    			Usuario usuarioCreador) {
+    			UsuarioBase usuarioCreador) {
     		this.titulo = titulo;
     		this.descripcion = descripcion;
     		this.fechaCreacion = LocalDate.now();
@@ -108,7 +108,7 @@ public class Ticket {
 		return usuarioCreador;
 	}
 
-	public void setUsuarioCreador(Usuario usuarioCreador) {
+	public void setUsuarioCreador(UsuarioBase usuarioCreador) {
 		this.usuarioCreador = usuarioCreador;
 	}
 
@@ -143,5 +143,14 @@ public class Ticket {
 	public void setArea(Area area) {
 		this.area = area;
 	}
+	@Override
+	public String toString() {
+		return "Ticket [idTicket=" + idTicket + ", titulo=" + titulo + ", descripcion=" + descripcion
+				+ ", fechaCreacion=" + fechaCreacion + ", fechaCierre=" + fechaCierre + ", usuarioCreador="
+				+ usuarioCreador + ", estado=" + estado + ", prioridad=" + prioridad + ", area=" + area + ", procesos="
+				+ procesos + "]";
+	}
+	
+	
 
 }

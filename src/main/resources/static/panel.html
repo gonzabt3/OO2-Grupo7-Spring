@@ -65,7 +65,7 @@
 </head>
 <body>
 
-<div th:replace="fragments/navbar :: navbar"></div>
+<div id="navbar-container"></div>
 
 <div class="container mt-5">
     <div class="panel-container mx-auto" style="max-width: 800px;">
@@ -96,26 +96,23 @@
 			<a href="/ticket/lista" class="btn btn-info btn-lg mx-2 my-2 d-none solo-manager" id="btn-manager-tickets">
 			    Ver Todos Los Tickets
 			</a>
+			
+			<!-- Contacto soporte (solo USER) -->
+					<a href="/contacto/formulario-contacto" class="btn btn-outline-dark btn-lg d-none solo-user" id="btn-user-contacto">
+						    Contactar Soporte
+						</a>
 
 			<a href="/manager/listar.html" class="btn btn-warning btn-lg mx-2 my-2 d-none solo-manager" id="btn-manager-usuarios">
 			    Usuarios / Asignar Empleado
 			</a>
 
-			<a href="/contacto/formulario-contacto" class="btn btn-outline-dark btn-lg d-none solo-user" id="btn-user-contacto">
-			    Contactar Soporte
-			</a>
 
             <button id="btnLogout" type="button" class="btn btn-danger btn-lg mx-2 my-2">
                 Cerrar Sesión
             </button>
         </div>
 
-        <!-- Contacto soporte (solo USER) -->
-        <div class="text-center mt-5">
-            <a href="/contacto/formulario-contacto" class="btn btn-outline-dark btn-lg d-none" id="btn-user-contacto">
-                Contactar Soporte
-            </a>
-        </div>
+       
     </div>
 </div>
 
@@ -125,6 +122,28 @@
 <script>
   // Obtener y mostrar el rol actual
   window.addEventListener('DOMContentLoaded', () => {
+	
+	fetch('/fragments/navbar.html')
+	  .then(res => res.text())
+	  .then(html => {
+	    document.getElementById('navbar-container').innerHTML = html;
+
+	    return fetch('/api/usuario/getUsuario', { credentials: 'include' });
+	  })
+	  .then(res => res.ok ? res.json() : Promise.reject("Error al obtener usuario"))
+	  .then(data => {
+	    const el = document.getElementById('navbar-nombreUsuario');
+	    if (el) {
+	      el.textContent = data.nombreUsuario;
+	    }
+	  })
+	  .catch(err => {
+	    const el = document.getElementById('navbar-nombreUsuario');
+	    if (el) el.textContent = '(error)';
+	    console.error(err);
+	  });
+
+			   
     fetch('/api/rol', { credentials: 'include' })
       .then(response => {
         if (!response.ok) throw new Error('Error al obtener rol');
@@ -151,23 +170,10 @@
   });
 
   // Cerrar sesión
-  document.getElementById("btnLogout").addEventListener("click", async () => {
-    try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" }
-      });
-      if (response.ok) {
-        window.location.href = "/usuario/login";
-      } else {
-        alert("Error al cerrar sesión");
-      }
-    } catch (error) {
-      alert("Error de red: " + error.message);
-    }
+  document.getElementById("btnLogout").addEventListener("click", () => {
+    logout();
   });
 </script>
-
+<script src="/js/utils.js"></script>
 </body>
 </html>
