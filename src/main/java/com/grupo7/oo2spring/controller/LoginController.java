@@ -21,4 +21,12 @@ public class LoginController {
         
     }
     
+    @GetMapping("/error_login")
+    public String mostrarErrorLogin(HttpServletRequest request, Model model) {
+        String errorMessage = (String) request.getAttribute("error_message");
+        model.addAttribute("errorMessage", errorMessage);
+        return "usuario/login"; // La vista login donde mostrarás el error
+    }
+
+    
 }

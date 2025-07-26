@@ -13,30 +13,38 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @Component
-public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class RestAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
-	@Override
+    @Override
     public void onAuthenticationFailure(HttpServletRequest request,
                                         HttpServletResponse response,
                                         AuthenticationException exception)
                                         throws IOException, ServletException {
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json;charset=UTF-8");
+
         String mensajeError = "Error desconocido";
 
         if (exception instanceof BadCredentialsException) {
-        	mensajeError = "Usuario o contraseña incorrectos";
+            mensajeError = "Usuario o contraseña incorrectos";
         } else if (exception instanceof UsernameNotFoundException) {
-        	mensajeError = "Usuario no encontrado";
+            mensajeError = "Usuario no encontrado";
         } else if (exception instanceof LockedException) {
-        	mensajeError = "La cuenta está bloqueada";
+            mensajeError = "La cuenta está bloqueada";
         } else if (exception instanceof DisabledException) {
-        	mensajeError = "La cuenta está deshabilitada";
+            mensajeError = exception.getMessage();
         } else {
-            mensajeError = "Error de autenticación desconocido: " + exception.getMessage();
+            mensajeError = "Error de autenticación: " + exception.getMessage();
         }
 
-        request.setAttribute("error_message", mensajeError);
-        request.getRequestDispatcher("/usuario/error_login").forward(request, response);
+        String json = "{\"error\": \"" + mensajeError + "\"}";
+
+        response.getWriter().write(json);
     }
 }
+

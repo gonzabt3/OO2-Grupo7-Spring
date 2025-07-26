@@ -1,3 +1,4 @@
+
 package com.grupo7.oo2spring.controller.rest;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import com.grupo7.oo2spring.models.Usuario;
 import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.repositories.IAreaRepository;
 import com.grupo7.oo2spring.repositories.IEmpleadoRepository;
+import com.grupo7.oo2spring.repositories.IUsuarioBaseRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 import com.grupo7.oo2spring.services.EmpleadoService;
 import com.grupo7.oo2spring.services.ManagerService;
@@ -41,6 +43,7 @@ public class ManagerRestController {
     private final ManagerService managerService;
     private final IAreaRepository areaRepository;
     private final EmpleadoService empleadoService;
+    private final IUsuarioBaseRepository usuarioBaseRepository;
     
     @GetMapping("/listar")
     public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
@@ -60,13 +63,13 @@ public class ManagerRestController {
     @Operation(summary = "Convierte un usuario en empleado")
     @PostMapping("/convertir/{id}")
     public ResponseEntity<String> convertirAEmpleado(@PathVariable int id, @RequestBody EmpleadoDTO dto) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+        Optional<UsuarioBase> usuarioOpt = usuarioBaseRepository.findById(id);
 
         if (usuarioOpt.isEmpty()) {
             return ResponseEntity.badRequest().body("Usuario no encontrado");
         }
         
-        Usuario usuario = usuarioOpt.get();
+        UsuarioBase usuario = usuarioOpt.get();
 
         Area area = areaRepository.findById(dto.idArea())
             .orElseThrow(() -> new RuntimeException("Área no encontrada"));

@@ -3,6 +3,7 @@ package com.grupo7.oo2spring.controller;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.grupo7.oo2spring.models.MensajeContacto;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.repositories.IMensajeRepository;
+import com.grupo7.oo2spring.repositories.IUsuarioBaseRepository;
 import com.grupo7.oo2spring.security.UsuarioDetails;
 import com.grupo7.oo2spring.services.EmailService;
 import com.grupo7.oo2spring.services.UsuarioService;
@@ -32,6 +35,7 @@ public class EmailController {
 	  private final EmailService emailService;
 	  private final UsuarioService usuarioService;
 	  private final IMensajeRepository mensajeRepository;
+	  private final IUsuarioBaseRepository usuarioBaseRepository;
 	  
 	// Dirección de remitente que usarás, EMAIL_USERNAME de Gmail
 	    @Value("${EMAIL_TEST}") 
@@ -70,8 +74,10 @@ public class EmailController {
     @PostMapping("/enviar")
     public String enviarContacto(@RequestParam("mensaje") String mensaje, Principal principal) {
     	System.out.println("👤 principal.getName(): " + principal.getName());
-        Usuario usuario = usuarioService.getUsuarioByNombreUsuario(principal.getName());
+        Optional<UsuarioBase> usuarioOpt = usuarioBaseRepository.findByNombreUsuario(principal.getName());
+        UsuarioBase usuario = usuarioOpt.get();
 
+        System.out.println(usuario);
         // 1. Guardar en la BD
         MensajeContacto nuevo = new MensajeContacto();
         nuevo.setMensaje(mensaje);

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -45,14 +46,19 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-    	System.out.println("ES ACA LOADBYUSERNAME");
         Usuario usuario = usuarioRepository.findByNombreUsuario(username);
         
         if (usuario != null) {
             System.out.println("Cargando usuario: " + usuario.getNombreUsuario() + " rol: " + usuario.getRol().getTipo());
+            
+            if (!usuario.isUsuarioActivo()) {
+                throw new DisabledException("Usuario no activo, confirmá tu cuenta primero.");
+            }
        
             return new UsuarioDetails(usuario);
         }
+        
+       
 
         Empleado empleado = empleadoRepository.findEmpleadoAllByNombreUsuario(username);
         if (empleado != null) {

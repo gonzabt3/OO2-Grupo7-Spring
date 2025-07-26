@@ -12,9 +12,11 @@ import com.grupo7.oo2spring.models.Area;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Rol;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.repositories.IEmpleadoRepository;
 import com.grupo7.oo2spring.repositories.IRolRepository;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
+import com.grupo7.oo2spring.repositories.IUsuarioBaseRepository;
 import com.grupo7.oo2spring.repositories.IUsuarioRepository;
 
 import jakarta.persistence.EntityManager;
@@ -32,6 +34,7 @@ public class ManagerService {
 	private final UsuarioService usuarioService;
 	private final EmpleadoService empleadoService;
 	private final ITicketRepository ticketRepository;
+	private final IUsuarioBaseRepository usuarioBaseRepository;
 	
 	 public Empleado crearManager(String nombre, String apellido, String dni, String email, String nombreUsuario, String contraseña, Area area, boolean disponibilidad) throws Exception {
 	        Empleado u = new Empleado(nombre, apellido, dni, email, nombreUsuario, contraseña, area, disponibilidad);
@@ -63,67 +66,48 @@ public class ManagerService {
 	
 	@Transactional
 	public Empleado convertirUsuarioAEmpleado(int idUsuario, Empleado datosEmpleado) throws Exception {
-	    Usuario usuario = usuarioRepository.findById(idUsuario)
+	    UsuarioBase usuarioBase = usuarioBaseRepository.findById(idUsuario)
 	        .orElseThrow(() -> new Exception("Usuario no encontrado"));
 
+	    Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
 
-	    // Eliminar la fila de la tabla usuario (subclase)
-	    ticketRepository.deleteByUsuarioCreador(usuario);
-	    entityManager.remove(usuario);
-	    entityManager.flush();
+	    // Paso A: Eliminar fila de la tabla 'usuario' si existe
+	    usuarioOpt.ifPresent(usuarioRepository::delete);
 
-	    // Crear un nuevo empleado con el mismo ID (en tabla empleado)
+	    // Paso B: Crear nuevo empleado con mismo ID
 	    Empleado empleado = new Empleado();
-	    empleado.setNombre(usuario.getNombre());
-	    empleado.setApellido(usuario.getApellido());
-	    empleado.setDni(usuario.getDni());
-	    empleado.setEmail(usuario.getEmail());
-	    empleado.setNombreUsuario(usuario.getNombreUsuario());
-	    empleado.setContraseña(usuario.getContraseña());
+	    empleado.setId(usuarioBase.getId()); // conservar ID para no afectar FK
+	    empleado.setNombre(usuarioBase.getNombre());
+	    empleado.setApellido(usuarioBase.getApellido());
+	    empleado.setDni(usuarioBase.getDni());
+	    empleado.setEmail(usuarioBase.getEmail());
+	    empleado.setNombreUsuario(usuarioBase.getNombreUsuario());
+	    empleado.setContraseña(usuarioBase.getContraseña());
 	    empleado.setArea(datosEmpleado.getArea());
 	    empleado.setDisponibilidad(datosEmpleado.isDisponibilidad());
-
-	    // Asignar el rol EMPLEADO
 	    empleado.setRol(rolRepository.findByTipo(TipoRol.EMPLEADO));
 
-	    // Guardar empleado en tabla empleado
-	    empleado = entityManager.merge(empleado);
+	    // Guardar empleado
+	    empleado = empleadoRepository.save(empleado);
 
 	    return empleado;
 	}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	@Transactional
 	public void sacarPermisosEmpleado(int idEmpleado) throws Exception {
 	    Empleado empleado = empleadoRepository.findById(idEmpleado)
 	        .orElseThrow(() -> new Exception("Empleado no encontrado"));
 
-	    // Crear usuario nuevo con datos del empleado
-	    Usuario nuevoUsuario = usuarioService.crearUsuario(empleado.getNombre(), empleado.getApellido(), empleado.getDni(), empleado.getEmail(), empleado.getNombreUsuario(), empleado.getContraseña());
-	    nuevoUsuario.setUsuarioActivo(true);
+	    // Actualizar rol a USUARIO sin borrar filas
+	    empleado.setRol(rolRepository.findByTipo(TipoRol.USER));
 	    
-	    // Eliminar empleado
-	    empleadoRepository.delete(empleado);
-	    empleadoRepository.flush();
-
-	    usuarioRepository.save(nuevoUsuario);
-
-
+	    // Guardar cambios sin borrar nada
+	    empleadoRepository.save(empleado);
 	}
+
+
 
 
 	}
