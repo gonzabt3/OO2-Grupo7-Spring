@@ -127,27 +127,12 @@
 		<div class="mb-4">
 			<h4>Información General</h4>
 			<ul class="list-group">
-				<li class="list-group-item"><strong>Título:</strong> <span th:text="${ticketDetalle.titulo}"></span>
-				</li>
-				<li class="list-group-item"><strong>Descripción:</strong> <span
-						th:text="${ticketDetalle.descripcion}"></span></li>
-				<!--
-            <li class="list-group-item"><strong>Creado por:</strong>
-                <span th:text="${ticketDetail.usuarioCreador != null ? (ticketDetail.usuarioCreador.nombre + ' ' + ticketDetail.usuarioCreador.apellido) : 'N/A'}"></span>
-            </li>
--->
-				<!--            <li class="list-group-item"><strong>Fecha de Creación:</strong> -->
-				<!--				<span th:text="${#temporals.format(ticketDetalle.fechaCreacion, 'dd-MM-yyyy')}"></span></li>-->
-				<!--            <li class="list-group-item"><strong>Fecha de Cierre:</strong>-->
-				<!--                <span th:text="${ticketDetalle.fechaCierre != null ? #temporals.format(ticketDetalle.fechaCierre, 'dd-MM-yyyy') : 'Pendiente'}"></span>-->
-				<!--            </li>-->
-				<li class="list-group-item"><strong>Estado:</strong> <span th:text="${ticketDetalle.estado}"></span>
-				</li>
-				<li class="list-group-item"><strong>Prioridad:</strong> <span
-						th:text="${ticketDetalle.prioridad}"></span></li>
+				<li class="list-group-item"><strong>Título:</strong> <span th:text="${ticketDetalle.titulo}"></span></li>
+				<li class="list-group-item"><strong>Descripción:</strong> <span th:text="${ticketDetalle.descripcion}"></span></li>
+				<li class="list-group-item"><strong>Estado:</strong> <span th:text="${ticketDetalle.estado}"></span></li>
+				<li class="list-group-item"><strong>Prioridad:</strong> <span th:text="${ticketDetalle.prioridad}"></span></li>
 				<li class="list-group-item"><strong>Área Asignada:</strong>
-					<span
-						th:text="${ticketDetalle.area.tipo.nombre != null ? ticketDetalle.area.tipo.nombre : 'Sin Asignar'}"></span>
+					<span th:text="${ticketDetalle.area.tipo.nombre != null ? ticketDetalle.area.tipo.nombre : 'Sin Asignar'}"></span>
 				</li>
 			</ul>
 		</div>
