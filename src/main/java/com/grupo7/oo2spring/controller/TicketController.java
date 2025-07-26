@@ -113,7 +113,7 @@ public class TicketController {
 	public String listarticketsPorArea(Model model, @AuthenticationPrincipal UserDetails usuariolog){
 		model.addAttribute("usuarioLogueado", usuariolog);
 		List<Ticket> tickets = null;
-		Empleado empleadoOpt = empleadoService.findByEmpleadoNombre(usuariolog.getUsername());
+		Empleado empleadoOpt = empleadoService.findByNombreUsuario(usuariolog.getUsername());
 		System.out.println("el area es" + empleadoOpt.getArea().getTipo().getNombre());
 		if(empleadoOpt.getArea().getTipo() != null) {
 			tickets = ticketService.findByArea_Tipo(empleadoOpt.getArea().getTipo());

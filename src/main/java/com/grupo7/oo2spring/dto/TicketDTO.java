@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TicketDTO {
 
-    private int idTicket;
+	private int idTicket;
 
     private String titulo;
 
@@ -35,8 +35,8 @@ public class TicketDTO {
     private List<ControlDTO> procesos = new ArrayList<>();
     
    
-    public TicketDTO(String titulo, String descripcion,
-			Usuario usuarioCreador,Area area ) {
+    public TicketDTO(String titulo, String descripcion, Area area,
+			Usuario usuarioCreador) {
 		this.titulo = titulo;
 		this.descripcion = descripcion;
 		this.fechaCreacion = LocalDate.now();

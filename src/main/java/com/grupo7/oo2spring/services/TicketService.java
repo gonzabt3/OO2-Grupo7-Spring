@@ -20,6 +20,7 @@ import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Estado;
 import com.grupo7.oo2spring.models.Funcion;
 import com.grupo7.oo2spring.models.Prioridad;
+import com.grupo7.oo2spring.repositories.IAreaRepository;
 import com.grupo7.oo2spring.repositories.IControlRepository;
 import com.grupo7.oo2spring.repositories.ITicketRepository;
 
@@ -43,6 +44,8 @@ public class TicketService {
 	private final IControlRepository controlRepository;
 
 	private final AreaService areaService;
+	private final IAreaRepository areaRepository;
+
 
 	public Ticket getByIdTicket(int idTicket) {
 		return ticketRepository.getByIdTicket(idTicket);
@@ -69,6 +72,9 @@ public class TicketService {
 		
 		try {
 			Ticket nuevoTicket = new Ticket(ticket.getTitulo(), ticket.getDescripcion(), usuarioCreador);
+			Optional<Area> areaOpt = areaRepository.findByTipo(TipoArea.SIN_ASIGNAR);
+			Area areaSinAisgnar = areaOpt.get();
+			nuevoTicket.setArea(areaSinAisgnar);
 			Ticket guardado = ticketRepository.save(nuevoTicket);
 			System.out.println("SERVICIO: Ticket guardado con ID: " + guardado.getIdTicket());
 			return guardado;
@@ -135,10 +141,33 @@ public class TicketService {
 	        ticket.setEstado(nuevoEstado);
 	        return ticketRepository.save(ticket);
 	 }
+	 @Transactional
+	    public void delete(int id) throws TicketNoEncontradoException {
+	        if (!ticketRepository.existsById(id)) {
+	            throw new TicketNoEncontradoException("Ticket con ID " + id + " no encontrado");
+	        }
+	        ticketRepository.deleteById(id);
+	    }
 
 	public List<Ticket> getTicketsByUsuario(int usuarioIdCreador) {
 		return ticketRepository.findByUsuarioCreador_Id(usuarioIdCreador);
 	}
+	
+	 @Transactional
+	    public Ticket update(int id, Ticket ticketActualizado) throws TicketNoEncontradoException {
+	        Ticket ticketExistente = ticketRepository.findById(id)
+	            .orElseThrow(() -> new TicketNoEncontradoException("Ticket con ID " + id + " no encontrado"));
+
+	        // Actualiza solo los campos que se pueden modificar
+	        ticketExistente.setTitulo(ticketActualizado.getTitulo());
+	        ticketExistente.setDescripcion(ticketActualizado.getDescripcion());
+	        ticketExistente.setPrioridad(ticketActualizado.getPrioridad());
+	        ticketExistente.setEstado(ticketActualizado.getEstado());
+	        ticketExistente.setArea(ticketActualizado.getArea());
+	        // Agrega aquí otros campos editables si corresponde
+
+	        return ticketRepository.save(ticketExistente);
+	    }
 }
 
 

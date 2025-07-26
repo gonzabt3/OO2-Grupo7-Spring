@@ -104,7 +104,7 @@ public class ControlRestController {
 			@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Datos del nuevo control a crear", required = true, content = @Content(schema = @Schema(implementation = ControlDTO.class))) @Valid @RequestBody ControlDTO controlDTO,
 			@AuthenticationPrincipal UserDetails usuariolog, RedirectAttributes redirectAttributes) throws Exception {
 
-		Empleado empleadoLogeado = empleadoService.findByEmpleadoNombre(usuariolog.getUsername());
+		Empleado empleadoLogeado = empleadoService.findByNombreUsuario(usuariolog.getUsername());
 		try {
 			ControlDTO controlCreado = controlService.ControlInicial(idTicket, empleadoLogeado, controlDTO);
 			return new ResponseEntity<>(controlCreado, HttpStatus.CREATED);
@@ -192,7 +192,7 @@ public class ControlRestController {
 		
 		Map<String, Object> responseBody = new HashMap<>();
 		try {
-			Empleado empleadoLogueado = empleadoService.findByEmpleadoNombre(usuariolog.getUsername());
+			Empleado empleadoLogueado = empleadoService.findByNombreUsuario(usuariolog.getUsername());
 			if (empleadoLogueado == null) {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 			}

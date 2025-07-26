@@ -33,8 +33,8 @@ public class EmpleadoService {
 		 return empleadoRepository.findEmpleadoById(idEmpleado);
 	 }
 	 
-	 public Empleado findByEmpleadoNombre(String nombreEmpleado) {
-		 return empleadoRepository.findEmpleadoAllByNombreUsuario(nombreEmpleado);
+	 public Empleado findByNombreUsuario(String nombreEmpleado) {
+		 return empleadoRepository.findByNombreUsuario(nombreEmpleado);
 	 }
 	
 	public Empleado guardarEmpleado(Empleado empleado) {
