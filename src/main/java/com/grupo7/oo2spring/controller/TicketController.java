@@ -1,6 +1,7 @@
 package com.grupo7.oo2spring.controller;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +61,6 @@ public class TicketController {
     private final EmpleadoService empleadoService;
     
     private final UsuarioService usuarioService;
-    
-    private final EmailService emailService;
 
     private final AreaService areaService;
     
@@ -122,10 +121,11 @@ public class TicketController {
 		}else {
 			model.addAttribute("message", "No existen tickets asignados a su Area ");
 		}
+		model.addAttribute("estados", Arrays.asList(Estado.values()));
+        model.addAttribute("prioridades", Arrays.asList(Prioridad.values()));
 		model.addAttribute("tickets", tickets);
 		return "ticket/lista_tickets";
     }
-	
 	
 	@GetMapping("/{idTicket}/detalle")
     public String DetalleTicket(@PathVariable int idTicket, Model model, @AuthenticationPrincipal UserDetails usuariolog) throws TicketNoEncontradoException {
@@ -144,7 +144,6 @@ public class TicketController {
             List<Ticket> tickets = ticketRepository.findAll();
             model.addAttribute("tickets", tickets);
             model.addAttribute("rol",empleado.getRol());
-           // model.addAttribute("areas", TipoArea.values());
             model.addAttribute("areas", areaService.listarAreas());
             model.addAttribute("estados", Estado.values());
             model.addAttribute("prioridades", Prioridad.values());
