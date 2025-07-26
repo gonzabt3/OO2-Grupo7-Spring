@@ -32,10 +32,6 @@ public class EmpleadoService {
 	 public Optional<Empleado> findByEmpleado(int idEmpleado) {
 		 return empleadoRepository.findEmpleadoById(idEmpleado);
 	 }
-	 
-	 public Empleado findByNombreUsuario(String nombreEmpleado) {
-		 return empleadoRepository.findByNombreUsuario(nombreEmpleado);
-	 }
 	
 	public Empleado guardarEmpleado(Empleado empleado) {
         // Aquí podés hacer validaciones adicionales si querés
@@ -46,6 +42,11 @@ public class EmpleadoService {
 	
 	public Optional<Empleado> buscarPorId(int idEmpleado) {
 		return empleadoRepository.findEmpleadoById(idEmpleado);
+	}
+
+
+	public Empleado findByNombreUsuario(String username) {
+		return empleadoRepository.findByNombreUsuario(username);
 	}
 
 }
