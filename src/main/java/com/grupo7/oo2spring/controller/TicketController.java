@@ -114,7 +114,6 @@ public class TicketController {
 		model.addAttribute("usuarioLogueado", usuariolog);
 		List<Ticket> tickets = null;
 		Empleado empleadoOpt = empleadoService.findByNombreUsuario(usuariolog.getUsername());
-		System.out.println("el area es" + empleadoOpt.getArea().getTipo().getNombre());
 		if(empleadoOpt.getArea().getTipo() != null) {
 			tickets = ticketService.findByArea_Tipo(empleadoOpt.getArea().getTipo());
 			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea().getTipo().getNombre());
