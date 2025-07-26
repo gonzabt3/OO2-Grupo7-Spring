@@ -32,11 +32,11 @@ public class TestITicket {
 	    
 	    @Autowired
 	    private IUsuarioBaseRepository usuarioBaseRepository;
-	    
 
 	    
 	    @Test
 	    public void testCrearTicketsParaUsuarioExistente() {
+
 	    	ticketRepository.deleteAll();
 		    Optional<UsuarioBase> usuarioOpt = usuarioBaseRepository.findByNombreUsuario("rober");
 		    UsuarioBase roberto = usuarioOpt.get();

@@ -81,7 +81,7 @@ public class EmailController {
         // 1. Guardar en la BD
         MensajeContacto nuevo = new MensajeContacto();
         nuevo.setMensaje(mensaje);
-        nuevo.setUsuario(usuario);
+        //nuevo.setUsuario(usuario);
         mensajeRepository.save(nuevo);
 
         // 2. Enviar por email

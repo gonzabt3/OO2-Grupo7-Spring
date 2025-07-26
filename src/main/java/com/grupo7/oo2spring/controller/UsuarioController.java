@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Usuario;
+import com.grupo7.oo2spring.models.UsuarioBase;
 import com.grupo7.oo2spring.security.UsuarioDetails;
 
 import lombok.RequiredArgsConstructor;
@@ -31,10 +32,8 @@ public class UsuarioController {
             model.addAttribute("usuariologueado", empleadoLogeado); // Objeto común para propiedades compartidas
             model.addAttribute("tipoEntidad", "empleado"); // Indicador de tipo
             model.addAttribute("empleadoData", empleadoLogeado); // Datos específicos de Empleado
-
         } else if (entidadLogeada instanceof Usuario) {
-        	
-            Usuario usuarioLogeado = (Usuario) entidadLogeada;
+            UsuarioBase usuarioLogeado = (Usuario) entidadLogeada;
             model.addAttribute("usuariologueado", usuarioLogeado); // Objeto común para propiedades compartidas
             model.addAttribute("tipoEntidad", "usuario"); // Indicador de tipo
             model.addAttribute("usuarioData", usuarioLogeado); // Datos específicos de Usuario

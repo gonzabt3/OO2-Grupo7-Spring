@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TicketDTO {
 
-    private int idTicket;
+	private int idTicket;
 
     private String titulo;
 

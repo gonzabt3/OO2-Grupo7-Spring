@@ -1,96 +1,39 @@
 package com.grupo7.oo2spring.dto;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-import com.grupo7.oo2spring.models.Empleado;
-import com.grupo7.oo2spring.models.Funcion;
+@Schema(description = "DTO para la transferencia de datos de un Control/Intervención")
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+public record ControlDTO (
+    @Schema(description = "ID único del control", example = "101", accessMode = Schema.AccessMode.READ_ONLY)
+    int idControl,
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class ControlDTO {
+    @Schema(description = "ID del ticket asociado", example = "5", accessMode = Schema.AccessMode.READ_ONLY)
+    int idTicket,
 
-    private int idControl;
-    private TicketDTO ticket;
-    private Empleado empleado;
-    private LocalDateTime fechaEntrada;
-    private LocalDateTime fechaSalida;
-    private String accion;
-    private boolean finalizado;
-    private Funcion funcion;
+    @Schema(description = "Acción o descripción de la intervención realizada", example = "Se analizó el log de errores y se escaló el caso.", required = true)
+    @NotBlank(message = "La acción no puede estar vacía")
+    String accion,
 
-    public ControlDTO(TicketDTO ticket, Empleado empleado, LocalDateTime fechaEntrada,
-			LocalDateTime fechaSalida, String accion, boolean finalizado, Funcion funcion) {
-		this.ticket = ticket;
-		this.empleado = empleado;
-		this.fechaEntrada = fechaEntrada;
-		this.fechaSalida = fechaSalida;
-		this.accion = accion;
-		this.finalizado = finalizado;
-		this.funcion = funcion;
-	}
-    
-    // Getters y setters
-    public int getIdControl() {
-        return idControl;
-    }
+    @Schema(description = "Tipo de función o rol de la intervención (ej. ESCALAMIENTO, SEGUIMIENTO)", example = "SEGUIMIENTO", required = true)
+    @NotNull(message = "La función es obligatoria")
+    String funcion, 
 
-    public void setIdControl(int idControl) {
-        this.idControl = idControl;
-    }
+    @Schema(description = "¿La intervención ha finalizado?", example = "false")
+    boolean finalizado,
 
-    public Empleado getEmpleadoDTO() {
-		return empleado;
-	}
+    @Schema(description = "Fecha y hora de inicio de la intervención", example = "2024-07-25T10:00:00", accessMode = Schema.AccessMode.READ_ONLY)
+    LocalDateTime fechaEntrada,
 
-	public void setEmpleadoDTO(Empleado empleado) {
-		this.empleado = empleado;
-	}
+    @Schema(description = "Fecha y hora de finalización de la intervención", example = "2024-07-25T11:30:00", nullable = true, accessMode = Schema.AccessMode.READ_ONLY)
+    LocalDateTime fechaSalida,
 
-	public TicketDTO getTicket() {
-        return ticket;
-    }
+    @Schema(description = "Nombre completo del empleado que realizó la intervención", example = "Juan Pérez", accessMode = Schema.AccessMode.READ_ONLY)
+    String empleado, 
 
-    public void setTicket(TicketDTO ticket) {
-        this.ticket = ticket;
-    }
-
-    public LocalDateTime getFechaEntrada() {
-        return fechaEntrada;
-    }
-
-    public void setFechaEntrada(LocalDateTime fechaEntrada) {
-        this.fechaEntrada = fechaEntrada;
-    }
-
-    public LocalDateTime getFechaSalida() {
-        return fechaSalida;
-    }
-
-    public void setFechaSalida(LocalDateTime fechaSalida) {
-        this.fechaSalida = fechaSalida;
-    }
-
-    public boolean isFinalizado() {
-        return finalizado;
-    }
-
-    public void setFinalizado(boolean finalizado) {
-        this.finalizado = finalizado;
-    }
-
-	public String getAccion() {
-		return accion;
-	}
-
-	public void setAccion(String accion) {
-		this.accion = accion;
-	}
-
-	
-}
+    @Schema(description = "Título del ticket al que pertenece el control", example = "Problema con el servicio de correo", accessMode = Schema.AccessMode.READ_ONLY)
+    String tituloTicket 
+	) {}

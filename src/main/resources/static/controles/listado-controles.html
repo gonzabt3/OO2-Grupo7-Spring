@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Lista de Controles por Ticket</title>
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/styles.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+	<style>
+		.alert:empty {
+			display: none;
+		}
+
+		#mensaje-container {
+			text-align: center;
+			margin-top: 20px;
+		}
+
+		.mensaje {
+			padding: 10px 15px;
+			border-radius: 5px;
+			margin-bottom: 20px;
+			font-weight: bold;
+			border: 1px solid transparent;
+		}
+
+		.mensaje.success {
+			background-color: #d4edda;
+			color: #155724;
+			border-color: #c3e6cb;
+		}
+
+		.mensaje.danger {
+			background-color: #f8d7da;
+			color: #721c24;
+			border-color: #f5c6cb;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="mensaje-container"></div>
+
+	<div class="container mt-5">
+		<h2 class="mb-4">Controles del Ticket</h2>
+		<h3 id="tituloticket" class="mb-3"></h3>
+		<div class="d-flex justify-content-end mb-3"> <button id="crearControl" class="btn btn-success">
+				<i class="bi bi-plus-circle"></i> Crear Nuevo Control
+			</button>
+		</div>
+		<div class="table-responsive">
+			<table class="table table-bordered table-hover align-middle">
+				<thead class="table-dark">
+					<tr>
+						<th>ID Control</th>
+						<th>Acción</th>
+						<th>Función</th>
+						<th>Finalizado</th>
+						<th>Empleado Asignado</th>
+						<th>Fecha Entrada</th>
+						<th>Fecha Salida</th>
+						<th>Acciones</th>
+					</tr>
+				</thead>
+				<tbody id="controles-tbody">
+				</tbody>
+			</table>
+		</div>
+
+		<div class="btn-back mt-4">
+			<a href="/panel" class="btn btn-outline-primary">
+				<i class="bi bi-arrow-left"></i> Volver al Panel
+			</a>
+		</div>
+	</div>
+
+	<script src="/js/bootstrap.bundle.min.js"></script>
+	<script src="/js/utils.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const controlesTbody = document.getElementById('controles-tbody');
+			const tituloticket = document.getElementById('tituloticket');
+			const crearControlBtn = document.getElementById('crearControl');
+
+			const storedMsg = sessionStorage.getItem('successMessage');
+			if (storedMsg) {
+				mostrarMensaje('success', storedMsg);
+				sessionStorage.removeItem('successMessage');
+			}
+
+			let ticketEstado = null;
+
+			async function cargarControles(ticketId) {
+				if (!ticketId) {
+					mostrarMensaje('danger', 'Por favor, ingrese un ID de ticket.');
+					controlesTbody.innerHTML = '';
+					tituloticket.textContent = '';
+					crearControlBtn.style.display = '';
+					return;
+				}
+
+				let mensajeParaMostrarFinal = '';
+				try {
+					const response = await fetch(`/api/control/listado-controles/${ticketId}`);
+
+					if (!response.ok) {
+						const errorText = await response.text();
+						const errorMessage = response.status === 404 ?
+							`Ticket con ID ${ticketId} no encontrado.` :
+							`Error al obtener controles: ${errorText || response.statusText}`;
+						throw new Error(errorMessage);
+					}
+
+					const data = await response.json();
+					ticketEstado = data.estadoTicket;
+					if (ticketEstado === 'PENDIENTE') {
+						crearControlBtn.style.display = 'none';
+						mensajeParaMostrarFinal = `No se pueden crear nuevos controles para tickets en estado "PENDIENTE". Primero debe ser tomado.`;
+					} else if (ticketEstado === 'RESUELTO' || ticketEstado === 'CERRADO') {
+						crearControlBtn.style.display = 'block'; 
+						crearControlBtn.setAttribute('disabled', 'true');
+						mensajeParaMostrarFinal = `El ticket está ${ticketEstado}. No se pueden crear más controles.`;
+					} else {
+						crearControlBtn.style.display = 'block';
+						crearControlBtn.removeAttribute('disabled'); 
+					}
+					controlesTbody.innerHTML = '';
+					if (data.controles && data.controles.length > 0) {
+						data.controles.forEach(control => {
+							const tr = document.createElement('tr');
+							tr.innerHTML = `
+			                        <td>${control.idControl}</td>
+			                        <td>${control.accion}</td>
+			                        <td>${control.funcion}</td>
+			                        <td>${control.finalizado ? '<i class="bi bi-check-circle-fill text-success"></i> Sí' : '<i class="bi bi-x-circle-fill text-danger"></i> No'}</td>
+			                        <td>${control.empleado || 'Sin Asignar'}</td>
+			                        <td>${control.fechaEntrada ? new Date(control.fechaEntrada).toLocaleDateString('es-AR') : 'N/A'}</td>
+			                        <td>${control.fechaSalida ? new Date(control.fechaSalida).toLocaleDateString('es-AR') : 'N/A'}</td>
+			                        <td>
+			                            <button class="btn btn-sm btn-warning me-2 editar-control-btn" data-id="${control.idControl}" data-ticket-id="${ticketId}">
+			                                Editar
+			                            </button>
+			                        </td>
+			                    `;
+							controlesTbody.appendChild(tr);
+						});
+						if (!mensajeParaMostrarFinal) {
+							mensajeParaMostrarFinal = `Controles del ticket ${ticketId} cargados exitosamente.`;
+						}
+					} else {
+						controlesTbody.innerHTML = '<tr><td colspan="8" class="text-center">No hay controles para este ticket.</td></tr>';
+						if (!mensajeParaMostrarFinal) {
+							mensajeParaMostrarFinal = `El ticket ${ticketId} no tiene controles registrados.`;
+						}
+					}
+					if (mensajeParaMostrarFinal) {
+						mostrarMensaje('info', mensajeParaMostrarFinal);
+					}
+
+				} catch (error) {
+					console.error('Error al cargar controles:', error);
+					mostrarMensaje('danger', `Error al cargar controles: ${error.message}`);
+				}
+			}
+			const urlParams = new URLSearchParams(window.location.search);
+			const idTicketElegido = urlParams.get('ticketId');
+
+			if (idTicketElegido) {
+				cargarControles(idTicketElegido);
+			} else {
+				mostrarMensaje('warning', 'No se encontró un ID de ticket en la URL. Por favor, asegúrese de acceder desde la lista de tickets.');
+				tituloticket.textContent = 'Seleccione un Ticket';
+				controlesTbody.innerHTML = '<tr><td colspan="8" class="text-center">No se puede cargar la información sin un ID de Ticket.</td></tr>';
+				crearControlBtn.style.display = 'none';
+			}
+
+
+			controlesTbody.addEventListener('click', function (e) {
+				const button = e.target.closest('button');
+				const controlId = button.getAttribute('data-id');
+				const ticketIdFromBtn = button.getAttribute('data-ticket-id');
+				if (button.classList.contains('editar-control-btn')) {
+					window.location.href = `edicion-control.html?id=${controlId}&ticketId=${ticketIdFromBtn}`;
+				}
+
+			});
+			function CreacionControl() {
+				const ticketId = idTicketElegido;
+				if (ticketId) {
+					window.location.href = `crear-control.html?ticketId=${ticketId}`;
+				} else {
+					mostrarMensaje('danger', 'No se puede crear un control sin un ID de ticket válido.');
+				}
+			}
+			crearControlBtn.addEventListener('click', CreacionControl);
+		});
+	</script>
+</body>
+
+</html>
