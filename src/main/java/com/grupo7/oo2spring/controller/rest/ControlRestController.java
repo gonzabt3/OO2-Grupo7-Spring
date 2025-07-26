@@ -138,9 +138,9 @@ public class ControlRestController {
 	@GetMapping("/detalle/{idControl}")
 	public ResponseEntity<ControlDTO> obtenerControl(
 			@Parameter(description = "ID del control a buscar") @PathVariable int idControl)
-			throws TicketNoEncontradoException {
+			throws Exception {
 		Control control = controlService.buscarControlPorId(idControl)
-				.orElseThrow(() -> new TicketNoEncontradoException("Ticket no encontrado"));
+				.orElseThrow(() -> new Exception("Ticket no encontrado"));
 		if (control == null) {
 			return ResponseEntity.notFound().build();
 		}
