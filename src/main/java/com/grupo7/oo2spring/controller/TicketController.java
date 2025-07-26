@@ -114,11 +114,9 @@ public class TicketController {
 	public String listarticketsPorArea(Model model, @AuthenticationPrincipal UserDetails usuariolog){
 		model.addAttribute("usuarioLogueado", usuariolog);
 		List<Ticket> tickets = null;
-		//Empleado usuario = (Empleado) usuarioService.getUsuarioByUsername(usuariolog.getUsername());
-		System.out.println(usuariolog.getUsername());
 		Empleado empleadoOpt = empleadoService.findByNombreUsuario(usuariolog.getUsername());
-		if(empleadoOpt.getArea() != null) {
-			tickets = ticketService.findByAreaTipo(empleadoOpt.getArea().getTipo());
+		if(empleadoOpt.getArea().getTipo() != null) {
+			tickets = ticketService.findByArea_Tipo(empleadoOpt.getArea().getTipo());
 			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea());
 			model.addAttribute("tickets", tickets);
 		}else {
@@ -128,77 +126,12 @@ public class TicketController {
 		return "ticket/lista_tickets";
     }
 	
-	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
-	@GetMapping("/{idTicket}/tomarTicket")
-	public String tomarTicket(@PathVariable int idTicket, Model model) throws TicketNoEncontradoException {
-		try {
-			Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-			model.addAttribute("ticket",ticket);
-			model.addAttribute("control", new Control());
-			return "manager/toma-ticket";
-		}catch (RuntimeException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "redirect:/ticket/lista";
-        }
-	}
 	
-	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
-	@PostMapping("/{idTicket}/tomar")
-    public String processTakeTicket(@PathVariable int idTicket,
-                                    @ModelAttribute("control") ControlDTO control, // Captura los datos del formulario en un objeto Control
-                                    @AuthenticationPrincipal UserDetails usuariolog,
-                                    Model model) throws Exception, TicketNoEncontradoException {
-		System.out.println("➡️ Entró al controlador tomarTicketConControlInicial");
-		String nombreDelUsuarioEnSesion = usuariolog.getUsername();
-    	Empleado empleadoLogeado = empleadoService.findByNombreUsuario(nombreDelUsuarioEnSesion);
-    	try {
-
-            ticketService.tomarTicketConControlInicial(idTicket, empleadoLogeado, control);
-            
-
-            
-            
-            Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-		    UsuarioBase usuarioDueño = ticket.getUsuarioCreador(); // asumimos que Ticket tiene un Usuario asociado
-		    
-            System.out.println(usuarioDueño);
-
-		    // ✅ Armar variables para el template
-		    Map<String, Object> variables = new HashMap<>();
-		    variables.put("nombreUsuario", usuarioDueño.getNombre());
-		    variables.put("email", usuarioDueño.getEmail());
-		    variables.put("tituloTicket", ticket.getTitulo());
-		    variables.put("descripcionControl", ticket.getDescripcion());
-		    variables.put("ticketId", ticket.getIdTicket());
-		    variables.put("accionControl", control.getAccion());
-		    variables.put("fechaControl", LocalDate.now().toString());
-
-		    System.out.println("📌 emailService es: " + emailService);
-		    
-		    
-		    // ✅ Enviar el email con plantilla
-		    emailService.enviarEmailConHtml(
-		        usuarioDueño.getEmail(),
-		        "Se actualizó tu ticket #" + ticket.getIdTicket(), "email-control-agregado-template",
-		        variables
-		    );
-
-		    model.addAttribute("successMessage", "Control agregado con éxito y correo enviado.");
-            model.addAttribute("successMessage", "¡Ticket #" + idTicket + " tomado y gestión iniciada!");
-        } catch (TicketCreacionException e) {
-            model.addAttribute("errorMessage", "Error al tomar el ticket #" + idTicket + ": " + e.getMessage());
-            // Si hay un error, redirie al formulario de toma con el ticket para que pueda intentar de nuevo
-            return "redirect:/ticket/" + idTicket + "/tomarTicket";
-        }
-        return "redirect:/ticket/listaArea"; // Redirige al dashboard o a la vista de detalle del ticket recién tomado
-    }
-	
-	@GetMapping("/{idTicket}/detail")
+	@GetMapping("/{idTicket}/detalle")
     public String DetalleTicket(@PathVariable int idTicket, Model model, @AuthenticationPrincipal UserDetails usuariolog) throws TicketNoEncontradoException {
-        Ticket ticketDetail = ticketService.buscarTicketPorId(idTicket);
-        model.addAttribute("ticketDetail", ticketDetail);
-        model.addAttribute("controlCreationDTO", new ControlDTO()); // Para el formulario de agregar controles
-        return "ticket/ticket-detail";
+        Ticket ticketDetalle = ticketService.buscarTicketPorId(idTicket);
+        model.addAttribute("ticketDetalle", ticketDetalle);
+        return "ticket/ticket-detalle";
     }
 	
 	
