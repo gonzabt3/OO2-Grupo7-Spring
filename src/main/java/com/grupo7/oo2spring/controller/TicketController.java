@@ -79,7 +79,7 @@ public class TicketController {
         if (usuariolog == null) {
             System.out.println("CONTROLADOR: Usuario no autenticado");
             redirectAttributes.addFlashAttribute("mensaje", "Error con el Usuario");
-            return "redirect:/panel";
+            return "redirect:/panel.html";
         }
 
         String nombreDelUsuarioEnSesion = usuariolog.getUsername();
@@ -116,7 +116,7 @@ public class TicketController {
 		Empleado empleadoOpt = empleadoService.findByNombreUsuario(usuariolog.getUsername());
 		if(empleadoOpt.getArea().getTipo() != null) {
 			tickets = ticketService.findByArea_Tipo(empleadoOpt.getArea().getTipo());
-			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea().getTipo().getNombre());
+			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea());
 			model.addAttribute("tickets", tickets);
 		}else {
 			model.addAttribute("message", "No existen tickets asignados a su Area ");
@@ -127,25 +127,10 @@ public class TicketController {
 		return "ticket/lista_tickets";
     }
 	
-	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
-	@GetMapping("/{idTicket}/tomarTicket")
-	public String tomarTicket(@PathVariable int idTicket, Model model) throws TicketNoEncontradoException {
-		try {
-			Ticket ticket = ticketService.buscarTicketPorId(idTicket);
-			model.addAttribute("ticket",ticket);
-			model.addAttribute("control", new Control());
-			return "manager/toma-ticket";
-		}catch (RuntimeException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "redirect:/ticket/lista";
-        }
-	}
-	
 	@GetMapping("/{idTicket}/detalle")
     public String DetalleTicket(@PathVariable int idTicket, Model model, @AuthenticationPrincipal UserDetails usuariolog) throws TicketNoEncontradoException {
         Ticket ticketDetalle = ticketService.buscarTicketPorId(idTicket);
         model.addAttribute("ticketDetalle", ticketDetalle);
-        //model.addAttribute("controlCreationDTO", new ControlDTO());
         return "ticket/ticket-detalle";
     }
 	
@@ -194,7 +179,7 @@ public class TicketController {
 	    List<Ticket> tickets = ticketService.getTicketsByUsuario(usuario.getId());
 	    model.addAttribute("tickets", tickets);
 
-	    return "ticket/usuario-tickets"; 
+	    return "ticket/usuario-tickets"; // Vista con la tabla de tickets
 	}
 	
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
@@ -208,7 +193,7 @@ public class TicketController {
         else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_EMPLEADO"))) {
             return "redirect:/ticket/listaArea";
         }
-		return "redirect:/panel";
+		return "redirect:/panel.html";
 	}
 	@PreAuthorize("hasAnyRole('MANAGER', 'EMPLEADO')")
 	@PostMapping("/{idTicket}/cambiarEstado")
@@ -221,7 +206,7 @@ public class TicketController {
         else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_EMPLEADO"))) {
             return "redirect:/ticket/listaArea";
         }
-		return "redirect:/panel";
+		return "redirect:/panel.html";
 	}
 	
 	//Para testear la excepcion
