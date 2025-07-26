@@ -116,7 +116,7 @@ public class TicketController {
 		Empleado empleadoOpt = empleadoService.findByNombreUsuario(usuariolog.getUsername());
 		if(empleadoOpt.getArea().getTipo() != null) {
 			tickets = ticketService.findByArea_Tipo(empleadoOpt.getArea().getTipo());
-			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea());
+			model.addAttribute("message", "Mostrando solo tickets de su área: " + empleadoOpt.getArea().getTipo();
 			model.addAttribute("tickets", tickets);
 		}else {
 			model.addAttribute("message", "No existen tickets asignados a su Area ");
