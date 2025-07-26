@@ -18,6 +18,7 @@ import com.grupo7.oo2spring.enums.TipoArea;
 import com.grupo7.oo2spring.models.Control;
 import com.grupo7.oo2spring.models.Empleado;
 import com.grupo7.oo2spring.models.Estado;
+import com.grupo7.oo2spring.models.Funcion;
 import com.grupo7.oo2spring.models.Prioridad;
 import com.grupo7.oo2spring.repositories.IAreaRepository;
 import com.grupo7.oo2spring.repositories.IControlRepository;
@@ -45,6 +46,7 @@ public class TicketService {
 	private final AreaService areaService;
 	private final IAreaRepository areaRepository;
 
+	
 	public Ticket getByIdTicket(int idTicket) {
 		return ticketRepository.getByIdTicket(idTicket);
 	}
@@ -60,8 +62,8 @@ public class TicketService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<Ticket> findByAreaTipo(TipoArea area) {
-		return ticketRepository.findByAreaTipo(area);
+	public List<Ticket> findByArea_Tipo(TipoArea area) {
+		return ticketRepository.findByArea_Tipo(area);
 	}
 
 	@Transactional
@@ -80,24 +82,7 @@ public class TicketService {
 			throw new TicketCreacionException("Error al guardar el ticket: " + e.getMessage());
 		}
 	}
-
-	    @Transactional
-    public Ticket update(int id, Ticket ticketActualizado) throws TicketNoEncontradoException {
-        Ticket ticketExistente = ticketRepository.findById(id)
-            .orElseThrow(() -> new TicketNoEncontradoException("Ticket con ID " + id + " no encontrado"));
-
-        // Actualiza solo los campos que se pueden modificar
-        ticketExistente.setTitulo(ticketActualizado.getTitulo());
-        ticketExistente.setDescripcion(ticketActualizado.getDescripcion());
-        ticketExistente.setPrioridad(ticketActualizado.getPrioridad());
-        ticketExistente.setEstado(ticketActualizado.getEstado());
-        ticketExistente.setArea(ticketActualizado.getArea());
-        // Agrega aquí otros campos editables si corresponde
-
-        return ticketRepository.save(ticketExistente);
-    }
-
-	//@PreAuthorize("hasRole('EMPLEADO')")
+	
 	@Transactional
 	public void tomarTicketConControlInicial(int idTicket, Empleado empleadoLogueado, ControlDTO control)
 			throws Exception {
@@ -156,18 +141,34 @@ public class TicketService {
 	        ticket.setEstado(nuevoEstado);
 	        return ticketRepository.save(ticket);
 	 }
-
+	@Transactional
+	    public void delete(int id) throws TicketNoEncontradoException {
+	        if (!ticketRepository.existsById(id)) {
+	            throw new TicketNoEncontradoException("Ticket con ID " + id + " no encontrado");
+	        }
+	        ticketRepository.deleteById(id);
+	    }
+	
 	public List<Ticket> getTicketsByUsuario(int usuarioIdCreador) {
 		return ticketRepository.findByUsuarioCreador_Id(usuarioIdCreador);
 	}
 
-	  @Transactional
-    public void delete(int id) throws TicketNoEncontradoException {
-        if (!ticketRepository.existsById(id)) {
-            throw new TicketNoEncontradoException("Ticket con ID " + id + " no encontrado");
-        }
-        ticketRepository.deleteById(id);
+	@Transactional
+    public Ticket update(int id, Ticket ticketActualizado) throws TicketNoEncontradoException {
+        Ticket ticketExistente = ticketRepository.findById(id)
+            .orElseThrow(() -> new TicketNoEncontradoException("Ticket con ID " + id + " no encontrado"));
+
+        // Actualiza solo los campos que se pueden modificar
+        ticketExistente.setTitulo(ticketActualizado.getTitulo());
+        ticketExistente.setDescripcion(ticketActualizado.getDescripcion());
+        ticketExistente.setPrioridad(ticketActualizado.getPrioridad());
+        ticketExistente.setEstado(ticketActualizado.getEstado());
+        ticketExistente.setArea(ticketActualizado.getArea());
+        // Agrega aquí otros campos editables si corresponde
+
+        return ticketRepository.save(ticketExistente);
     }
+
 }
 
 
