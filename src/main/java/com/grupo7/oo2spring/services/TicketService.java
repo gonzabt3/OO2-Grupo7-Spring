@@ -46,7 +46,7 @@ public class TicketService {
 	private final AreaService areaService;
 	private final IAreaRepository areaRepository;
 
-	
+
 	public Ticket getByIdTicket(int idTicket) {
 		return ticketRepository.getByIdTicket(idTicket);
 	}
@@ -82,7 +82,7 @@ public class TicketService {
 			throw new TicketCreacionException("Error al guardar el ticket: " + e.getMessage());
 		}
 	}
-	
+
 	@Transactional
 	public void tomarTicketConControlInicial(int idTicket, Empleado empleadoLogueado, ControlDTO control)
 			throws Exception {
@@ -91,11 +91,11 @@ public class TicketService {
 
 		Control controlInicial = new Control();
 		controlInicial.setTicket(ticket);
-		controlInicial.setAccion(control.getAccion());
+		controlInicial.setAccion(control.accion());
 		controlInicial.setFechaEntrada(LocalDateTime.now());
 		controlInicial.setFinalizado(false); // No está finalizado al tomarlo
 		controlInicial.setFechaSalida(null);
-		controlInicial.setFuncion(control.getFuncion());
+		controlInicial.setFuncion(Funcion.valueOf(control.funcion().toUpperCase()));
 		
 		controlInicial.setEmpleado(empleadoLogueado);
 		ticket.setEstado(Estado.ABIERTO);
@@ -141,34 +141,31 @@ public class TicketService {
 	        ticket.setEstado(nuevoEstado);
 	        return ticketRepository.save(ticket);
 	 }
-	@Transactional
+	 @Transactional
 	    public void delete(int id) throws TicketNoEncontradoException {
 	        if (!ticketRepository.existsById(id)) {
 	            throw new TicketNoEncontradoException("Ticket con ID " + id + " no encontrado");
 	        }
 	        ticketRepository.deleteById(id);
 	    }
-	
+
 	public List<Ticket> getTicketsByUsuario(int usuarioIdCreador) {
 		return ticketRepository.findByUsuarioCreador_Id(usuarioIdCreador);
 	}
+	
+	 @Transactional
+	    public Ticket update(int id, Ticket ticketActualizado) throws TicketNoEncontradoException {
+	        Ticket ticketExistente = ticketRepository.findById(id)
+	            .orElseThrow(() -> new TicketNoEncontradoException("Ticket con ID " + id + " no encontrado"));
 
-	@Transactional
-    public Ticket update(int id, Ticket ticketActualizado) throws TicketNoEncontradoException {
-        Ticket ticketExistente = ticketRepository.findById(id)
-            .orElseThrow(() -> new TicketNoEncontradoException("Ticket con ID " + id + " no encontrado"));
+	        // Actualiza solo los campos que se pueden modificar
+	        ticketExistente.setTitulo(ticketActualizado.getTitulo());
+	        ticketExistente.setDescripcion(ticketActualizado.getDescripcion());
+	        ticketExistente.setPrioridad(ticketActualizado.getPrioridad());
+	        ticketExistente.setEstado(ticketActualizado.getEstado());
+	        ticketExistente.setArea(ticketActualizado.getArea());
+	        // Agrega aquí otros campos editables si corresponde
 
-        // Actualiza solo los campos que se pueden modificar
-        ticketExistente.setTitulo(ticketActualizado.getTitulo());
-        ticketExistente.setDescripcion(ticketActualizado.getDescripcion());
-        ticketExistente.setPrioridad(ticketActualizado.getPrioridad());
-        ticketExistente.setEstado(ticketActualizado.getEstado());
-        ticketExistente.setArea(ticketActualizado.getArea());
-        // Agrega aquí otros campos editables si corresponde
-
-        return ticketRepository.save(ticketExistente);
-    }
-
+	        return ticketRepository.save(ticketExistente);
+	    }
 }
-
-
