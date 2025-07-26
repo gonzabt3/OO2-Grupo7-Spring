@@ -47,7 +47,7 @@ public interface ITicketRepository extends JpaRepository<Ticket, Integer> {
 	// Busca los tickets sin area
     List<Ticket> findByAreaIsNull();
 	
-    List<Ticket> findByAreaTipo(TipoArea sinAsignar);
+    List<Ticket> findByArea_Tipo(TipoArea sinAsignar);
 
 	List<Ticket> deleteByUsuarioCreador(UsuarioBase usuario);
 	
