@@ -42,6 +42,8 @@
                 <p><strong>Email:</strong>
                     <span th:text="${usuariologueado.email}"></span>
                 </p>
+                <p th:if="${usuariologueado.rol != null}"><strong>Rol en el Sistema:</strong>
+                    <span th:text="${usuariologueado.rol.tipo.name()}"></span> </p>
                 <p><strong>DNI:</strong>
                     <span th:text="${usuariologueado.dni}"></span>
                 </p>
@@ -58,6 +60,7 @@
                 </p>
                 <p><strong>Área de Trabajo:</strong>
                     <span th:text="${empleadoData.area.tipo.nombre}"></span>
+
                 </p>
                 <p><strong>Disponibilidad:</strong>
                     <span th:text="${empleadoData.disponibilidad ? 'Disponible' : 'No Disponible'}"></span>
@@ -81,7 +84,7 @@
         </div>
 
         <div class="mt-4 text-center">
-            <a href="/panel" class="btn btn-primary"><i class="fas fa-home"></i> Volver</a>
+            <a href="/panel.html" class="btn btn-primary"><i class="fas fa-home"></i> Volver</a>
         </div>
     </div>
 

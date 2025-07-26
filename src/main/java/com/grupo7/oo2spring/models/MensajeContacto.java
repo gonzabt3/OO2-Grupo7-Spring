@@ -3,9 +3,11 @@ package com.grupo7.oo2spring.models;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import lombok.NoArgsConstructor;
@@ -22,8 +24,9 @@ public class MensajeContacto {
 
     private LocalDateTime fechaEnvio;
 
-    @ManyToOne
-    private Usuario usuario;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private UsuarioBase usuario;
 
 	public MensajeContacto(String mensaje, Usuario usuario) {
 		this.mensaje = mensaje;
@@ -62,11 +65,11 @@ public class MensajeContacto {
 		this.fechaEnvio = fechaEnvio;
 	}
 
-	public Usuario getUsuario() {
+	public UsuarioBase getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
+	public void setUsuario(UsuarioBase usuario) {
 		this.usuario = usuario;
 	}
 

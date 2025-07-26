@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+	<style>
+		.alert:empty {
+		    display: none;
+		}
+		
+		#mensaje-container {
+		  text-align: center; /* Centra el mensaje dentro del contenedor */
+		  margin-top: 20px;
+		}
+		
+		.mensaje {
+		  padding: 10px 15px;
+		  border-radius: 5px;
+		  margin-bottom: 20px;
+		  font-weight: bold;
+		  border: 1px solid transparent;
+		}
+
+		.mensaje.success {
+		  background-color: #d4edda;
+		  color: #155724;
+		  border-color: #c3e6cb;
+		}
+
+		.mensaje.danger {
+		  background-color: #f8d7da;
+		  color: #721c24;
+		  border-color: #f5c6cb;
+		}
+	</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Usuarios</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles -->
+    <link href="/css/style.css" rel="stylesheet">
+	
+	<!-- Bootstrap Icons -->
+	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+</head>
+<body>
+	<div id="mensaje-container"></div>
+
+<div class="container mt-5">
+    <h2 class="mb-4">Lista de Usuarios</h2>
+    <!-- Mensajes de éxito o error -->
+    <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>DNI</th>
+					<th>Nombre de Usuario</TH>
+                    <th>Email</th>
+					<th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+             <tbody id="usuarios-tbody">
+						</tbody>
+        </table>
+    </div>
+	<div class="btn-back">
+		<a href="/panel.html" class="btn btn-outline-primary">
+		<i class="bi bi-arrow-left"></i> Volver al Panel
+		            </a>
+	</div>
+</div>
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script>
+
+	document.addEventListener('DOMContentLoaded', function () {
+	  cargarUsuarios();
+
+	  const tbody = document.getElementById('usuarios-tbody');
+	  tbody.addEventListener('click', function (e) {
+	    const btn = e.target;
+
+	    if (btn.classList.contains('convertir-btn')) {
+	      const id = btn.getAttribute('data-id');
+	      window.location.href = `formulario_empleado.html?id=${id}`;
+	    }
+
+	    if (btn.classList.contains('sacar-permisos-btn')) {
+	      if (!confirm('¿Estás seguro que querés sacar permisos a este empleado?')) return;
+
+	      const id = btn.getAttribute('data-id');
+
+	      fetch(`/api/manager/sacar-permisos/${id}`, {
+	        method: 'POST',
+	      })
+	        .then(response => {
+	          if (!response.ok) {
+	            return response.text().then(text => { throw new Error(text) });
+	          }
+	          return response.text();
+	        })
+	        .then(msg => {
+	          mostrarMensaje('success', msg);
+	          cargarUsuarios();
+	        })
+	        .catch(error => {
+	          mostrarMensaje('danger', error.message);
+	        });
+	    }
+	  });
+	});
+
+	function cargarUsuarios() {
+	  const tbody = document.getElementById('usuarios-tbody');
+	  fetch('/api/manager/listar')
+	    .then(response => response.json())
+	    .then(usuarios => {
+	      tbody.innerHTML = '';
+
+	      usuarios.forEach(usuario => {
+	        if (usuario.rol.tipo !== 'USER' && usuario.rol.tipo !== 'EMPLEADO') return;
+
+	        const tr = document.createElement('tr');
+	        tr.innerHTML = `
+	          <td>${usuario.nombre}</td>
+	          <td>${usuario.apellido}</td>
+	          <td>${usuario.dni}</td>
+	          <td>${usuario.nombreUsuario}</td>
+	          <td>${usuario.email}</td>
+	          <td>${usuario.rol.tipo}</td>
+	          <td>
+	            ${
+	              usuario.rol.tipo === 'USER'
+	                ? `<button class="btn btn-sm btn-success convertir-btn" data-id="${usuario.id}">Convertir a Empleado</button>`
+	                : `<button class="btn btn-sm btn-danger sacar-permisos-btn" data-id="${usuario.id}">Sacar permisos</button>`
+	            }
+	          </td>
+	        `;
+	        tbody.appendChild(tr);
+	      });
+	    })
+	    .catch(error => {
+	      mostrarMensaje('danger', 'Error al cargar usuarios');
+	      console.error(error);
+	    });
+	}
+
+	
+	
+
+</script>
+<script src="/js/utils.js"></script>
+</body>
+</html>

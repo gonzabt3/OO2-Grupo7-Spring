@@ -9,14 +9,13 @@
 
     <h2 class="mb-4">Convertir en Empleado</h2>
 
-    <form th:action="@{/manager/convertir-a-empleado}" method="post" th:object="${empleado}" class="needs-validation" novalidate>
+	<form id="form-convertir-empleado" class="needs-validation" novalidate>
+	    <input type="hidden" name="idEmpleado" id="idEmpleado" />
 
-        <input type="hidden" th:field="*{idEmpleado}" />
-
-        <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" th:field="*{nombre}" class="form-control" readonly>
-        </div>
+	    <div class="mb-3">
+	        <label class="form-label">Nombre</label>
+	        <input type="text" name="nombre" id="nombre" class="form-control" readonly>
+	    </div>
 
         <div class="mb-3">
             <label class="form-label">Apellido</label>
@@ -33,30 +32,71 @@
             <input type="email" th:field="*{email}" class="form-control" readonly>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Usuario</label>
-            <input type="text" th:field="*{nombreUsuario}" class="form-control" readonly>
-        </div>
 
-        <div class="mb-3">
-            <label class="form-label">Área</label>
-            <select th:field="*{area}" class="form-select" required>
-                <option value="" disabled selected>Seleccioná un área</option>
-                <option th:each="areaEnum : ${T(com.grupo7.oo2spring.models.Area).values()}" 
-                        th:value="${areaEnum}" 
-                        th:text="${areaEnum}">
-                </option>
-            </select>
-        </div>
+		    <div class="mb-3">
+				<select id="area" name="area" class="form-select" required>
+				    <option value="" disabled selected>Seleccioná un área</option>
+				</select>
+		    </div>
 
-        <div class="form-check mb-4">
-            <input type="checkbox" th:field="*{disponibilidad}" class="form-check-input" id="disponibilidadCheck">
-            <label class="form-check-label" for="disponibilidadCheck">Disponible</label>
-        </div>
+		    <div class="form-check mb-4">
+		        <input type="checkbox" name="disponibilidad" id="disponibilidad" class="form-check-input">
+		        <label class="form-check-label" for="disponibilidad">Disponible</label>
+		    </div>
 
-        <button type="submit" class="btn btn-primary">Guardar</button>
+		    <button type="submit" class="btn btn-primary">Guardar</button>
+		</form>
+	
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+		  const params = new URLSearchParams(window.location.search);
+		  const id = params.get('id');
 
-    </form>
+		  // 🔄 Buscar los datos del usuario
+		  fetch(`/api/usuario/${id}`)
+		    .then(response => {
+		      if (!response.ok) throw new Error('Usuario no encontrado');
+		      return response.json();
+		    })
+		    .then(usuario => {
+		      document.getElementById('nombre').value = usuario.nombre;
+		      document.getElementById('apellido').value = usuario.apellido;
+			  document.getElementById('dni').value = usuario.dni;
+			  document.getElementById('email').value = usuario.email;
+		      // y otros campos...
+		    })
+		    .catch(err => alert(err.message));
+
+		  document.getElementById('formulario').addEventListener('submit', e => {
+		    e.preventDefault();
+
+		    const dto = {
+		      nombre: document.getElementById('nombre').value,
+		      apellido: document.getElementById('apellido').value,
+			  dni: document.getElementById('dni').value,
+			  email: document.getElementById('email').value,
+			  area: document.getElementById('area').value,
+			  disponibilidad: document.getElementById('disponbilidad').value
+		      // ...
+		    };
+
+		    fetch(`/api/manager/convertir/${id}`, {
+		      method: 'POST',
+		      headers: { 'Content-Type': 'application/json' },
+		      body: JSON.stringify(dto)
+		    })
+		      .then(response => {
+		        if (!response.ok) throw new Error('Error al convertir');
+		        return response.text();
+		      })
+		      .then(msg => {
+		        alert(msg);
+		        window.location.href = '/manager/listar.html'; // o donde quieras volver
+		      })
+		      .catch(err => alert(err.message));
+		  });
+		});
+	</script>
 
 </body>
 </html>

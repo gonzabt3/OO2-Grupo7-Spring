@@ -434,24 +434,37 @@
 </style>
 
 <body>
+	
+	
 	<header>
+		<a href="/panel.html" class="btn btn-secondary btn-back">
+		   <i class="fas fa-arrow-left"></i> Atrás
+		 </a>
 		<h1>Tickets sin Área Asignada</h1>
+		
+		</div>
 		<nav>
 			<ul>
-				<li><a th:href="@{/panel}">Panel de Control</a></li>
+				<li><a href="@{/panel.html}">Panel de Control</a></li>
 			</ul>
 		</nav>
 	</header>
+	
+	
 	<div th:if="${successMessage}" class="alert alert-success">
 		<p th:text="${successMessage}"></p>
 	</div>
 	<div th:if="${errorMessage}" class="alert alert-danger">
 		<p th:text="${errorMessage}"></p>
 	</div>
+	
+
 
 	<div th:if="${#lists.isEmpty(tickets)}" class="alert alert-info">
 		<p>No hay tickets sin área asignada en este momento.</p>
 	</div>
+	
+
 
 	<div th:unless="${#lists.isEmpty(tickets)}">
 		<table>
@@ -494,7 +507,9 @@
 							</a>
 							<button type="button" class="btn btn-sm btn-outline-info"
 								th:data-ticket-id="${ticket.idTicket}"
-								th:data-current-area="${ticket.area.tipo.nombre != null ? ticket.area.id : ''}"
+
+								th:data-current-area="${ticket.area != null ? ticket.area.id : ''}"
+
 								onclick="openChangeModal(this, 'area')">
 								<i class="fas fa-sync-alt"></i> area
 							</button>
@@ -534,9 +549,9 @@
 						<div class="mb-3" id="areaSelectGroup">
 							<label for="modalArea" class="form-label">Seleccione Area:</label>
 							<select class="form-select" id="modalArea" name="area" required>
-								<option disabled selected>Seleccionar</option>
-								<option th:each="area : ${areas}" th:value="${area.id}" th:text="${area.tipo.nombre}">
-								</option>
+
+								<option  disabled selected>Seleccionar</option>
+								<option th:each="area : ${areas}" th:value="${area.id}" th:text="${area.tipo.nombre}"></option>
 							</select>
 						</div>
 
